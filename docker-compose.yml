@@ -19,15 +19,9 @@ services:
     depends_on:
       - eureka-server
       - elastic-search-service
-      # - relational-service
-      # - document-service
       - graph-service
-      #- timeseries-service
-      # - columnar-key-value-service
-      # - standalone
-      # - vector-database-service
     ports:
-      - "8080:8080"
+      - "9000:9000"
 
   graph-service:
     build:
