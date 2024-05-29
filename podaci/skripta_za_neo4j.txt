@@ -1,0 +1,201 @@
+LOAD CSV WITH HEADERS FROM 'file:///spotify_songs.csv' AS row
+CREATE (:Song {
+    track_id: row.track_id,
+    track_name: row.track_name,
+    track_artist: row.track_artist,
+    track_popularity: toInteger(row.track_popularity),
+    track_album_id: row.track_album_id,
+    track_album_name: row.track_album_name,
+    track_album_release_date: row.track_album_release_date,
+    playlist_name: row.playlist_name,
+    playlist_id: row.playlist_id,
+    playlist_genre: row.playlist_genre,
+    playlist_subgenre: row.playlist_subgenre,
+    danceability: toFloat(row.danceability),
+    energy: toFloat(row.energy),
+    key: toInteger(row.key),
+    loudness: toFloat(row.loudness),
+    mode: toInteger(row.mode),
+    speechiness: toFloat(row.speechiness),
+    acousticness: toFloat(row.acousticness),
+    instrumentalness: toFloat(row.instrumentalness),
+    liveness: toFloat(row.liveness),
+    valence: toFloat(row.valence),
+    tempo: toFloat(row.tempo),
+    duration_ms: toInteger(row.duration_ms)
+})
+
+
+// Kreiranje klastera
+CREATE (:Cluster {name: 'reverb_cluster'});
+
+// Kreiranje kolekcija (nodova)
+CREATE (:Collection {name: 'songs'});
+CREATE (:Collection {name: 'artists'});
+CREATE (:Collection {name: 'albums'});
+
+
+// Dodavanje atributa za svaku kolekciju
+MATCH (song:Song)
+CREATE (:CollectionSong {
+    track_id: song.track_id,
+    track_name: song.track_name,
+    track_artist: song.track_artist,
+    track_popularity: song.track_popularity,
+    track_album_id: song.track_album_id,
+    track_album_name: song.track_album_name,
+    track_album_release_date: song.track_album_release_date,
+    playlist_name: song.playlist_name,
+    playlist_id: song.playlist_id,
+    playlist_genre: song.playlist_genre,
+    playlist_subgenre: song.playlist_subgenre,
+    danceability: song.danceability,
+    energy: song.energy,
+    key: song.key,
+    loudness: song.loudness,
+    mode: song.mode,
+    speechiness: song.speechiness,
+    acousticness: song.acousticness,
+    instrumentalness: song.instrumentalness,
+    liveness: song.liveness,
+    valence: song.valence,
+    tempo: song.tempo,
+    duration_ms: song.duration_ms
+})
+
+//Indeks na ime
+CREATE INDEX FOR (a:CollectionArtist) ON (a.name);
+
+
+// Prenos podataka iz baze 'Song' u kolekciju 'artists'
+MATCH (song:Song)
+MERGE (artist:CollectionArtist {name: song.track_artist})
+ON CREATE SET
+    artist.artist_id = song.artist_id,
+    artist.artist_name = song.artist_name,
+    artist.artist_genre = song.artist_genre,
+    artist.artist_popularity = song.artist_popularity
+
+//Indeks na ime
+CREATE INDEX FOR (a:CollectionAlbum) ON (a.name);
+
+
+// Prenos podataka iz baze 'Song' u kolekciju 'albums'
+MATCH (song:Song)
+MERGE (album:CollectionAlbum {name: song.track_album_name})
+ON CREATE SET
+    album.album_id = song.album_id,
+    album.album_name = song.album_name,
+    album.album_artist = song.album_artist,
+    album.album_release_date = song.album_release_date,
+    album.album_total_tracks = song.album_total_tracks,
+    album.album_popularity = song.album_popularity
+
+
+// Formiranje indeksa za track_id polje u kolekciji pesama
+CREATE INDEX FOR (s:Song) ON (s.track_id);
+
+
+// CREATE IZMENI PODATKE
+CREATE (:CollectionSong {
+    track_id: 'ID_PESME',
+    track_name: 'NAZIV_PESME',
+    track_artist: 'IZVODJAC_PESME',
+    track_popularity: POPULARNOST_PESME,
+    track_album_id: 'ID_ALBUMA',
+    track_album_name: 'NAZIV_ALBUMA',
+    track_album_release_date: 'DATUM_IZLASKA_ALBUMA',
+    playlist_name: 'NAZIV_PLAYLISTE',
+    playlist_id: 'ID_PLAYLISTE',
+    playlist_genre: 'ZANR_PLAYLISTE',
+    playlist_subgenre: 'PODRZAN_ZANR_PLAYLISTE',
+    danceability: FLOAT_VREDNOST,
+    energy: FLOAT_VREDNOST,
+    key: INTEGER_VREDNOST,
+    loudness: FLOAT_VREDNOST,
+    mode: INTEGER_VREDNOST,
+    speechiness: FLOAT_VREDNOST,
+    acousticness: FLOAT_VREDNOST,
+    instrumentalness: FLOAT_VREDNOST,
+    liveness: FLOAT_VREDNOST,
+    valence: FLOAT_VREDNOST,
+    tempo: FLOAT_VREDNOST,
+    duration_ms: INTEGER_VREDNOST
+})
+
+// READ 
+MATCH (song:CollectionSong {track_id: 'ID_PESME'})
+RETURN song
+
+// UPDATE
+MATCH (song:CollectionSong {track_id: 'ID_PESME'})
+SET song.track_name = 'NOVI_NAZIV_PESME'
+RETURN song
+
+// DELETE
+MATCH (song:CollectionSong {track_id: 'ID_PESME'})
+DELETE song
+
+// CREATE IZMENI PODATKE
+CREATE (:CollectionArtist {
+    name: 'NAZIV_IZVODJACA',
+    artist_id: 'ID_IZVODJACA',
+    artist_genre: 'ZANR_IZVODJACA',
+    artist_popularity: POPULARNOST_IZVODJACA
+})
+
+// READ
+MATCH (artist:CollectionArtist {artist_id: 'ID_IZVODJACA'})
+RETURN artist
+
+// UPDATE
+MATCH (artist:CollectionArtist {artist_id: 'ID_IZVODJACA'})
+SET artist.name = 'NOVI_NAZIV_IZVODJACA'
+RETURN artist
+
+// DELETE
+MATCH (artist:CollectionArtist {artist_id: 'ID_IZVODJACA'})
+DELETE artist
+
+// CREATE
+CREATE (:CollectionAlbum {
+    name: 'NAZIV_ALBUMA',
+    album_id: 'ID_ALBUMA',
+    album_artist: 'NAZIV_IZVODJACA',
+    album_release_date: 'DATUM_IZDAVANJA_ALBUMA',
+    album_total_tracks: BROJ_PESAMA_NA_ALBUMU,
+    album_popularity: POPULARNOST_ALBUMA
+})
+
+// READ
+MATCH (album:CollectionAlbum {album_id: 'ID_ALBUMA'})
+RETURN album
+
+// UPDATE
+MATCH (album:CollectionAlbum {album_id: 'ID_ALBUMA'})
+SET album.name = 'NOVI_NAZIV_ALBUMA'
+RETURN album
+
+// DELETE
+MATCH (album:CollectionAlbum {album_id: 'ID_ALBUMA'})
+DELETE album
+
+// SINGLE VECTOR SEARCH
+MATCH (song:CollectionSong)
+WHERE song.track_popularity >= 70
+RETURN song
+
+// MULTI VECTOR SEARCH
+MATCH (song:CollectionSong)
+WHERE song.playlist_genre = 'Rock' AND song.track_popularity >= 70
+RETURN song
+
+// FILTER
+MATCH (song:CollectionSong)
+WHERE song.energy >= 0.8
+RETURN song
+
+// COUNT
+MATCH (song:CollectionSong)
+WHERE song.playlist_genre = 'Pop'
+RETURN COUNT(song) AS NumPopSongs
