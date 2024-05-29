@@ -1,0 +1,8 @@
+
+.metadata/*
+/.metadata/
+
+.idea/*
+/.idea/
+
+/data/transactions/
