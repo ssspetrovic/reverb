@@ -98,86 +98,86 @@ CREATE INDEX FOR (s:Song) ON (s.track_id);
 
 // CREATE IZMENI PODATKE
 CREATE (:CollectionSong {
-    track_id: 'ID_PESME',
-    track_name: 'NAZIV_PESME',
-    track_artist: 'IZVODJAC_PESME',
-    track_popularity: POPULARNOST_PESME,
-    track_album_id: 'ID_ALBUMA',
-    track_album_name: 'NAZIV_ALBUMA',
-    track_album_release_date: 'DATUM_IZLASKA_ALBUMA',
-    playlist_name: 'NAZIV_PLAYLISTE',
-    playlist_id: 'ID_PLAYLISTE',
-    playlist_genre: 'ZANR_PLAYLISTE',
-    playlist_subgenre: 'PODRZAN_ZANR_PLAYLISTE',
-    danceability: FLOAT_VREDNOST,
-    energy: FLOAT_VREDNOST,
-    key: INTEGER_VREDNOST,
-    loudness: FLOAT_VREDNOST,
-    mode: INTEGER_VREDNOST,
-    speechiness: FLOAT_VREDNOST,
-    acousticness: FLOAT_VREDNOST,
-    instrumentalness: FLOAT_VREDNOST,
-    liveness: FLOAT_VREDNOST,
-    valence: FLOAT_VREDNOST,
-    tempo: FLOAT_VREDNOST,
-    duration_ms: INTEGER_VREDNOST
+    track_id: 'cx12xzcklsa_d1k23lddasq23',
+    track_name: 'Ne moze nam niko nista',
+    track_artist: 'Mitar Miric',
+    track_popularity: 0.12,
+    track_album_id: 'dsad123cxzm213',
+    track_album_name: 'Ne moze nam niko nista',
+    track_album_release_date: '1989-03-31',
+    playlist_name: 'Jaka plejlista',
+    playlist_id: 'sajdlkajdl21n3jcxz',
+    playlist_genre: 'Narodna',
+    playlist_subgenre: 'Zabavna',
+    danceability: 0.45,
+    energy: 0.46,
+    key: 2,
+    loudness: 0.78,
+    mode: 1,
+    speechiness: 0.05,
+    acousticness: 0.23,
+    instrumentalness: 0.64,
+    liveness: 0.77,
+    valence: 0.43,
+    tempo: 0.3,
+    duration_ms: 360000
 })
 
 // READ 
-MATCH (song:CollectionSong {track_id: 'ID_PESME'})
+MATCH (song:CollectionSong {track_id: 'cx12xzcklsa_d1k23lddasq23'})
 RETURN song
 
 // UPDATE
-MATCH (song:CollectionSong {track_id: 'ID_PESME'})
-SET song.track_name = 'NOVI_NAZIV_PESME'
+MATCH (song:CollectionSong {track_id: 'cx12xzcklsa_d1k23lddasq23'})
+SET song.track_name = 'Moze nam svako svasta'
 RETURN song
 
 // DELETE
-MATCH (song:CollectionSong {track_id: 'ID_PESME'})
+MATCH (song:CollectionSong {track_id: 'cx12xzcklsa_d1k23lddasq23'})
 DELETE song
 
 // CREATE IZMENI PODATKE
 CREATE (:CollectionArtist {
-    name: 'NAZIV_IZVODJACA',
-    artist_id: 'ID_IZVODJACA',
-    artist_genre: 'ZANR_IZVODJACA',
-    artist_popularity: POPULARNOST_IZVODJACA
+    name: 'Mitar Miric',
+    artist_id: '44213xzcasdk123s',
+    artist_genre: 'Zabavna muzika',
+    artist_popularity: 0.88
 })
 
 // READ
-MATCH (artist:CollectionArtist {artist_id: 'ID_IZVODJACA'})
+MATCH (artist:CollectionArtist {artist_id: '44213xzcasdk123s'})
 RETURN artist
 
 // UPDATE
-MATCH (artist:CollectionArtist {artist_id: 'ID_IZVODJACA'})
-SET artist.name = 'NOVI_NAZIV_IZVODJACA'
+MATCH (artist:CollectionArtist {artist_id: '44213xzcasdk123s'})
+SET artist.name = 'Breskvica'
 RETURN artist
 
 // DELETE
-MATCH (artist:CollectionArtist {artist_id: 'ID_IZVODJACA'})
+MATCH (artist:CollectionArtist {artist_id: '44213xzcasdk123s'})
 DELETE artist
 
 // CREATE
 CREATE (:CollectionAlbum {
-    name: 'NAZIV_ALBUMA',
-    album_id: 'ID_ALBUMA',
-    album_artist: 'NAZIV_IZVODJACA',
-    album_release_date: 'DATUM_IZDAVANJA_ALBUMA',
-    album_total_tracks: BROJ_PESAMA_NA_ALBUMU,
-    album_popularity: POPULARNOST_ALBUMA
+    name: 'Tako mlada',
+    album_id: 'xdak142ncxdldsa',
+    album_artist: 'Tanja Savic',
+    album_release_date: '2005-06-16',
+    album_total_tracks: 8,
+    album_popularity: 0.45
 })
 
 // READ
-MATCH (album:CollectionAlbum {album_id: 'ID_ALBUMA'})
+MATCH (album:CollectionAlbum {album_id: 'xdak142ncxdldsa'})
 RETURN album
 
 // UPDATE
-MATCH (album:CollectionAlbum {album_id: 'ID_ALBUMA'})
-SET album.name = 'NOVI_NAZIV_ALBUMA'
+MATCH (album:CollectionAlbum {album_id: 'xdak142ncxdldsa'})
+SET album.name = 'Stranci'
 RETURN album
 
 // DELETE
-MATCH (album:CollectionAlbum {album_id: 'ID_ALBUMA'})
+MATCH (album:CollectionAlbum {album_id: 'xdak142ncxdldsa'})
 DELETE album
 
 // SINGLE VECTOR SEARCH
@@ -187,8 +187,8 @@ RETURN song
 
 // MULTI VECTOR SEARCH
 MATCH (song:CollectionSong)
-WHERE song.playlist_genre = 'Rock' AND song.track_popularity >= 70
-RETURN song
+WHERE song.playlist_genre = 'rock' AND song.track_popularity >= 70
+RETURN song.track_name as trackName
 
 // FILTER
 MATCH (song:CollectionSong)
@@ -197,5 +197,5 @@ RETURN song
 
 // COUNT
 MATCH (song:CollectionSong)
-WHERE song.playlist_genre = 'Pop'
+WHERE song.playlist_genre = 'pop'
 RETURN COUNT(song) AS NumPopSongs
