@@ -33,7 +33,7 @@ CREATE (:Cluster {name: 'reverb_cluster'});
 CREATE (:Collection {name: 'songs'});
 CREATE (:Collection {name: 'artists'});
 CREATE (:Collection {name: 'albums'});
-
+CREATE (:Collection {name: 'playlists'});
 
 // Dodavanje atributa za svaku kolekciju
 MATCH (song:Song)
@@ -71,10 +71,8 @@ CREATE INDEX FOR (a:CollectionArtist) ON (a.name);
 MATCH (song:Song)
 MERGE (artist:CollectionArtist {name: song.track_artist})
 ON CREATE SET
-    artist.artist_id = song.artist_id,
-    artist.artist_name = song.artist_name,
-    artist.artist_genre = song.artist_genre,
-    artist.artist_popularity = song.artist_popularity
+    artist.artist_id = rand() * 1000000  // Generišemo pseudoslučajan broj kao artist_id
+
 
 //Indeks na ime
 CREATE INDEX FOR (a:CollectionAlbum) ON (a.name);
@@ -94,6 +92,52 @@ ON CREATE SET
 
 // Formiranje indeksa za track_id polje u kolekciji pesama
 CREATE INDEX FOR (s:Song) ON (s.track_id);
+
+MATCH (song:Song)
+CREATE (:CollectionPlaylist {
+    playlist_name: song.playlist_name,
+    playlist_id: song.playlist_id,
+    playlist_genre: song.playlist_genre,
+    playlist_subgenre: song.playlist_subgenre
+})
+
+// Indeks na ime plejliste u kolekciji plejlista
+CREATE INDEX FOR (p:CollectionPlaylist) ON (p.playlist_name);
+
+
+// ********* Kreiranje relacija između čvorova ************
+
+// Relacija između pesme i kolekcije pesama
+MATCH (s:Song), (cs:CollectionSong)
+WHERE s.track_id = cs.track_id
+CREATE (cs)-[:BELONGS_TO]->(:Collection {name: 'songs'})
+
+// Relacija između pesme i izvođača
+MATCH (s:Song), (a:CollectionArtist)
+WHERE s.track_artist = a.name
+CREATE (s)-[:PERFORMED_BY]->(a)
+
+// Promena vrednosti
+MATCH (s:Song)-[r:PERFORMED_BY]->(a:CollectionArtist)
+WHERE s.track_id = '6f807x0ima9a1j3VPbc7VN' AND a.artist_id = 72850.46266283402
+SET r.since = date('2023-01-01')
+RETURN s, r, a
+
+// Relacija između pesme i albuma
+MATCH (s:Song), (al:CollectionAlbum)
+WHERE s.track_album_name = al.name
+CREATE (s)-[:INCLUDED_IN]->(al)
+
+// Relacija između pesme i plejliste
+MATCH (s:Song), (p:CollectionPlaylist)
+WHERE s.playlist_id = p.playlist_id
+CREATE (s)-[:INCLUDED_IN_PLAYLIST]->(p)
+
+//Prosecna popularnost
+MATCH (al:CollectionAlbum)<-[:INCLUDED_IN]-(s:Song)
+WITH al, AVG(s.track_popularity) AS avgPopularity
+RETURN al.name, avgPopularity
+ORDER BY avgPopularity DESC
 
 
 // CREATE IZMENI PODATKE
@@ -199,3 +243,34 @@ RETURN song
 MATCH (song:CollectionSong)
 WHERE song.playlist_genre = 'pop'
 RETURN COUNT(song) AS NumPopSongs
+
+// Prebrojavanje pesama po zanru
+
+MATCH (s:Song)
+WHERE s.playlist_genre = 'pop'
+WITH s.playlist_subgenre AS subgenre, COUNT(s) AS numSongs
+RETURN subgenre, numSongs
+ORDER BY numSongs DESC
+
+// Popularni izvodjaci
+
+MATCH (a:CollectionArtist)<-[:PERFORMED_BY]-(s:Song)
+WHERE s.track_popularity > 70
+WITH a, COUNT(s) AS popularSongs
+RETURN a.name, popularSongs
+ORDER BY popularSongs DESC
+
+
+// Odredjene karakteristike
+MATCH (s:Song)
+WHERE s.energy > 0.8 AND s.danceability > 0.7
+WITH s, s.track_popularity AS popularity
+RETURN s.track_name, s.track_artist, popularity
+ORDER BY popularity DESC
+
+//Filter po plejlistama
+MATCH (s:Song)
+WHERE s.playlist_name CONTAINS 'Chill'
+WITH s, s.playlist_name AS playlist
+RETURN s.track_name, playlist
+ORDER BY playlist
