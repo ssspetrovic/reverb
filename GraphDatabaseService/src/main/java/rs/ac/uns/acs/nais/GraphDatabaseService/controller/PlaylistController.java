@@ -10,7 +10,7 @@ import rs.ac.uns.acs.nais.GraphDatabaseService.service.IPlaylistService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/playlists")
+@RequestMapping("/playlists")
 public class PlaylistController {
 
     private final IPlaylistService playlistService;
