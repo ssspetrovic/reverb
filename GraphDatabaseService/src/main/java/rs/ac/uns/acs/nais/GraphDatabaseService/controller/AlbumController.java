@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.acs.nais.GraphDatabaseService.service.impl.AlbumService;
+import rs.ac.uns.acs.nais.GraphDatabaseService.service.IAlbumService;
 import rs.ac.uns.acs.nais.GraphDatabaseService.model.Album;
 
 import java.util.List;
@@ -13,10 +13,10 @@ import java.util.List;
 @RequestMapping("/albums")
 public class AlbumController {
 
-    private final AlbumService albumService;
+    private final IAlbumService albumService;
 
     @Autowired
-    public AlbumController(AlbumService albumService) {
+    public AlbumController(IAlbumService albumService) {
         this.albumService = albumService;
     }
 

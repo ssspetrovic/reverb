@@ -9,16 +9,41 @@ import org.springframework.data.neo4j.core.schema.Relationship.Direction;
 
 import java.util.List;
 
-@Node
+@Node("CollectionArtist")
 public class Artist {
 
     @RelationshipId @GeneratedValue
     private Long id;
+    private Long artistId;
     private String name;
 
     @Relationship(type = "PERFORMED_BY", direction = Direction.INCOMING)
     private List<Song> songs;
 
     public Artist() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getArtistId() {
+        return artistId;
+    }
+
+    public void setArtistId(Long artistId) {
+        this.artistId = artistId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

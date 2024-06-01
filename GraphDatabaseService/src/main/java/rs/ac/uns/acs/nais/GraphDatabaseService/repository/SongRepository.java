@@ -23,27 +23,27 @@ public interface SongRepository extends Neo4jRepository<Song, Long> {
     @Query("MATCH (s:CollectionSong {track_id: $trackId}) RETURN s")
     Song getSongById(String trackId);
 
-    @Query("MATCH (s:Song) RETURN s")
+    @Query("MATCH (s:CollectionSong) RETURN s")
     List<Song> getAllSongs();
 
-    @Query("MATCH (s:Song)-[:PERFORMED_BY]->(a:CollectionArtist {name: $artistName}) RETURN s")
+    @Query("MATCH (s:CollectionSong)-[:PERFORMED_BY]->(a:CollectionArtist {name: $artistName}) RETURN s")
     List<Song> getSongsByArtist(String artistName);
 
-    @Query("MATCH (s:Song)-[:INCLUDED_IN]->(al:CollectionAlbum {album_name: $albumName}) RETURN s")
+    @Query("MATCH (s:CollectionSong)-[:INCLUDED_IN]->(al:CollectionAlbum {album_name: $albumName}) RETURN s")
     List<Song> getSongsByAlbum(String albumName);
 
-    @Query("MATCH (s:Song) WHERE $criteria RETURN s")
+    @Query("MATCH (s:CollectionSong) WHERE $criteria RETURN s")
     List<Song> searchSongsByCriteria(SongSearchCriteriaDTO criteria);
 
-    @Query("MATCH (s:Song) WHERE s.track_popularity >= $popularity RETURN s")
-    List<Song> searchSongsByPopularity(int popularity);
+    @Query("MATCH (s:CollectionSong) WHERE s.track_popularity >= $popularity RETURN s")
+    List<Song> searchSongsByPopularity(Integer popularity);
 
-    @Query("MATCH (s:Song) WHERE s.playlist_genre = $playlistGenre RETURN s")
+    @Query("MATCH (s:CollectionSong) WHERE s.playlist_genre = $playlistGenre RETURN s")
     List<Song> searchSongsByPlaylistGenre(String playlistGenre);
 
-    @Query("MATCH (s:Song) WHERE s.energy = $energy RETURN s")
-    List<Song> searchSongsByEnergy(double energy);
+    @Query("MATCH (s:CollectionSong) WHERE s.energy = $energy RETURN s")
+    List<Song> searchSongsByEnergy(Integer energy);
 
-    @Query("MATCH (s:Song) WHERE s.playlist_subgenre = $playlistSubgenre RETURN s")
+    @Query("MATCH (s:CollectionSong) WHERE s.playlist_subgenre = $playlistSubgenre RETURN s")
     List<Song> searchSongsByPlaylistSubgenre(String playlistSubgenre);
 }

@@ -14,8 +14,8 @@ public interface ISongService {
     List<Song> getSongsByArtist(String artistName);
     List<Song> getSongsByAlbum(String albumName);
     List<Song> searchSongsByCriteria(SongSearchCriteriaDTO criteria);
-    List<Song> searchSongsByPopularity(int popularity);
+    List<Song> searchSongsByPopularity(Integer popularity);
     List<Song> searchSongsByPlaylistGenre(String playlistGenre);
-    List<Song> searchSongsByEnergy(double energy);
+    List<Song> searchSongsByEnergy(Integer energy);
     List<Song> searchSongsByPlaylistSubgenre(String playlistSubgenre);
 }

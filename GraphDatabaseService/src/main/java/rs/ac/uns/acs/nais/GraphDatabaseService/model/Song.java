@@ -3,14 +3,10 @@ package rs.ac.uns.acs.nais.GraphDatabaseService.model;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.Relationship;
-import org.springframework.data.neo4j.core.schema.Relationship.Direction;
 import java.util.HashMap;
 import java.util.Map;
 
-import java.util.List;
-
-@Node
+@Node("CollectionSong")
 public class Song {
 
     @Id @GeneratedValue
@@ -18,7 +14,7 @@ public class Song {
     private String trackId;
     private String trackName;
     private String trackArtist;
-    private int trackPopularity;
+    private Integer trackPopularity;
     private String trackAlbumId;
     private String trackAlbumName;
     private String trackAlbumReleaseDate;
@@ -26,23 +22,23 @@ public class Song {
     private String playlistId;
     private String playlistGenre;
     private String playlistSubgenre;
-    private float danceability;
-    private float energy;
-    private int key;
-    private float loudness;
-    private int mode;
-    private float speechiness;
-    private float acousticness;
-    private float instrumentalness;
-    private float liveness;
-    private float valence;
-    private float tempo;
-    private int durationMs;
+    private Float danceability;
+    private Float energy;
+    private Integer key;
+    private Float loudness;
+    private Integer mode;
+    private Float speechiness;
+    private Float acousticness;
+    private String instrumentalness;
+    private Float liveness;
+    private Float valence;
+    private Float tempo;
+    private Integer durationMs;
 
     public Song() {
     }
 
-        public Map<String, Object> toMap() {
+    public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
         map.put("id", this.id);
         map.put("trackId", this.trackId);
@@ -71,6 +67,14 @@ public class Song {
         return map;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getTrackId() {
         return trackId;
     }
@@ -85,5 +89,173 @@ public class Song {
 
     public void setTrackName(String trackName) {
         this.trackName = trackName;
+    }
+
+    public String getTrackArtist() {
+        return trackArtist;
+    }
+
+    public void setTrackArtist(String trackArtist) {
+        this.trackArtist = trackArtist;
+    }
+
+    public Integer getTrackPopularity() {
+        return trackPopularity;
+    }
+
+    public void setTrackPopularity(Integer trackPopularity) {
+        this.trackPopularity = trackPopularity;
+    }
+
+    public String getTrackAlbumId() {
+        return trackAlbumId;
+    }
+
+    public void setTrackAlbumId(String trackAlbumId) {
+        this.trackAlbumId = trackAlbumId;
+    }
+
+    public String getTrackAlbumName() {
+        return trackAlbumName;
+    }
+
+    public void setTrackAlbumName(String trackAlbumName) {
+        this.trackAlbumName = trackAlbumName;
+    }
+
+    public String getTrackAlbumReleaseDate() {
+        return trackAlbumReleaseDate;
+    }
+
+    public void setTrackAlbumReleaseDate(String trackAlbumReleaseDate) {
+        this.trackAlbumReleaseDate = trackAlbumReleaseDate;
+    }
+
+    public String getPlaylistName() {
+        return playlistName;
+    }
+
+    public void setPlaylistName(String playlistName) {
+        this.playlistName = playlistName;
+    }
+
+    public String getPlaylistId() {
+        return playlistId;
+    }
+
+    public void setPlaylistId(String playlistId) {
+        this.playlistId = playlistId;
+    }
+
+    public String getPlaylistGenre() {
+        return playlistGenre;
+    }
+
+    public void setPlaylistGenre(String playlistGenre) {
+        this.playlistGenre = playlistGenre;
+    }
+
+    public String getPlaylistSubgenre() {
+        return playlistSubgenre;
+    }
+
+    public void setPlaylistSubgenre(String playlistSubgenre) {
+        this.playlistSubgenre = playlistSubgenre;
+    }
+
+    public Float getDanceability() {
+        return danceability;
+    }
+
+    public void setDanceability(Float danceability) {
+        this.danceability = danceability;
+    }
+
+    public Float getEnergy() {
+        return energy;
+    }
+
+    public void setEnergy(Float energy) {
+        this.energy = energy;
+    }
+
+    public Integer getKey() {
+        return key;
+    }
+
+    public void setKey(Integer key) {
+        this.key = key;
+    }
+
+    public Float getLoudness() {
+        return loudness;
+    }
+
+    public void setLoudness(Float loudness) {
+        this.loudness = loudness;
+    }
+
+    public Integer getMode() {
+        return mode;
+    }
+
+    public void setMode(Integer mode) {
+        this.mode = mode;
+    }
+
+    public Float getSpeechiness() {
+        return speechiness;
+    }
+
+    public void setSpeechiness(Float speechiness) {
+        this.speechiness = speechiness;
+    }
+
+    public Float getAcousticness() {
+        return acousticness;
+    }
+
+    public void setAcousticness(Float acousticness) {
+        this.acousticness = acousticness;
+    }
+
+    public String getInstrumentalness() {
+        return instrumentalness;
+    }
+
+    public void setInstrumentalness(String instrumentalness) {
+        this.instrumentalness = instrumentalness;
+    }
+
+    public Float getLiveness() {
+        return liveness;
+    }
+
+    public void setLiveness(Float liveness) {
+        this.liveness = liveness;
+    }
+
+    public Float getValence() {
+        return valence;
+    }
+
+    public void setValence(Float valence) {
+        this.valence = valence;
+    }
+
+    public Float getTempo() {
+        return tempo;
+    }
+
+    public void setTempo(Float tempo) {
+        this.tempo = tempo;
+    }
+
+    public Integer getDurationMs() {
+        return durationMs;
+    }
+
+    public void setDurationMs(Integer durationMs) {
+        this.durationMs = durationMs;
     }
 }

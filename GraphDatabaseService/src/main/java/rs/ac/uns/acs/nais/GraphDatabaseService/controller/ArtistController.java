@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.acs.nais.GraphDatabaseService.service.impl.ArtistService;
+import rs.ac.uns.acs.nais.GraphDatabaseService.service.IArtistService;
 import rs.ac.uns.acs.nais.GraphDatabaseService.model.Artist;
 
 import java.util.List;
@@ -13,10 +13,10 @@ import java.util.List;
 @RequestMapping("/artists")
 public class ArtistController {
 
-    private final ArtistService artistService;
+    private final IArtistService artistService;
 
     @Autowired
-    public ArtistController(ArtistService artistService) {
+    public ArtistController(IArtistService artistService) {
         this.artistService = artistService;
     }
 

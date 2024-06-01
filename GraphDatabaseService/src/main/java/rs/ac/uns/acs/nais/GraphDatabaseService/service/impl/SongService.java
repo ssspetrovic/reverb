@@ -58,18 +58,15 @@ public class SongService implements ISongService {
         if (criteria.getPlaylistSubgenre() != null) {
             return songRepository.searchSongsByPlaylistSubgenre(criteria.getPlaylistSubgenre());
         }
-        if (criteria.getEnergy() != null && criteria.getEnergy().doubleValue() != 0) {
-            return songRepository.searchSongsByEnergy(criteria.getEnergy().doubleValue());
-        }
-        if (criteria.getEnergy() != null && criteria.getEnergy().doubleValue() != 0) {
-            return songRepository.searchSongsByEnergy(criteria.getEnergy().doubleValue());
+        if (criteria.getEnergy() != null && criteria.getEnergy() != 0) {
+            return songRepository.searchSongsByEnergy(criteria.getEnergy());
         } else {
             throw new IllegalArgumentException("Invalid search criteria");
         }
     }
 
     // Pretraga pesama po popularnosti
-    public List<Song> searchSongsByPopularity(int popularity) {
+    public List<Song> searchSongsByPopularity(Integer popularity) {
         return songRepository.searchSongsByPopularity(popularity);
     }
 
@@ -79,7 +76,7 @@ public class SongService implements ISongService {
     }
 
     // Pretraga pesama po energiji
-    public List<Song> searchSongsByEnergy(double energy) {
+    public List<Song> searchSongsByEnergy(Integer energy) {
         return songRepository.searchSongsByEnergy(energy);
     }
 

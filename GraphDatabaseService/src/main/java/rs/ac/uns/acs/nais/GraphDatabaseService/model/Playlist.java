@@ -8,7 +8,7 @@ import org.springframework.data.neo4j.core.schema.Relationship.Direction;
 
 import java.util.List;
 
-@Node
+@Node("CollectionPlaylist")
 public class Playlist {
 
     @Id @GeneratedValue

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.acs.nais.GraphDatabaseService.service.impl.SongService;
+import rs.ac.uns.acs.nais.GraphDatabaseService.service.ISongService;
 import rs.ac.uns.acs.nais.GraphDatabaseService.model.Song;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongSearchCriteriaDTO;
 
@@ -14,10 +14,10 @@ import java.util.List;
 @RequestMapping("/songs")
 public class SongController {
 
-    private final SongService songService;
+    private final ISongService songService;
 
     @Autowired
-    public SongController(SongService songService) {
+    public SongController(ISongService songService) {
         this.songService = songService;
     }
 
@@ -64,7 +64,7 @@ public class SongController {
     }
 
     @GetMapping("/popularity/{popularity}")
-    public ResponseEntity<List<Song>> searchSongsByPopularity(@PathVariable int popularity) {
+    public ResponseEntity<List<Song>> searchSongsByPopularity(@PathVariable Integer popularity) {
         return ResponseEntity.ok(songService.searchSongsByPopularity(popularity));
     }
 
@@ -74,7 +74,7 @@ public class SongController {
     }
 
     @GetMapping("/energy/{energy}")
-    public ResponseEntity<List<Song>> searchSongsByEnergy(@PathVariable double energy) {
+    public ResponseEntity<List<Song>> searchSongsByEnergy(@PathVariable Integer energy) {
         return ResponseEntity.ok(songService.searchSongsByEnergy(energy));
     }
 
