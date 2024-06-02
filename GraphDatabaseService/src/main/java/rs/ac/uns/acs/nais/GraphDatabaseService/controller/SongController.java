@@ -38,9 +38,19 @@ public class SongController {
     }
 
     @GetMapping("/{trackId}")
-    public ResponseEntity<Song> getSongById(@PathVariable String trackId) {
-        Song song = songService.getSongById(trackId);
-        return song != null ? ResponseEntity.ok(song) : ResponseEntity.notFound().build();
+    public ResponseEntity<?> getSongById(@PathVariable String trackId) {
+        try {
+            Song song = songService.getSongById(trackId);
+            if (song != null) {
+                return ResponseEntity.ok(song);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            // U slučaju greške, vraćamo odgovor sa statusom 500 i detaljnim opisom greške
+            String errorMessage = "Došlo je do greške prilikom dohvatanja pesme sa ID-em: " + trackId + ". Greška: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
+        }
     }
 
     @GetMapping
@@ -74,7 +84,7 @@ public class SongController {
     }
 
     @GetMapping("/energy/{energy}")
-    public ResponseEntity<List<Song>> searchSongsByEnergy(@PathVariable Integer energy) {
+    public ResponseEntity<List<Song>> searchSongsByEnergy(@PathVariable String energy) {
         return ResponseEntity.ok(songService.searchSongsByEnergy(energy));
     }
 

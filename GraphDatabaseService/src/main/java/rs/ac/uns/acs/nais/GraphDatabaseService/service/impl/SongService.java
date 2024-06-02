@@ -58,7 +58,7 @@ public class SongService implements ISongService {
         if (criteria.getPlaylistSubgenre() != null) {
             return songRepository.searchSongsByPlaylistSubgenre(criteria.getPlaylistSubgenre());
         }
-        if (criteria.getEnergy() != null && criteria.getEnergy() != 0) {
+        if (criteria.getEnergy() != null) {
             return songRepository.searchSongsByEnergy(criteria.getEnergy());
         } else {
             throw new IllegalArgumentException("Invalid search criteria");
@@ -76,7 +76,7 @@ public class SongService implements ISongService {
     }
 
     // Pretraga pesama po energiji
-    public List<Song> searchSongsByEnergy(Integer energy) {
+    public List<Song> searchSongsByEnergy(String energy) {
         return songRepository.searchSongsByEnergy(energy);
     }
 

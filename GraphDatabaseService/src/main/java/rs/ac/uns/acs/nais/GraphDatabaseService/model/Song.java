@@ -1,5 +1,6 @@
 package rs.ac.uns.acs.nais.GraphDatabaseService.model;
 
+import org.springframework.data.neo4j.core.schema.RelationshipId;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -9,31 +10,31 @@ import java.util.Map;
 @Node("CollectionSong")
 public class Song {
 
-    @Id @GeneratedValue
+    @RelationshipId @GeneratedValue
     private Long id;
-    private String trackId;
-    private String trackName;
-    private String trackArtist;
-    private Integer trackPopularity;
-    private String trackAlbumId;
-    private String trackAlbumName;
-    private String trackAlbumReleaseDate;
-    private String playlistName;
-    private String playlistId;
-    private String playlistGenre;
-    private String playlistSubgenre;
-    private Float danceability;
-    private Float energy;
+    private String track_id;
+    private String track_name;
+    private String track_artist;
+    private Integer track_popularity;
+    private String track_album_id;
+    private String track_album_name;
+    private String track_album_release_date;
+    private String playlist_name;
+    private String playlist_id;
+    private String playlist_genre;
+    private String playlist_subgenre;
+    private String danceability; 
+    private String energy;        
     private Integer key;
-    private Float loudness;
+    private String loudness;      
     private Integer mode;
-    private Float speechiness;
-    private Float acousticness;
+    private String speechiness; 
+    private String acousticness;  
     private String instrumentalness;
-    private Float liveness;
-    private Float valence;
-    private Float tempo;
-    private Integer durationMs;
+    private String liveness;     
+    private String valence;      
+    private String tempo;         
+    private Integer duration_ms;
 
     public Song() {
     }
@@ -41,17 +42,17 @@ public class Song {
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
         map.put("id", this.id);
-        map.put("trackId", this.trackId);
-        map.put("trackName", this.trackName);
-        map.put("trackArtist", this.trackArtist);
-        map.put("trackPopularity", this.trackPopularity);
-        map.put("trackAlbumId", this.trackAlbumId);
-        map.put("trackAlbumName", this.trackAlbumName);
-        map.put("trackAlbumReleaseDate", this.trackAlbumReleaseDate);
-        map.put("playlistName", this.playlistName);
-        map.put("playlistId", this.playlistId);
-        map.put("playlistGenre", this.playlistGenre);
-        map.put("playlistSubgenre", this.playlistSubgenre);
+        map.put("track_id", this.track_id);
+        map.put("track_name", this.track_name);
+        map.put("track_artist", this.track_artist);
+        map.put("track_popularity", this.track_popularity);
+        map.put("track_album_id", this.track_album_id);
+        map.put("track_album_name", this.track_album_name);
+        map.put("track_album_release_date", this.track_album_release_date);
+        map.put("playlist_name", this.playlist_name);
+        map.put("playlist_id", this.playlist_id);
+        map.put("playlist_genre", this.playlist_genre);
+        map.put("playlist_subgenre", this.playlist_subgenre);
         map.put("danceability", this.danceability);
         map.put("energy", this.energy);
         map.put("key", this.key);
@@ -63,10 +64,10 @@ public class Song {
         map.put("liveness", this.liveness);
         map.put("valence", this.valence);
         map.put("tempo", this.tempo);
-        map.put("durationMs", this.durationMs);
+        map.put("duration_ms", this.duration_ms);
         return map;
     }
-
+ 
     public Long getId() {
         return id;
     }
@@ -76,107 +77,107 @@ public class Song {
     }
 
     public String getTrackId() {
-        return trackId;
+        return track_id;
     }
 
-    public void setTrackId(String trackId) {
-        this.trackId = trackId;
+    public void setTrackId(String track_id) {
+        this.track_id = track_id;
     }
 
     public String getTrackName() {
-        return trackName;
+        return track_name;
     }
 
-    public void setTrackName(String trackName) {
-        this.trackName = trackName;
+    public void setTrackName(String track_name) {
+        this.track_name = track_name;
     }
 
     public String getTrackArtist() {
-        return trackArtist;
+        return track_artist;
     }
 
-    public void setTrackArtist(String trackArtist) {
-        this.trackArtist = trackArtist;
+    public void setTrackArtist(String track_artist) {
+        this.track_artist = track_artist;
     }
 
     public Integer getTrackPopularity() {
-        return trackPopularity;
+        return track_popularity;
     }
 
-    public void setTrackPopularity(Integer trackPopularity) {
-        this.trackPopularity = trackPopularity;
+    public void setTrackPopularity(Integer track_popularity) {
+        this.track_popularity = track_popularity;
     }
 
-    public String getTrackAlbumId() {
-        return trackAlbumId;
+    public String getTrackAlbum_id() {
+        return track_album_id;
     }
 
-    public void setTrackAlbumId(String trackAlbumId) {
-        this.trackAlbumId = trackAlbumId;
+    public void setTrackAlbum_id(String track_album_id) {
+        this.track_album_id = track_album_id;
     }
 
-    public String getTrackAlbumName() {
-        return trackAlbumName;
+    public String getTrackAlbum_name() {
+        return track_album_name;
     }
 
-    public void setTrackAlbumName(String trackAlbumName) {
-        this.trackAlbumName = trackAlbumName;
+    public void setTrackAlbumName(String track_album_name) {
+        this.track_album_name = track_album_name;
     }
 
     public String getTrackAlbumReleaseDate() {
-        return trackAlbumReleaseDate;
+        return track_album_release_date;
     }
 
-    public void setTrackAlbumReleaseDate(String trackAlbumReleaseDate) {
-        this.trackAlbumReleaseDate = trackAlbumReleaseDate;
+    public void setTrackAlbumReleaseDate(String track_album_release_date) {
+        this.track_album_release_date = track_album_release_date;
     }
 
     public String getPlaylistName() {
-        return playlistName;
+        return playlist_name;
     }
 
-    public void setPlaylistName(String playlistName) {
-        this.playlistName = playlistName;
+    public void setPlaylistName(String playlist_name) {
+        this.playlist_name = playlist_name;
     }
 
     public String getPlaylistId() {
-        return playlistId;
+        return playlist_id;
     }
 
-    public void setPlaylistId(String playlistId) {
-        this.playlistId = playlistId;
+    public void setPlaylistId(String playlist_id) {
+        this.playlist_id = playlist_id;
     }
 
     public String getPlaylistGenre() {
-        return playlistGenre;
+        return playlist_genre;
     }
 
-    public void setPlaylistGenre(String playlistGenre) {
-        this.playlistGenre = playlistGenre;
+    public void setPlaylistGenre(String playlist_genre) {
+        this.playlist_genre = playlist_genre;
     }
 
     public String getPlaylistSubgenre() {
-        return playlistSubgenre;
+        return playlist_subgenre;
     }
 
-    public void setPlaylistSubgenre(String playlistSubgenre) {
-        this.playlistSubgenre = playlistSubgenre;
+    public void setPlaylistSubgenre(String playlist_subgenre) {
+        this.playlist_subgenre = playlist_subgenre;
     }
 
-    public Float getDanceability() {
+    public String getDanceability() {
         return danceability;
     }
 
-    public void setDanceability(Float danceability) {
-        this.danceability = danceability;
+    public void setDanceability(String danceability) {
+        this.danceability = (danceability != null) ? danceability : "0.0";
     }
 
-    public Float getEnergy() {
+    public String getEnergy() {
         return energy;
     }
 
-    public void setEnergy(Float energy) {
-        this.energy = energy;
+    public void setEnergy(String energy) {
+        this.energy = (energy != null) ? energy : "0.0";
     }
 
     public Integer getKey() {
@@ -187,12 +188,12 @@ public class Song {
         this.key = key;
     }
 
-    public Float getLoudness() {
+    public String getLoudness() {
         return loudness;
     }
 
-    public void setLoudness(Float loudness) {
-        this.loudness = loudness;
+    public void setLoudness(String loudness) {
+        this.loudness = (loudness != null) ? loudness : "0.0";
     }
 
     public Integer getMode() {
@@ -203,20 +204,20 @@ public class Song {
         this.mode = mode;
     }
 
-    public Float getSpeechiness() {
+    public String getSpeechiness() {
         return speechiness;
     }
 
-    public void setSpeechiness(Float speechiness) {
-        this.speechiness = speechiness;
+    public void setSpeechiness(String speechiness) {
+        this.speechiness = (speechiness != null) ? speechiness : "0.0";
     }
 
-    public Float getAcousticness() {
+    public String getAcousticness() {
         return acousticness;
     }
 
-    public void setAcousticness(Float acousticness) {
-        this.acousticness = acousticness;
+    public void setAcousticness(String acousticness) {
+        this.acousticness = (acousticness != null) ? acousticness : "0.0";
     }
 
     public String getInstrumentalness() {
@@ -224,38 +225,38 @@ public class Song {
     }
 
     public void setInstrumentalness(String instrumentalness) {
-        this.instrumentalness = instrumentalness;
+        this.instrumentalness = (instrumentalness != null) ? instrumentalness : "0.0";
     }
 
-    public Float getLiveness() {
+    public String getLiveness() {
         return liveness;
     }
 
-    public void setLiveness(Float liveness) {
-        this.liveness = liveness;
+    public void setLiveness(String liveness) {
+        this.liveness = (liveness != null) ? liveness : "0.0";
     }
 
-    public Float getValence() {
+    public String getValence() {
         return valence;
     }
 
-    public void setValence(Float valence) {
-        this.valence = valence;
+    public void setValence(String valence) {
+        this.valence = (valence != null) ? valence : "0.0";
     }
 
-    public Float getTempo() {
+    public String getTempo() {
         return tempo;
     }
 
-    public void setTempo(Float tempo) {
-        this.tempo = tempo;
+    public void setTempo(String tempo) {
+        this.tempo = (tempo != null) ? tempo : "0.0";
     }
 
     public Integer getDurationMs() {
-        return durationMs;
+        return duration_ms;
     }
 
-    public void setDurationMs(Integer durationMs) {
-        this.durationMs = durationMs;
+    public void setDurationMs(Integer duration_ms) {
+        this.duration_ms = duration_ms;
     }
 }

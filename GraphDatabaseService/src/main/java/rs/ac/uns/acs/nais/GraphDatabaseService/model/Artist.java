@@ -14,7 +14,7 @@ public class Artist {
 
     @RelationshipId @GeneratedValue
     private Long id;
-    private Long artistId;
+    private Long artist_id;
     private String name;
 
     @Relationship(type = "PERFORMED_BY", direction = Direction.INCOMING)
@@ -32,11 +32,11 @@ public class Artist {
     }
 
     public Long getArtistId() {
-        return artistId;
+        return artist_id;
     }
 
-    public void setArtistId(Long artistId) {
-        this.artistId = artistId;
+    public void setArtistId(Long artist_id) {
+        this.artist_id = artist_id;
     }
 
     public String getName() {

@@ -20,7 +20,7 @@ public interface SongRepository extends Neo4jRepository<Song, Long> {
     @Query("MATCH (s:CollectionSong {track_id: $trackId}) DELETE s")
     void deleteSong(String trackId);
 
-    @Query("MATCH (s:CollectionSong {track_id: $trackId}) RETURN s")
+    @Query("MATCH (s:CollectionSong {track_id: $trackId}) RETURN s LIMIT 1")
     Song getSongById(String trackId);
 
     @Query("MATCH (s:CollectionSong) RETURN s")
@@ -42,7 +42,7 @@ public interface SongRepository extends Neo4jRepository<Song, Long> {
     List<Song> searchSongsByPlaylistGenre(String playlistGenre);
 
     @Query("MATCH (s:CollectionSong) WHERE s.energy = $energy RETURN s")
-    List<Song> searchSongsByEnergy(Integer energy);
+    List<Song> searchSongsByEnergy(String energy);
 
     @Query("MATCH (s:CollectionSong) WHERE s.playlist_subgenre = $playlistSubgenre RETURN s")
     List<Song> searchSongsByPlaylistSubgenre(String playlistSubgenre);

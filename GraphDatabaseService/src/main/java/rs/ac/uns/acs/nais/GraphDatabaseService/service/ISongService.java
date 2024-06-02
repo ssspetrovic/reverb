@@ -16,6 +16,6 @@ public interface ISongService {
     List<Song> searchSongsByCriteria(SongSearchCriteriaDTO criteria);
     List<Song> searchSongsByPopularity(Integer popularity);
     List<Song> searchSongsByPlaylistGenre(String playlistGenre);
-    List<Song> searchSongsByEnergy(Integer energy);
+    List<Song> searchSongsByEnergy(String energy);
     List<Song> searchSongsByPlaylistSubgenre(String playlistSubgenre);
 }

@@ -4,6 +4,7 @@ import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
+import org.springframework.data.neo4j.core.schema.RelationshipId;
 import org.springframework.data.neo4j.core.schema.Relationship.Direction;
 
 import java.util.List;
@@ -11,12 +12,12 @@ import java.util.List;
 @Node("CollectionPlaylist")
 public class Playlist {
 
-    @Id @GeneratedValue
+    @RelationshipId @GeneratedValue
     private Long id;
-    private String playlistId;
-    private String playlistName;
-    private String playlistGenre;
-    private String playlistSubgenre;
+    private String playlist_id;
+    private String playlist_name;
+    private String playlist_genre;
+    private String playlist_subgenre;
 
     @Relationship(type = "INCLUDED_IN_PLAYLIST", direction = Direction.INCOMING) // Definišemo relaciju "INCLUDED_IN_PLAYLIST"
     private List<Song> songs;
@@ -42,34 +43,34 @@ public class Playlist {
     }
 
     public String getPlaylistId() {
-        return playlistId;
+        return playlist_id;
     }
 
-    public void setPlaylistId(String playlistId) {
-        this.playlistId = playlistId;
+    public void setPlaylistId(String playlist_id) {
+        this.playlist_id = playlist_id;
     }
 
     public String getPlaylistName() {
-        return playlistName;
+        return playlist_name;
     }
 
-    public void setPlaylistName(String playlistName) {
-        this.playlistName = playlistName;
+    public void setPlaylistName(String playlist_name) {
+        this.playlist_name = playlist_name;
     }
 
     public String getPlaylistGenre() {
-        return playlistGenre;
+        return playlist_genre;
     }
 
-    public void setPlaylistGenre(String playlistGenre) {
-        this.playlistGenre = playlistGenre;
+    public void setPlaylistGenre(String playlist_genre) {
+        this.playlist_genre = playlist_genre;
     }
 
     public String getPlaylistSubgenre() {
-        return playlistSubgenre;
+        return playlist_subgenre;
     }
 
-    public void setPlaylistSubgenre(String playlistSubgenre) {
-        this.playlistSubgenre = playlistSubgenre;
+    public void setPlaylistSubgenre(String playlist_subgenre) {
+        this.playlist_subgenre = playlist_subgenre;
     }
 }

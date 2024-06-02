@@ -3,7 +3,7 @@ package rs.ac.uns.acs.nais.GraphDatabaseService.dto;
 public class SongSearchCriteriaDTO {
     private String playlistGenre;
     private String playlistSubgenre;
-    private Integer energy;
+    private String energy;
 
     SongSearchCriteriaDTO() {
     }
@@ -24,11 +24,11 @@ public class SongSearchCriteriaDTO {
         this.playlistSubgenre = playlistSubgenre;
     }
 
-    public Integer getEnergy() {
+    public String getEnergy() {
         return energy;
     }
 
-    public void setEnergy(Integer energy) {
+    public void setEnergy(String energy) {
         this.energy = energy;
     }
 }
