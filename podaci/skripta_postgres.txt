@@ -1,0 +1,14 @@
+CREATE TABLE users
+(
+    id            SERIAL PRIMARY KEY,
+    first_name    VARCHAR(50),
+    last_name     VARCHAR(50),
+    email         VARCHAR(100) UNIQUE NOT NULL,
+    phone_number  VARCHAR(40),
+    address       TEXT,
+    city          VARCHAR(50),
+    state         VARCHAR(50),
+    zip_code      VARCHAR(40),
+    country       VARCHAR(100),
+    date_of_birth DATE
+);
