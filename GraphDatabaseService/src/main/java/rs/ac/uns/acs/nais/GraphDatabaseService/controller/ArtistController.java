@@ -25,20 +25,26 @@ public class ArtistController {
         return new ResponseEntity<>(artistService.createArtist(artist), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{artistId}")
-    public ResponseEntity<Artist> updateArtist(@PathVariable String artistId, @RequestBody Artist artist) {
-        return new ResponseEntity<>(artistService.updateArtist(artistId, artist), HttpStatus.OK);
+    @PutMapping("/{artist_id}")
+    public ResponseEntity<Artist> updateArtist(@PathVariable Long artist_id, @RequestBody Artist artist) {
+        return new ResponseEntity<>(artistService.updateArtist(artist_id, artist), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{artistId}")
-    public ResponseEntity<Void> deleteArtist(@PathVariable String artistId) {
-        artistService.deleteArtist(artistId);
+    @DeleteMapping("/{artist_id}")
+    public ResponseEntity<Void> deleteArtist(@PathVariable Long artist_id) {
+        artistService.deleteArtist(artist_id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{artistId}")
-    public ResponseEntity<Artist> getArtistById(@PathVariable String artistId) {
-        Artist artist = artistService.getArtistById(artistId);
+    @GetMapping("/{artist_id}")
+    public ResponseEntity<Artist> getArtistById(@PathVariable Long artist_id) {
+        Artist artist = artistService.getArtistById(artist_id);
+        return artist != null ? ResponseEntity.ok(artist) : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/{name}")
+    public ResponseEntity<Artist> getArtistByName(@PathVariable String name) {
+        Artist artist = artistService.getArtistByName(name);
         return artist != null ? ResponseEntity.ok(artist) : ResponseEntity.notFound().build();
     }
 
@@ -48,7 +54,7 @@ public class ArtistController {
     }
 
     @GetMapping("/popularity/{popularity}")
-    public ResponseEntity<List<Artist>> searchArtistsByPopularity(@PathVariable double popularity) {
+    public ResponseEntity<List<Artist>> searchArtistsByPopularity(@PathVariable String popularity) {
         return ResponseEntity.ok(artistService.searchArtistsByPopularity(popularity));
     }
 

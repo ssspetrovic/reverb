@@ -1,0 +1,98 @@
+// 1. CollectionSong
+// CREATE
+    CREATE (:CollectionSong {
+        track_id: 'novi_id_pesme',
+        track_name: 'Naziv nove pesme',
+        track_artist: 'Izvodjac pesme',
+        track_popularity: 70, 
+        track_album_id: 'id_albuma',
+        track_album_name: 'Naziv albuma',
+        track_album_release_date: 'Datum izlaska albuma',
+        playlist_name: 'Naziv plejliste',
+        playlist_id: 'id_plejliste',
+        playlist_genre: 'Zanr plejliste',
+        playlist_subgenre: 'Podzanr plejliste',
+        danceability: 0.8,
+        energy: 0.7,
+        key: 5,
+        loudness: -6.2,
+        mode: 1,
+        speechiness: 0.05,
+        acousticness: 0.1,
+        instrumentalness: 0.3,
+        liveness: 0.2,
+        valence: 0.8,
+        tempo: 120,
+        duration_ms: 240000
+    })
+
+// READ
+    MATCH (s:CollectionSong {track_id: 'novi_id_pesme'})
+    RETURN s
+
+// UPDATE
+    MATCH (s:CollectionSong {track_id: 'novi_id_pesme'})
+    SET s.track_popularity = 80
+    RETURN s
+
+// DELETE
+    MATCH (s:CollectionSong {track_id: 'novi_id_pesme'})
+    DELETE s
+
+
+
+// 2. CollectionArtist
+// CREATE
+CREATE (a:CollectionArtist {name: 'Ime izvodjaca'})
+SET a.artist_id = id(a)
+
+// READ
+MATCH (a:CollectionArtist {name: 'Ime izvodjaca'})
+RETURN a
+
+// UPDATE
+MATCH (a:CollectionArtist {name: 'Ime izvodjaca'})
+SET a.name = 'Novo ime izvodjaca'
+
+// DELETE
+MATCH (a:CollectionArtist {name: 'Novo ime izvodjaca'})
+DETACH DELETE a
+
+
+
+// 3. CollectionAlbum
+
+// CREATE
+CREATE (al:CollectionAlbum {album_id: 'Id albuma', name: 'Naziv albuma', artist: 'Ime izvodjaca', release_date: 'Datum izlaska'})
+
+// READ
+MATCH (al:CollectionAlbum {album_id: 'Id albuma'})
+RETURN al
+
+// UPDATE
+MATCH (al:CollectionAlbum {album_id: 'Id albuma'})
+SET al.name = 'Novi naziv albuma', al.artist = 'Novo ime izvodjaca', al.release_date = 'Novi datum izlaska'
+
+// DELETE
+MATCH (al:CollectionAlbum {album_id: 'Id albuma'})
+DETACH DELETE al
+
+
+
+// 4. CollectionPlaylist
+
+// CREATE
+CREATE (p:CollectionPlaylist {name: 'Naziv plejliste', playlist_id: 'Id plejliste', genre: 'Zanr', subgenre: 'Podzanr'})
+
+// READ
+MATCH (p:CollectionPlaylist {name: 'Naziv plejliste'})
+RETURN p
+
+// UPDATE
+MATCH (p:CollectionPlaylist {playlist_id: 'Id plejliste'})
+SET p.name = 'Novi naziv plejliste', p.genre = 'Novi zanr', p.subgenre = 'Novi podzanr'
+
+// DELETE
+MATCH (p:CollectionPlaylist {name: 'Novi naziv plejliste'})
+DETACH DELETE p
+

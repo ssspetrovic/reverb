@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface IAlbumService {
     Album createAlbum(Album album);
-    Album updateAlbum(String albumId, Album album);
-    void deleteAlbum(String albumId);
-    Album getAlbumById(String albumId);
+    Album updateAlbum(String album_id, Album album);
+    void deleteAlbum(String album_id);
+    Album getAlbumById(String album_id);
     List<Album> getAllAlbums();
-    List<Album> searchAlbumsByPopularity(double popularity);
+    List<Album> searchAlbumsByPopularity(String popularity);
     List<Album> searchAlbumsByGenre(String genre);
     List<Album> getAlbumsByArtist(String artistName);
 }

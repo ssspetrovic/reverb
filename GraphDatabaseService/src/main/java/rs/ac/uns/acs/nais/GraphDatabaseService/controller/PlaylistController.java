@@ -26,21 +26,21 @@ public class PlaylistController {
         return new ResponseEntity<>(createdPlaylist, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{playlistId}")
-    public ResponseEntity<Playlist> updatePlaylist(@PathVariable String playlistId, @RequestBody Playlist playlist) {
-        Playlist updatedPlaylist = playlistService.updatePlaylist(playlistId, playlist);
+    @PutMapping("/{playlist_id}")
+    public ResponseEntity<Playlist> updatePlaylist(@PathVariable String playlist_id, @RequestBody Playlist playlist) {
+        Playlist updatedPlaylist = playlistService.updatePlaylist(playlist_id, playlist);
         return ResponseEntity.ok(updatedPlaylist);
     }
 
-    @DeleteMapping("/{playlistId}")
-    public ResponseEntity<Void> deletePlaylist(@PathVariable Long playlistId) {
-        playlistService.deletePlaylist(playlistId);
+    @DeleteMapping("/{playlist_id}")
+    public ResponseEntity<Void> deletePlaylist(@PathVariable String playlist_id) {
+        playlistService.deletePlaylist(playlist_id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{playlistId}")
-    public ResponseEntity<Playlist> getPlaylistById(@PathVariable Long playlistId) {
-        Playlist playlist = playlistService.getPlaylistById(playlistId);
+    @GetMapping("/{playlist_id}")
+    public ResponseEntity<Playlist> getPlaylistById(@PathVariable String playlist_id) {
+        Playlist playlist = playlistService.getPlaylistById(playlist_id);
         return ResponseEntity.ok(playlist);
     }
 

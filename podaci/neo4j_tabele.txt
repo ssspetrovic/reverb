@@ -1,0 +1,118 @@
+LOAD CSV WITH HEADERS FROM 'file:///spotify_songs.csv' AS row
+CREATE (:Song {
+    track_id: row.track_id,
+    track_name: row.track_name,
+    track_artist: row.track_artist,
+    track_popularity: toInteger(row.track_popularity),
+    track_album_id: row.track_album_id,
+    track_album_name: row.track_album_name,
+    track_album_release_date: row.track_album_release_date,
+    playlist_name: row.playlist_name,
+    playlist_id: row.playlist_id,
+    playlist_genre: row.playlist_genre,
+    playlist_subgenre: row.playlist_subgenre,
+    danceability: row.danceability,
+    energy: row.energy,
+    key: toInteger(row.key),
+    loudness: row.loudness,
+    mode: toInteger(row.mode),
+    speechiness: row.speechiness,
+    acousticness: row.acousticness,
+    instrumentalness: row.instrumentalness,
+    liveness: row.liveness,
+    valence: row.valence,
+    tempo: row.tempo,
+    duration_ms: toInteger(row.duration_ms)
+})
+
+// Kreiranje kolekcija (nodova)
+CREATE (:Collection {name: 'songs'});
+CREATE (:Collection {name: 'artists'});
+CREATE (:Collection {name: 'albums'});
+CREATE (:Collection {name: 'playlists'});
+
+// Dodavanje atributa za svaku kolekciju
+MATCH (song:Song)
+CREATE (:CollectionSong {
+    track_id: song.track_id,
+    track_name: COALESCE(song.track_name, '/'),
+    track_artist: COALESCE(song.track_artist, '/'),
+    track_popularity: COALESCE(song.track_popularity, 0),
+    track_album_id: COALESCE(song.track_album_id, '/'),
+    track_album_name: COALESCE(song.track_album_name, '/'),
+    track_album_release_date: COALESCE(song.track_album_release_date, '/'),
+    playlist_name: COALESCE(song.playlist_name, '/'),
+    playlist_id: COALESCE(song.playlist_id, '/'),
+    playlist_genre: COALESCE(song.playlist_genre, '/'),
+    playlist_subgenre: COALESCE(song.playlist_subgenre, '/'),
+    danceability: COALESCE(song.danceability, 0),
+    energy: COALESCE(song.energy, 0),
+    key: COALESCE(song.key, 0),
+    loudness: COALESCE(song.loudness, 0),
+    mode: COALESCE(song.mode, 0),
+    speechiness: COALESCE(song.speechiness, 0),
+    acousticness: COALESCE(song.acousticness, 0),
+    instrumentalness: COALESCE(song.instrumentalness, 0),
+    liveness: COALESCE(song.liveness, 0),
+    valence: COALESCE(song.valence, 0),
+    tempo: COALESCE(song.tempo, 0),
+    duration_ms: COALESCE(song.duration_ms, 0)
+})
+
+//Indeks na ime
+CREATE INDEX FOR (a:CollectionArtist) ON (a.name);
+
+
+// Prenos podataka iz baze 'Song' u kolekciju 'artists'
+MATCH (song:Song)
+MERGE (artist:CollectionArtist {name: song.track_artist})
+ON CREATE SET
+    artist.name = song.track_artist
+
+
+//Indeks na ime
+CREATE INDEX FOR (a:CollectionAlbum) ON (a.name);
+
+
+// Prenos podataka iz baze 'Song' u kolekciju 'albums'
+MATCH (song:Song)
+MERGE (album:CollectionAlbum {name: song.track_album_name})
+ON CREATE SET
+    album.album_id = song.track_album_id,
+    album.name = song.track_album_name,
+    album.artist = song.track_artist,
+    album.release_date = song.track_album_release_date
+
+
+// Formiranje indeksa za track_id polje u kolekciji pesama
+CREATE INDEX FOR (s:Song) ON (s.track_id);
+
+MATCH (song:Song)
+MERGE (playlist:CollectionPlaylist {playlist_id: song.playlist_id})
+ON CREATE SET
+    playlist.name = song.playlist_name,
+    playlist.playlist_id = song.playlist_id,
+    playlist.genre = song.playlist_genre,
+    playlist.subgenre = song.playlist_subgenre
+
+
+// Indeks na ime plejliste u kolekciji plejlista
+CREATE INDEX FOR (p:CollectionPlaylist) ON (p.playlist_name);
+
+
+// ********* Kreiranje relacija između čvorova ************
+
+// Relacija između pesme i izvođača
+MATCH (s:CollectionSong), (a:CollectionArtist)
+WHERE s.track_artist = a.name
+CREATE (s)-[:PERFORMED_BY]->(a)
+
+// Relacija između pesme i albuma
+MATCH (s:CollectionSong), (al:CollectionAlbum)
+WHERE s.track_album_name = al.name
+CREATE (s)-[:INCLUDED_IN]->(al)
+
+// Relacija između pesme i plejliste
+MATCH (s:CollectionSong), (p:CollectionPlaylist)
+WHERE s.playlist_id = p.playlist_id
+CREATE (s)-[:INCLUDED_IN_PLAYLIST]->(p)

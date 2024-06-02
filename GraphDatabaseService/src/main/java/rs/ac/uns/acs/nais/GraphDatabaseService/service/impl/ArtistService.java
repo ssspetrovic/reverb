@@ -22,16 +22,21 @@ public class ArtistService implements IArtistService {
         return artistRepository.createArtist(artist);
     }
 
-    public Artist updateArtist(String artistId, Artist artist) {
-        return artistRepository.updateArtist(artistId, artist);
+    public Artist updateArtist(Long artist_id, Artist artist) {
+        artist.setArtistId(artist_id);
+        return artistRepository.updateArtist(artist);
     }
 
-    public void deleteArtist(String artistId) {
-        artistRepository.deleteArtist(artistId);
+    public void deleteArtist(Long artist_id) {
+        artistRepository.deleteArtist(artist_id);
     }
 
-    public Artist getArtistById(String artistId) {
-        return artistRepository.getArtistById(artistId);
+    public Artist getArtistById(Long artist_id) {
+        return artistRepository.getArtistById(artist_id);
+    }
+
+    public Artist getArtistByName(String name) {
+        return artistRepository.getArtistByName(name);
     }
 
     public List<Artist> getAllArtists() {
@@ -39,7 +44,7 @@ public class ArtistService implements IArtistService {
     }
 
     // Pretraga izvođača po popularnosti
-    public List<Artist> searchArtistsByPopularity(double popularity) {
+    public List<Artist> searchArtistsByPopularity(String popularity) {
         return artistRepository.searchArtistsByPopularity(popularity);
     }
 

@@ -10,24 +10,24 @@ import java.util.List;
 @Repository
 public interface PlaylistRepository extends Neo4jRepository<Playlist, Long> {
 
-    @Query("CREATE (p:Playlist $props) RETURN p")
+    @Query("CREATE (p:CollectionPlaylist {playlist_id: $playlist.playlist_id, name: $playlist.name, genre: $playlist.genre, subgenre: $playlist.subgenre}) RETURN p")
     Playlist createPlaylist(Playlist playlist);
 
-    @Query("MATCH (p:Playlist {id: $playlistId}) SET p = $props RETURN p")
-    Playlist updatePlaylist(String playlistId, Playlist playlist);
+    @Query("MATCH (p:CollectionPlaylist {playlist_id: $playlist.playlist_id}) SET p.name = $playlist.name, p.genre = $playlist.genre, p.subgenre = $playlist.subgenre RETURN p")
+    Playlist updatePlaylist(Playlist playlist);
 
-    @Query("MATCH (p:Playlist {id: $playlistId}) DELETE p")
-    void deletePlaylist(String playlistId);
+    @Query("MATCH (p:CollectionPlaylist {playlist_id: $playlist_id}) DELETE p")
+    void deletePlaylist(String playlist_id);
 
-    @Query("MATCH (p:Playlist {id: $playlistId}) RETURN p")
-    Playlist getPlaylistById(String playlistId);
+    @Query("MATCH (p:CollectionPlaylist {playlist_id: $playlist_id}) RETURN p LIMIT 1")
+    Playlist getPlaylistById(String playlist_id);
 
-    @Query("MATCH (p:Playlist) RETURN p")
+    @Query("MATCH (p:CollectionPlaylist) RETURN p")
     List<Playlist> getAllPlaylists();
 
-    @Query("MATCH (p:Playlist) WHERE p.genre = $genre RETURN p")
+    @Query("MATCH (p:CollectionPlaylist) WHERE p.genre = $genre RETURN p")
     List<Playlist> getPlaylistsByGenre(String genre);
 
-    @Query("MATCH (p:Playlist) WHERE p.subgenre = $subgenre RETURN p")
+    @Query("MATCH (p:CollectionPlaylist) WHERE p.subgenre = $subgenre RETURN p")
     List<Playlist> getPlaylistsBySubgenre(String subgenre);
 }

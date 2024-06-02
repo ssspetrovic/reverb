@@ -18,38 +18,44 @@ public class AlbumService implements IAlbumService {
         this.albumRepository = albumRepository;
     }
 
+    @Override
     public Album createAlbum(Album album) {
         return albumRepository.createAlbum(album);
     }
 
-    public Album updateAlbum(String albumId, Album album) {
-        return albumRepository.updateAlbum(albumId, album);
+    @Override
+    public Album updateAlbum(String album_id, Album album) {
+        album.setAlbumId(album_id);
+        return albumRepository.updateAlbum(album);
     }
 
-    public void deleteAlbum(String albumId) {
-        albumRepository.deleteAlbum(albumId);
+    @Override
+    public void deleteAlbum(String album_id) {
+        albumRepository.deleteAlbum(album_id);
     }
 
-    public Album getAlbumById(String albumId) {
-        return albumRepository.getAlbumById(albumId);
+    @Override
+    public Album getAlbumById(String album_id) {
+        return albumRepository.getAlbumById(album_id);
     }
 
+    @Override
     public List<Album> getAllAlbums() {
         return albumRepository.getAllAlbums();
     }
 
-    // Pretraga albuma po popularnosti
-    public List<Album> searchAlbumsByPopularity(double popularity) {
+    @Override
+    public List<Album> searchAlbumsByPopularity(String popularity) {
         return albumRepository.searchAlbumsByPopularity(popularity);
     }
 
-    // Pretraga albuma po žanru
+    @Override
     public List<Album> searchAlbumsByGenre(String genre) {
         return albumRepository.searchAlbumsByGenre(genre);
     }
 
-    public List<Album> getAlbumsByArtist(String artistName) {
-        return albumRepository.getAlbumsByArtist(artistName);
+    @Override
+    public List<Album> getAlbumsByArtist(String name) {
+        return albumRepository.getAlbumsByArtist(name);
     }
-
 }

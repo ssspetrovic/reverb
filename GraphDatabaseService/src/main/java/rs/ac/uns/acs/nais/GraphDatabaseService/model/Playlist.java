@@ -15,9 +15,9 @@ public class Playlist {
     @RelationshipId @GeneratedValue
     private Long id;
     private String playlist_id;
-    private String playlist_name;
-    private String playlist_genre;
-    private String playlist_subgenre;
+    private String name;
+    private String genre;
+    private String subgenre;
 
     @Relationship(type = "INCLUDED_IN_PLAYLIST", direction = Direction.INCOMING) // Definišemo relaciju "INCLUDED_IN_PLAYLIST"
     private List<Song> songs;
@@ -50,27 +50,27 @@ public class Playlist {
         this.playlist_id = playlist_id;
     }
 
-    public String getPlaylistName() {
-        return playlist_name;
+    public String getName() {
+        return name;
     }
 
-    public void setPlaylistName(String playlist_name) {
-        this.playlist_name = playlist_name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getPlaylistGenre() {
-        return playlist_genre;
+    public String getGenre() {
+        return genre;
     }
 
-    public void setPlaylistGenre(String playlist_genre) {
-        this.playlist_genre = playlist_genre;
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 
-    public String getPlaylistSubgenre() {
-        return playlist_subgenre;
+    public String getSubgenre() {
+        return subgenre;
     }
 
-    public void setPlaylistSubgenre(String playlist_subgenre) {
-        this.playlist_subgenre = playlist_subgenre;
+    public void setSubgenre(String subgenre) {
+        this.subgenre = subgenre;
     }
 }

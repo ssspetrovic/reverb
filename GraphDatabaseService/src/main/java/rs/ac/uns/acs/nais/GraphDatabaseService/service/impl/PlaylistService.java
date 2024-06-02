@@ -19,31 +19,28 @@ public class PlaylistService implements IPlaylistService {
 
     @Override
     public Playlist createPlaylist(Playlist playlist) {
-        return playlistRepository.save(playlist);
+        return playlistRepository.createPlaylist(playlist);
     }
 
     @Override
-    public Playlist updatePlaylist(String playlistId, Playlist playlist) {
-        Playlist existingPlaylist = playlistRepository.findById(Long.parseLong(playlistId))
-                .orElseThrow(() -> new RuntimeException("Playlist not found"));
-        playlist.setId(existingPlaylist.getId());
-        return playlistRepository.save(playlist);
+    public Playlist updatePlaylist(String playlist_id, Playlist playlist) {
+        playlist.setPlaylistId(playlist_id);
+        return playlistRepository.updatePlaylist(playlist);
     }
 
     @Override
-    public void deletePlaylist(Long playlistId) {
-        playlistRepository.deleteById(playlistId);
+    public void deletePlaylist(String playlist_id) {
+        playlistRepository.deletePlaylist(playlist_id);
     }
 
     @Override
-    public Playlist getPlaylistById(Long playlistId) {
-        return playlistRepository.findById(playlistId)
-                .orElseThrow(() -> new RuntimeException("Playlist not found"));
+    public Playlist getPlaylistById(String playlist_id) {
+        return playlistRepository.getPlaylistById(playlist_id);
     }
 
     @Override
     public List<Playlist> getAllPlaylists() {
-        return playlistRepository.findAll();
+        return playlistRepository.getAllPlaylists();
     }
 
     @Override

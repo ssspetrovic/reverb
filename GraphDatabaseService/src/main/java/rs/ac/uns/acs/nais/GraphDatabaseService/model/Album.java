@@ -14,7 +14,10 @@ public class Album {
 
     @RelationshipId @GeneratedValue
     private Long id;
+    private String album_id;
     private String name;
+    private String artist;
+    private String release_date;
 
     @Relationship(type = "INCLUDED_IN", direction = Direction.INCOMING)
     private List<Song> songs;
@@ -30,11 +33,35 @@ public class Album {
         this.id = id;
     }
 
+    public String getAlbumId() {
+        return album_id;
+    }
+
+    public void setAlbumId(String album_id) {
+        this.album_id = album_id;
+    }
+
     public String getName(){
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getArtist() {
+        return artist;
+    }
+
+    public void setArtist(String artist) {
+        this.artist = artist;
+    }
+
+    public String getReleaseDate() {
+        return release_date;
+    }
+
+    public void setReleaseDate(String release_date) {
+        this.release_date = release_date;
     }
 }
