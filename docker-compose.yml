@@ -76,21 +76,22 @@ services:
       POSTGRES_PASSWORD: "nais"
     volumes:
       - data:/var/lib/postgres
+      - ./csv/random_user_data.csv:/tmp/random_user_data.csv
     ports:
       - "5432:5432"
 
-  # pgadmin:
-  #   image: dpage/pgadmin4
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: admin@example.com
-  #     PGADMIN_DEFAULT_PASSWORD: admin
-  #   ports:
-  #     - "8080:80"
-  #   depends_on:
-  #     - postgresdb
-  #   volumes:
-  #     - ./data:/data
-  #     - ./import:/var/lib/postgresql/import
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgresdb
+    volumes:
+      - ./data:/data
+      - ./csv:/var/lib/pgadmin/import
 
   neo4j:
     image: neo4j
