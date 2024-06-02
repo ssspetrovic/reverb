@@ -55,19 +55,19 @@ services:
       SPRING_NEO4J_PASSWORD: password
     volumes:
       - ./data:/data
-
-  elastic-search-service:
-    build:
-      context: ./ElasticSearchDatabaseService
-      dockerfile: Dockerfile
-    image: elastic-spring-example:latest
-    restart: on-failure
-    depends_on:
-      - eureka-server
-      - elasticsearch
-    environment:
-      SPRING_ELASTICSEARCH_URIS: http://elasticsearch:9200
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+  #
+  #  elastic-search-service:
+  #    build:
+  #      context: ./ElasticSearchDatabaseService
+  #      dockerfile: Dockerfile
+  #    image: elastic-spring-example:latest
+  #    restart: on-failure
+  #    depends_on:
+  #      - eureka-server
+  #      - elasticsearch
+  #    environment:
+  #      SPRING_ELASTICSEARCH_URIS: http://elasticsearch:9200
+  #      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
 
   postgresdb:
     image: postgres:latest
@@ -76,20 +76,21 @@ services:
       POSTGRES_PASSWORD: "nais"
     volumes:
       - data:/var/lib/postgres
-      - ./import:/var/lib/postgresql/import
-
-  pgadmin:
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: admin
     ports:
-      - "8080:80"
-    depends_on:
-      - postgresdb
-    volumes:
-      - ./data:/data
-      - ./import:/var/lib/postgresql/import
+      - "5432:5432"
+
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: admin@example.com
+  #     PGADMIN_DEFAULT_PASSWORD: admin
+  #   ports:
+  #     - "8080:80"
+  #   depends_on:
+  #     - postgresdb
+  #   volumes:
+  #     - ./data:/data
+  #     - ./import:/var/lib/postgresql/import
 
   neo4j:
     image: neo4j
@@ -103,24 +104,23 @@ services:
       - ./data:/data
       - ./import:/var/lib/neo4j/import
 
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
-    container_name: elasticsearch
-    restart: always
-    ports:
-      - ${ELASTICSEARCH_PORT}:${ELASTICSEARCH_PORT}
-    env_file:
-      - .env
-    environment:
-      - xpack.security.enabled=false
-      - discovery.type=single-node
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
+#  elasticsearch:
+#    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
+#    container_name: elasticsearch
+#    restart: always
+#    ports:
+#      - ${ELASTICSEARCH_PORT}:${ELASTICSEARCH_PORT}
+#    env_file:
+#      - .env
+#    environment:
+#      - xpack.security.enabled=false
+#      - discovery.type=single-node
+#      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+#    ulimits:
+#      memlock:
+#        soft: -1
+#        hard: -1
 
 volumes:
   data:
-  influxdb-storage:
   grafana_storage: { }

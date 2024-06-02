@@ -11,7 +11,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import rs.ac.uns.acs.nais.RelationalDatabaseService.model.enumeration.Gender;
 
 @Entity
 @Table(name = "users")
