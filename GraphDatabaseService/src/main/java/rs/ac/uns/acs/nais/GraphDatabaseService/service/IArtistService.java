@@ -6,9 +6,8 @@ import java.util.List;
 
 public interface IArtistService {
     Artist createArtist(Artist artist);
-    Artist updateArtist(Long artist_id, Artist artist);
-    void deleteArtist(Long artist_id);
-    Artist getArtistById(Long artist_id);
+    Artist updateArtist(Artist artist);
+    void deleteArtist(String name);
     Artist getArtistByName(String name);
     List<Artist> getAllArtists();
     List<Artist> searchArtistsByPopularity(String popularity);

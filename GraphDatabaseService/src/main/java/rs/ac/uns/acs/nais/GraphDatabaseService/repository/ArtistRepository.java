@@ -10,17 +10,14 @@ import java.util.List;
 @Repository
 public interface ArtistRepository extends Neo4jRepository<Artist, Long> {
 
-    @Query("CREATE (a:CollectionArtist {name: $a.name}) SET a.artist_id = id(a)")
-    Artist createArtist(Artist artist);
+    @Query("CREATE (a:CollectionArtist {name: $name}) SET a.artist_id = id(a)")
+    Artist createArtist(String name);
 
-    @Query("MATCH (a:CollectionArtist {a.id: $artist.artist_id}) SET a.name = $artist.name RETURN a")
-    Artist updateArtist(Artist artist);
+    @Query("MATCH (a:CollectionArtist {name: $name}) SET a.name = $name RETURN a")
+    Artist updateArtist(String name);
 
-    @Query("MATCH (a:CollectionArtist {artist_id: $artist_id}) DELETE a")
-    void deleteArtist(Long artist_id);
-
-    @Query("MATCH (a:CollectionArtist {artist_id: $artist_id}) RETURN a LIMIT 1")
-    Artist getArtistById(Long artist_id);
+    @Query("MATCH (a:CollectionArtist {name: $name})-[r]-() DELETE a, r")
+    void deleteArtist(String name);
 
     @Query("MATCH (a:CollectionArtist {name: $name}) RETURN a LIMIT 1")
     Artist getArtistByName(String name);

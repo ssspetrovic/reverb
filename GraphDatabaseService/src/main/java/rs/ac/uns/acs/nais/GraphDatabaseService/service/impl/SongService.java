@@ -23,19 +23,64 @@ public class SongService implements ISongService {
         if (song == null || song.getTrackId() == null || song.getTrackName() == null) {
             throw new IllegalArgumentException("Invalid song data");
         }
-        return songRepository.createSong(song);
+        return songRepository.createSong(song.getTrackId(),
+                                        song.getTrackName(),
+                                        song.getTrackArtist(),
+                                        song.getTrackPopularity(),
+                                        song.getTrackAlbumId(),
+                                        song.getTrackAlbumName(),
+                                        song.getTrackAlbumReleaseDate(),
+                                        song.getPlaylistName(),
+                                        song.getPlaylistId(),
+                                        song.getPlaylistGenre(),
+                                        song.getPlaylistSubgenre(),
+                                        song.getDanceability(),
+                                        song.getEnergy(),
+                                        song.getKey(),
+                                        song.getLoudness(),
+                                        song.getMode(),
+                                        song.getSpeechiness(),
+                                        song.getAcousticness(),
+                                        song.getInstrumentalness(),
+                                        song.getLiveness(),
+                                        song.getValence(),
+                                        song.getTempo(),
+                                        song.getDurationMs());
     }
 
-    public Song updateSong(String trackId, Song song) {
-        return songRepository.updateSong(trackId, song);
+    public Song updateSong(String track_id, Song song) {
+        song.setTrackId(track_id);
+        return songRepository.updateSong(song.getTrackId(),
+                                        song.getTrackName(),
+                                        song.getTrackArtist(),
+                                        song.getTrackPopularity(),
+                                        song.getTrackAlbumId(),
+                                        song.getTrackAlbumName(),
+                                        song.getTrackAlbumReleaseDate(),
+                                        song.getPlaylistName(),
+                                        song.getPlaylistId(),
+                                        song.getPlaylistGenre(),
+                                        song.getPlaylistSubgenre(),
+                                        song.getDanceability(),
+                                        song.getEnergy(),
+                                        song.getKey(),
+                                        song.getLoudness(),
+                                        song.getMode(),
+                                        song.getSpeechiness(),
+                                        song.getAcousticness(),
+                                        song.getInstrumentalness(),
+                                        song.getLiveness(),
+                                        song.getValence(),
+                                        song.getTempo(),
+                                        song.getDurationMs());
     }
 
-    public void deleteSong(String trackId) {
-        songRepository.deleteSong(trackId);
+    public void deleteSong(String track_id) {
+        songRepository.deleteSong(track_id);
     }
 
-    public Song getSongById(String trackId) {
-        return songRepository.getSongById(trackId);
+    public Song getSongById(String track_id) {
+        return songRepository.getSongById(track_id);
     }
 
     public List<Song> getAllSongs() {

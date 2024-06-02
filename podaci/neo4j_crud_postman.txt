@@ -1,2 +1,139 @@
-//1. CollectionSong
+// 1. CollectionSong
 
+// CREATE
+http://localhost:9000/graph-database-service/songs
+{
+    "id": 24645,
+    "danceability": "0.681",
+    "energy": "0.803",
+    "key": 7,
+    "loudness": "-5.451",
+    "mode": 1,
+    "speechiness": "0.327",
+    "acousticness": "0.0357",
+    "instrumentalness": "0",
+    "liveness": "0.107",
+    "valence": "0.547",
+    "tempo": "180.138",
+    "trackId": "7q5YMVbbbsEQATnv0tVctx",
+    "trackName": "We On Fire",
+    "trackArtist": "Hot Boys",
+    "trackPopularity": 38,
+    "playlistId": "3R5c1OfJY7Rzl3p28pzGtL",
+    "trackAlbumId": "6eUYT38tLl7YwqZFJm1Ulb",
+    "trackAlbumName": "Guerrilla Warfare",
+    "trackAlbumReleaseDate": "1999-07-27",
+    "playlistName": "Southern Hip Hop",
+    "playlistGenre": "rap",
+    "playlistSubgenre": "southern hip hop",
+    "durationMs": 251240
+}
+
+// READ
+http://localhost:9000/graph-database-service/songs (/7q5YMVbbbsEQATnv0tVctx ZA ID)
+
+// UPDATE
+http://localhost:9000/graph-database-service/songs/7q5YMVbbbsEQATnv0tVctx
+{
+    "id": 24645,
+    "danceability": "0.681",
+    "energy": "0.803",
+    "key": 7,
+    "loudness": "-5.451",
+    "mode": 1,
+    "speechiness": "0.327",
+    "acousticness": "0.0357",
+    "instrumentalness": "0",
+    "liveness": "0.107",
+    "valence": "0.547",
+    "tempo": "180.138",
+    "trackId": "7q5YMVbbbsEQATnv0tVctx",
+    "trackName": "We On FireEEEEEEEEEEE",
+    "trackArtist": "Hot BoysSSSSSSS",
+    "trackPopularity": 38,
+    "playlistId": "3R5c1OfJY7Rzl3p28pzGtL",
+    "trackAlbumId": "6eUYT38tLl7YwqZFJm1Ulb",
+    "trackAlbumName": "Guerrilla Warfare",
+    "trackAlbumReleaseDate": "1999-07-27",
+    "playlistName": "Southern Hip Hop",
+    "playlistGenre": "rap",
+    "playlistSubgenre": "southern hip hop",
+    "durationMs": 251240
+}
+
+// DELETE
+http://localhost:9000/graph-database-service/songs/7q5YMVbbbsEQATnv0tVctx
+
+// 2. CollectionAlbum
+
+// CREATE
+http://localhost:9000/graph-database-service/albums
+{
+    "name": "Alakazam",
+    "artist": "Primer",
+    "albumId": "IDAlbuma",  
+    "releaseDate": "2001-01-01"
+}
+
+// READ
+http://localhost:9000/graph-database-service/albums (/6eUYT38tLl7YwqZFJm1Ulb ZA ID)
+
+// UPDATE
+http://localhost:9000/graph-database-service/albums/IDAlbuma
+{
+    "id": 87925,
+    "name": "Alakazam1",
+    "artist": "Primer1",
+    "albumId": "IDAlbuma",
+    "releaseDate": "2001-01-01"
+}
+
+// DELETE
+http://localhost:9000/graph-database-service/albums/IDAlbuma
+
+// 3. CollectionArtist
+
+// CREATE
+http://localhost:9000/graph-database-service/artists
+{
+    "name": "PrimerIzvodjaca"
+}
+
+// READ
+http://localhost:9000/graph-database-service/artists (/Scarface ZA ID)
+
+// UPDATE
+http://localhost:9000/graph-database-service/artists/PrimerIzvodjaca
+{
+    "name": "PrimerIzvodjacaa"
+}
+
+// DELETE
+http://localhost:9000/graph-database-service/artists/PrimerIzvodjacaa
+
+// 4. CollectionPlaylist
+
+// CREATE
+http://localhost:9000/graph-database-service/playlists
+{
+    "id": 120749,
+    "name": "Southern Hip Hop",
+    "genre": "rap",
+    "subgenre": "southern hip hop",
+    "songs": [],
+    "playlistId": "3R5c1OfJY7Rzl3p28pzGtL"
+}
+
+// READ
+http://localhost:9000/graph-database-service/playlists (/3R5c1OfJY7Rzl3p28pzGtL ZA ID)
+
+// UPDATE
+http://localhost:9000/graph-database-service/playlists/3R5c1OfJY7Rzl3p28pzGtL
+{
+    "name": "Southern Hip Hop",
+    "genre": "rap",
+    "subgenre": "southern hip hop epic gamer"
+}
+
+// DELETE
+http://localhost:9000/graph-database-service/playlists/3R5c1OfJY7Rzl3p28pzGtL

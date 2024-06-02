@@ -20,13 +20,13 @@ public class AlbumService implements IAlbumService {
 
     @Override
     public Album createAlbum(Album album) {
-        return albumRepository.createAlbum(album);
+        return albumRepository.createAlbum(album.getAlbumId(), album.getName(), album.getArtist(), album.getReleaseDate());
     }
 
     @Override
     public Album updateAlbum(String album_id, Album album) {
         album.setAlbumId(album_id);
-        return albumRepository.updateAlbum(album);
+        return albumRepository.updateAlbum(album.getAlbumId(), album.getName(), album.getArtist(), album.getReleaseDate());
     }
 
     @Override

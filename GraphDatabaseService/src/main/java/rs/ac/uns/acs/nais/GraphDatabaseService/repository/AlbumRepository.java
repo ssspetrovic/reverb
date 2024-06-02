@@ -11,13 +11,13 @@ import java.util.List;
 @Repository
 public interface AlbumRepository extends Neo4jRepository<Album, Long> {
 
-    @Query("CREATE (al:CollectionAlbum {album_id: $album.album_id, name: $album.name}) RETURN al")
-    Album createAlbum(Album album);
+    @Query("CREATE (al:CollectionAlbum {album_id: $album_id, name: $name, artist: $artist, release_date: $release_date}) RETURN al")
+    Album createAlbum(String album_id, String name, String artist, String release_date);
 
-    @Query("MATCH (al:CollectionAlbum {album_id: $album.album_id}) SET al.name = $album.name RETURN al")
-    Album updateAlbum(Album album);
+    @Query("MATCH (al:CollectionAlbum {album_id: $album_id}) SET al.name = $name, al.artist = $artist, al.release_date = $release_date RETURN al")
+    Album updateAlbum(String album_id, String name, String artist, String release_date);
 
-    @Query("MATCH (al:CollectionAlbum {album_id: $album_id}) DELETE al")
+    @Query("MATCH (al:CollectionAlbum {album_id: $album_id})-[r]-() DELETE al, r")
     void deleteAlbum(String album_id);
 
     @Query("MATCH (al:CollectionAlbum {album_id: $album_id}) RETURN al LIMIT 1")

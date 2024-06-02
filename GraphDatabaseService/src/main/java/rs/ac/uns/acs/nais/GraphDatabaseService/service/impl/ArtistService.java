@@ -19,20 +19,15 @@ public class ArtistService implements IArtistService {
     }
 
     public Artist createArtist(Artist artist) {
-        return artistRepository.createArtist(artist);
+        return artistRepository.createArtist(artist.getName());
     }
 
-    public Artist updateArtist(Long artist_id, Artist artist) {
-        artist.setArtistId(artist_id);
-        return artistRepository.updateArtist(artist);
+    public Artist updateArtist(Artist artist) {
+        return artistRepository.updateArtist(artist.getName());
     }
 
-    public void deleteArtist(Long artist_id) {
-        artistRepository.deleteArtist(artist_id);
-    }
-
-    public Artist getArtistById(Long artist_id) {
-        return artistRepository.getArtistById(artist_id);
+    public void deleteArtist(String name) {
+        artistRepository.deleteArtist(name);
     }
 
     public Artist getArtistByName(String name) {

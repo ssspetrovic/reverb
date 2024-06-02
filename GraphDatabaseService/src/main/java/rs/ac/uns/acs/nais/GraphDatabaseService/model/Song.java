@@ -108,15 +108,15 @@ public class Song {
         this.track_popularity = track_popularity;
     }
 
-    public String getTrackAlbum_id() {
+    public String getTrackAlbumId() {
         return track_album_id;
     }
 
-    public void setTrackAlbum_id(String track_album_id) {
+    public void setTrackAlbumId(String track_album_id) {
         this.track_album_id = track_album_id;
     }
 
-    public String getTrackAlbum_name() {
+    public String getTrackAlbumName() {
         return track_album_name;
     }
 

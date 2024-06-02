@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface ISongService {
     Song createSong(Song song);
-    Song updateSong(String trackId, Song song);
-    void deleteSong(String trackId);
-    Song getSongById(String trackId);
+    Song updateSong(String track_id, Song song);
+    void deleteSong(String track_id);
+    Song getSongById(String track_id);
     List<Song> getAllSongs();
     List<Song> getSongsByArtist(String artistName);
     List<Song> getSongsByAlbum(String albumName);

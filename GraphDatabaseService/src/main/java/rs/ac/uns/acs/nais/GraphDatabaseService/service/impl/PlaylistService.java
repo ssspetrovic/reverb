@@ -19,13 +19,13 @@ public class PlaylistService implements IPlaylistService {
 
     @Override
     public Playlist createPlaylist(Playlist playlist) {
-        return playlistRepository.createPlaylist(playlist);
+        return playlistRepository.createPlaylist(playlist.getPlaylistId(), playlist.getName(), playlist.getGenre(), playlist.getSubgenre());
     }
 
     @Override
     public Playlist updatePlaylist(String playlist_id, Playlist playlist) {
         playlist.setPlaylistId(playlist_id);
-        return playlistRepository.updatePlaylist(playlist);
+        return playlistRepository.updatePlaylist(playlist.getPlaylistId(), playlist.getName(), playlist.getGenre(), playlist.getSubgenre());
     }
 
     @Override

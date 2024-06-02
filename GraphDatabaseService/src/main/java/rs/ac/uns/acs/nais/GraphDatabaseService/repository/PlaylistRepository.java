@@ -10,13 +10,16 @@ import java.util.List;
 @Repository
 public interface PlaylistRepository extends Neo4jRepository<Playlist, Long> {
 
-    @Query("CREATE (p:CollectionPlaylist {playlist_id: $playlist.playlist_id, name: $playlist.name, genre: $playlist.genre, subgenre: $playlist.subgenre}) RETURN p")
-    Playlist createPlaylist(Playlist playlist);
+    @Query("CREATE (p:CollectionPlaylist {playlist_id: $playlist_id, name: $name, genre: $genre, subgenre: $subgenre}) RETURN p")
+    Playlist createPlaylist(String playlist_id, String name, String genre, String subgenre);
 
-    @Query("MATCH (p:CollectionPlaylist {playlist_id: $playlist.playlist_id}) SET p.name = $playlist.name, p.genre = $playlist.genre, p.subgenre = $playlist.subgenre RETURN p")
-    Playlist updatePlaylist(Playlist playlist);
+    @Query("MATCH (p:CollectionPlaylist {playlist_id: $playlist_id}) "
+            + "WITH p LIMIT 1 "
+            + "SET p.name = $name, p.genre = $genre, p.subgenre = $subgenre "
+            + "RETURN p")
+    Playlist updatePlaylist(String playlist_id, String name, String genre, String subgenre);
 
-    @Query("MATCH (p:CollectionPlaylist {playlist_id: $playlist_id}) DELETE p")
+    @Query("MATCH (p:CollectionPlaylist {playlist_id: $playlist_id})-[r]-() DELETE p, r")
     void deletePlaylist(String playlist_id);
 
     @Query("MATCH (p:CollectionPlaylist {playlist_id: $playlist_id}) RETURN p LIMIT 1")

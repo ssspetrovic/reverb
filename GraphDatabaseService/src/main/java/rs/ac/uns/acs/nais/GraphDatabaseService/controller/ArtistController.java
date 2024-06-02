@@ -25,21 +25,15 @@ public class ArtistController {
         return new ResponseEntity<>(artistService.createArtist(artist), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{artist_id}")
-    public ResponseEntity<Artist> updateArtist(@PathVariable Long artist_id, @RequestBody Artist artist) {
-        return new ResponseEntity<>(artistService.updateArtist(artist_id, artist), HttpStatus.OK);
+    @PutMapping("/{name}")
+    public ResponseEntity<Artist> updateArtist(@PathVariable String name, @RequestBody Artist artist) {
+        return new ResponseEntity<>(artistService.updateArtist(artist), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{artist_id}")
-    public ResponseEntity<Void> deleteArtist(@PathVariable Long artist_id) {
-        artistService.deleteArtist(artist_id);
+    @DeleteMapping("/{name}")
+    public ResponseEntity<Void> deleteArtist(@PathVariable String name) {
+        artistService.deleteArtist(name);
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/{artist_id}")
-    public ResponseEntity<Artist> getArtistById(@PathVariable Long artist_id) {
-        Artist artist = artistService.getArtistById(artist_id);
-        return artist != null ? ResponseEntity.ok(artist) : ResponseEntity.notFound().build();
     }
 
     @GetMapping("/{name}")
