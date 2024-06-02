@@ -1,6 +1,6 @@
 package rs.ac.uns.acs.nais.RelationalDatabaseService.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -16,35 +16,40 @@ import rs.ac.uns.acs.nais.RelationalDatabaseService.model.enumeration.Gender;
 @Entity
 @Table(name = "users")
 public class User {
-	
+
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(name = "first_name")
-    private String firstName;
+	@Column(name = "first_name", nullable = false)
+	private String firstName;
 
-    @Column(name = "last_name")
-    private String lastName;
+	@Column(name = "last_name", nullable = false)
+	private String lastName;
 
-    @Column(name = "email", unique = true, nullable = false)
-    private String email;
+	@Column(name = "email", unique = true, nullable = false)
+	private String email;
 
-    @Column(name = "phone_number")
-    private String phoneNumber;
-    
-    @Column(name = "date_of_birth")
-    private LocalDateTime dateOfBirth;
-    
-    @Column(name = "gender")
-    private Gender gender;
+	@Column(name = "phone_number", nullable = false)
+	private String phoneNumber;
 
-    @Column(name = "password", nullable= false)
-    private String password;
-    
-    @OneToOne(cascade = CascadeType.ALL, optional = true)
-    @JoinColumn(name = "address_id", referencedColumnName = "id", unique = true)
-    private Address address;
+	@Column(name = "address")
+	private String address;
+
+	@Column(name = "city")
+	private String city;
+
+	@Column(name = "state")
+	private String state;
+
+	@Column(name = "zip_code")
+	private String zipCode;
+
+	@Column(name = "country")
+	private String country;
+
+	@Column(name = "date_of_birth")
+	private LocalDate dateOfBirth;
 
 	public Long getId() {
 		return id;
@@ -86,38 +91,51 @@ public class User {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public LocalDateTime getDateOfBirth() {
-		return dateOfBirth;
-	}
-
-	public void setDateOfBirth(LocalDateTime dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
-	}
-
-	public Gender getGender() {
-		return gender;
-	}
-
-	public void setGender(Gender gender) {
-		this.gender = gender;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public Address getAddress() {
+	public String getAddress() {
 		return address;
 	}
 
-	public void setAddress(Address address) {
+	public void setAddress(String address) {
 		this.address = address;
 	}
 
-    
-    
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getZipCode() {
+		return zipCode;
+	}
+
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public LocalDate getDateOfBirth() {
+		return dateOfBirth;
+	}
+
+	public void setDateOfBirth(LocalDate dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
+	}
 }
