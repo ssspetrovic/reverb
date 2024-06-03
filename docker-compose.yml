@@ -20,25 +20,25 @@ services:
       - eureka-server
       #      - elastic-search-service
       - graph-service
-      #      - relational-service
+      - relational-service
     ports:
       - "9000:9000"
 
-  # relational-service:
-  #   build:
-  #     context: ./RelationalDatabaseService
-  #     dockerfile: Dockerfile
-  #   image: relational-service:latest
-  #   depends_on:
-  #     - postgresdb
-  #     - eureka-server
-  #   environment:
-  #     EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
-  #     SPRING_DATASOURCE_URL: "jdbc:postgresql://postgresdb:5432/nais"
-  #     SPRING_DATASOURCE_USERNAME: nais
-  #     SPRING_DATASOURCE_PASSWORD: nais
-  #   ports:
-  #     - "9030:9030"
+  relational-service:
+    build:
+      context: ./RelationalDatabaseService
+      dockerfile: Dockerfile
+    image: relational-service:latest
+    depends_on:
+      - postgresdb
+      - eureka-server
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://postgresdb:5432/nais"
+      SPRING_DATASOURCE_USERNAME: nais
+      SPRING_DATASOURCE_PASSWORD: nais
+    ports:
+      - "9030:9030"
 
   graph-service:
     build:
@@ -69,29 +69,29 @@ services:
   #      SPRING_ELASTICSEARCH_URIS: http://elasticsearch:9200
   #      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
 
-  # postgresdb:
-  #   image: postgres:latest
-  #   environment:
-  #     POSTGRES_USER: "nais"
-  #     POSTGRES_PASSWORD: "nais"
-  #   volumes:
-  #     - data:/var/lib/postgres
-  #     - ./csv/random_user_data.csv:/tmp/random_user_data.csv
-  #   ports:
-  #     - "5432:5432"
+  postgresdb:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: "nais"
+      POSTGRES_PASSWORD: "nais"
+    volumes:
+      - data:/var/lib/postgres
+      - ./csv/random_user_data.csv:/tmp/random_user_data.csv
+    ports:
+      - "5432:5432"
 
-  # pgadmin:
-  #   image: dpage/pgadmin4
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: admin@example.com
-  #     PGADMIN_DEFAULT_PASSWORD: admin
-  #   ports:
-  #     - "8080:80"
-  #   depends_on:
-  #     - postgresdb
-  #   volumes:
-  #     - ./data:/data
-  #     - ./csv:/var/lib/pgadmin/import
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgresdb
+    volumes:
+      - ./data:/data
+      - ./csv:/var/lib/pgadmin/import
 
   neo4j:
     image: neo4j
