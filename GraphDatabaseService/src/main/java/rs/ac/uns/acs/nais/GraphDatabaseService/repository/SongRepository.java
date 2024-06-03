@@ -4,9 +4,12 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.stereotype.Repository;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongSearchCriteriaDTO;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongPopularityProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.MostPopularSongInPlaylistDTO;
 import rs.ac.uns.acs.nais.GraphDatabaseService.model.Song;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface SongRepository extends Neo4jRepository<Song, Long> {
@@ -137,4 +140,17 @@ public interface SongRepository extends Neo4jRepository<Song, Long> {
 
     @Query("MATCH (s:CollectionSong) WHERE s.playlist_subgenre = $playlistSubgenre RETURN s")
     List<Song> searchSongsByPlaylistSubgenre(String playlistSubgenre);
+
+    @Query("MATCH (s:CollectionSong) "
+            + "WHERE toFloat(s.energy) > 0.8 AND s.track_name IS NOT NULL AND s.track_popularity IS NOT NULL "
+            + "SET s.track_popularity = s.track_popularity + 10 "
+            + "RETURN s")
+    List<SongPopularityProjection> updatePopularityBasedOnEnergy();
+
+    @Query("MATCH (p:CollectionPlaylist)<-[:INCLUDED_IN_PLAYLIST]-(s:CollectionSong) "
+            + "WITH p, s "
+            + "ORDER BY s.track_popularity DESC "
+            + "WITH p, COLLECT(s)[0] AS popularSong, s "
+            + "RETURN s")
+    List<MostPopularSongInPlaylistDTO> getMostPopularSongsFromEachPlaylist();
 }

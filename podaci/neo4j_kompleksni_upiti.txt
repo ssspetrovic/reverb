@@ -11,7 +11,7 @@
     RETURN p.name, s.track_name
 
 // Broj pesama po žanrovima u kolekciji
-    MATCH (s:Song)
+    MATCH (s:CollectionSong)
     WITH s.playlist_genre AS genre, COUNT(s) AS numSongs
     RETURN genre, numSongs
     ORDER BY numSongs DESC

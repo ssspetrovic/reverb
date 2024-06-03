@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.acs.nais.GraphDatabaseService.model.Artist;
 import rs.ac.uns.acs.nais.GraphDatabaseService.repository.ArtistRepository;
 import rs.ac.uns.acs.nais.GraphDatabaseService.service.IArtistService;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.MostPopularArtistsDTO;
 
 import java.util.List;
 
@@ -46,5 +47,9 @@ public class ArtistService implements IArtistService {
     // Pretraga izvođača po žanru
     public List<Artist> searchArtistsByGenre(String genre) {
         return artistRepository.searchArtistsByGenre(genre);
+    }
+
+    public List<MostPopularArtistsDTO> getArtistsSortedByAveragePopularity() {
+        return artistRepository.getArtistsSortedByAveragePopularity();
     }
 }

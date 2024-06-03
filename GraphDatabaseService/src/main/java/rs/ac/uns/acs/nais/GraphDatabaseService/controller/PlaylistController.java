@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.acs.nais.GraphDatabaseService.model.Playlist;
 import rs.ac.uns.acs.nais.GraphDatabaseService.service.IPlaylistService;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PlaylistGenreCountDTO;
 
 import java.util.List;
 
@@ -60,5 +61,15 @@ public class PlaylistController {
     public ResponseEntity<List<Playlist>> getPlaylistsBySubgenre(@PathVariable String subgenre) {
         List<Playlist> playlists = playlistService.getPlaylistsBySubgenre(subgenre);
         return ResponseEntity.ok(playlists);
+    }
+
+    @PutMapping("/{playlistName}/songs/{trackId}/genre/{newGenre}")
+    public Playlist updatePlaylistGenreBySong(@PathVariable String playlistName, @PathVariable String trackId, @PathVariable String newGenre) {
+        return playlistService.updatePlaylistGenreBySong(playlistName, trackId, newGenre);
+    }
+
+    @GetMapping("/playlistGenres")
+    public List<PlaylistGenreCountDTO> getPlaylistGenreWithSongCount() {
+        return playlistService.getPlaylistGenreWithSongCount();
     }
 }

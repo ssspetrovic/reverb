@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.acs.nais.GraphDatabaseService.service.IArtistService;
 import rs.ac.uns.acs.nais.GraphDatabaseService.model.Artist;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.MostPopularArtistsDTO;
 
 import java.util.List;
 
@@ -55,5 +56,10 @@ public class ArtistController {
     @GetMapping("/genre/{genre}")
     public ResponseEntity<List<Artist>> searchArtistsByGenre(@PathVariable String genre) {
         return ResponseEntity.ok(artistService.searchArtistsByGenre(genre));
+    }
+
+    @GetMapping("/mostPopularAverage")
+    public ResponseEntity<List<MostPopularArtistsDTO>> getArtistsSortedByAveragePopularity() {
+        return ResponseEntity.ok(artistService.getArtistsSortedByAveragePopularity());
     }
 }

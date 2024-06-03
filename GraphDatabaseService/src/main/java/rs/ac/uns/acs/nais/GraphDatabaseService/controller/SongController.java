@@ -7,8 +7,12 @@ import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.acs.nais.GraphDatabaseService.service.ISongService;
 import rs.ac.uns.acs.nais.GraphDatabaseService.model.Song;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongSearchCriteriaDTO;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongPopularityProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PlaylistGenreCountDTO;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.MostPopularSongInPlaylistDTO;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/songs")
@@ -91,5 +95,15 @@ public class SongController {
     @GetMapping("/playlistSubgenre/{playlistSubgenre}")
     public ResponseEntity<List<Song>> searchSongsByPlaylistSubgenre(@PathVariable String playlistSubgenre) {
         return ResponseEntity.ok(songService.searchSongsByPlaylistSubgenre(playlistSubgenre));
+    }
+
+    @GetMapping("/updatePopularity")
+    public List<SongPopularityProjection> updatePopularity() {
+        return songService.updatePopularityBasedOnEnergy();
+    }
+
+    @GetMapping("/mostPopularSongsInPlaylist")
+    public List<MostPopularSongInPlaylistDTO> getMostPopularSongsFromEachPlaylist() {
+        return songService.getMostPopularSongsFromEachPlaylist();
     }
 }

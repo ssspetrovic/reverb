@@ -1,0 +1,21 @@
+// Promena popularnosti pesme na osnovu njene energičnosti
+http://localhost:9000/graph-database-service/songs/updatePopularity (GET)
+
+// Dodavanje nove pesme u plejlistu
+http://localhost:9000/graph-database-service/playlists/Vibra%20Tropical/songs/3esLMWVvotR95tEwAKkU6j/genre/latino (PUT)
+
+// Broj pesama po žanrovima u kolekciji
+http://localhost:9000/graph-database-service/playlists/playlistGenres
+
+// Izvođači sa najboljom srednjom popularnošću
+    MATCH (a:CollectionArtist)<-[:PERFORMED_BY]-(s:CollectionSong)
+    WITH a, AVG(s.track_popularity) AS avgPopularity
+    RETURN a AS artist
+    ORDER BY avgPopularity DESC
+
+// Najpopularnija pesma u svakoj plejlisti
+    MATCH (p:CollectionPlaylist)<-[:INCLUDED_IN_PLAYLIST]-(s:CollectionSong)
+    WITH p, s
+    ORDER BY s.track_popularity DESC
+    WITH p, COLLECT(s)[0] AS popularSong, s
+    RETURN s

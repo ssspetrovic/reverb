@@ -4,6 +4,7 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.stereotype.Repository;
 import rs.ac.uns.acs.nais.GraphDatabaseService.model.Playlist;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PlaylistGenreCountDTO;
 
 import java.util.List;
 
@@ -33,4 +34,15 @@ public interface PlaylistRepository extends Neo4jRepository<Playlist, Long> {
 
     @Query("MATCH (p:CollectionPlaylist) WHERE p.subgenre = $subgenre RETURN p")
     List<Playlist> getPlaylistsBySubgenre(String subgenre);
+
+    @Query("MATCH (p:CollectionPlaylist {name: $playlist_name})<-[:INCLUDED_IN_PLAYLIST]-(s:CollectionSong {track_id: $track_id}) "
+            + "SET p.playlist_genre = $new_genre "
+            + "RETURN p")
+    Playlist updatePlaylistGenreBySong(String playlist_name, String track_id, String new_genre);
+
+    @Query("MATCH (s:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(p:CollectionPlaylist) "
+            + "WITH p, COUNT(s) AS songCount "
+            + "RETURN p AS playlist, songCount "
+            + "ORDER BY songCount DESC")
+    List<PlaylistGenreCountDTO> getPlaylistGenreWithSongCount();
 }
