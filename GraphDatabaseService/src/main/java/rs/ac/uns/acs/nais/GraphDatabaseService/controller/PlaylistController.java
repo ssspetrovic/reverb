@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.acs.nais.GraphDatabaseService.model.Playlist;
 import rs.ac.uns.acs.nais.GraphDatabaseService.service.IPlaylistService;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PlaylistGenreCountDTO;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PlaylistCountAveragePopularityDTO;
 
 import java.util.List;
 
@@ -71,5 +72,10 @@ public class PlaylistController {
     @GetMapping("/playlistGenres")
     public List<PlaylistGenreCountDTO> getPlaylistGenreWithSongCount() {
         return playlistService.getPlaylistGenreWithSongCount();
+    }
+
+    @GetMapping("/songCountAndPopularity")
+    public List<PlaylistCountAveragePopularityDTO> getPlaylistCountAndAveragePopularity() {
+        return playlistService.getPlaylistCountAndAveragePopularity();
     }
 }

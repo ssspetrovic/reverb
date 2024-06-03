@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.acs.nais.GraphDatabaseService.service.IArtistService;
 import rs.ac.uns.acs.nais.GraphDatabaseService.model.Artist;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.MostPopularArtistsDTO;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.ArtistsWithLargestAveragePopularityDTO;
 
 import java.util.List;
 
@@ -61,5 +62,10 @@ public class ArtistController {
     @GetMapping("/mostPopularAverage")
     public ResponseEntity<List<MostPopularArtistsDTO>> getArtistsSortedByAveragePopularity() {
         return ResponseEntity.ok(artistService.getArtistsSortedByAveragePopularity());
+    }
+
+    @GetMapping("/largestAveragePopularity")
+    public ResponseEntity<List<ArtistsWithLargestAveragePopularityDTO>> getArtistsWithLargestAveragePopularity() {
+        return ResponseEntity.ok(artistService.getArtistsWithLargestAveragePopularity());
     }
 }

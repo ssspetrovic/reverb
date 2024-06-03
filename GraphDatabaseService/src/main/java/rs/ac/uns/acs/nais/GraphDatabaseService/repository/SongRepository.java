@@ -7,6 +7,9 @@ import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongSearchCriteriaDTO;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongPopularityProjection;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.MostPopularSongInPlaylistDTO;
 import rs.ac.uns.acs.nais.GraphDatabaseService.model.Song;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongTempoProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.HighEnergyMusicProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.LongestSongInEveryAlbumProjection;
 
 import java.util.List;
 import java.util.Map;
@@ -147,10 +150,29 @@ public interface SongRepository extends Neo4jRepository<Song, Long> {
             + "RETURN s")
     List<SongPopularityProjection> updatePopularityBasedOnEnergy();
 
+    @Query("MATCH (s:CollectionSong) "
+            + "WHERE s.track_popularity > 80 "
+            + "SET s.tempo = toString(ROUND(toFloat(s.tempo) + 3, 2)) "
+            + "RETURN s")
+    List<SongTempoProjection> updateTempoBasedOnPopularity();
+
     @Query("MATCH (p:CollectionPlaylist)<-[:INCLUDED_IN_PLAYLIST]-(s:CollectionSong) "
             + "WITH p, s "
             + "ORDER BY s.track_popularity DESC "
             + "WITH p, COLLECT(s)[0] AS popularSong, s "
             + "RETURN s")
     List<MostPopularSongInPlaylistDTO> getMostPopularSongsFromEachPlaylist();
+
+    @Query("MATCH (s:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(p:CollectionPlaylist) "
+            + "WHERE p.genre = $playlist_genre AND toFloat(s.energy) > 0.75 "
+            + "RETURN s " 
+            + "ORDER BY toFloat(s.energy) DESC")
+    List<HighEnergyMusicProjection> getHighEnergyMusicBasedOnGenre(String playlist_genre);
+
+    @Query("MATCH (al:CollectionAlbum)<-[:INCLUDED_IN]-(s:CollectionSong) "
+            + "WITH al, s "
+            + "ORDER BY s.duration_ms DESC "
+            + "WITH al, COLLECT(s)[0] AS longestSong, s "
+            + "RETURN s")
+    List<LongestSongInEveryAlbumProjection> getLongestSongInEveryAlbum();
 }

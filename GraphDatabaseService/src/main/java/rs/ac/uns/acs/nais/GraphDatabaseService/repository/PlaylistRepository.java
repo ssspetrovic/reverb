@@ -5,6 +5,7 @@ import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.stereotype.Repository;
 import rs.ac.uns.acs.nais.GraphDatabaseService.model.Playlist;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PlaylistGenreCountDTO;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PlaylistCountAveragePopularityDTO;
 
 import java.util.List;
 
@@ -45,4 +46,10 @@ public interface PlaylistRepository extends Neo4jRepository<Playlist, Long> {
             + "RETURN p AS playlist, songCount "
             + "ORDER BY songCount DESC")
     List<PlaylistGenreCountDTO> getPlaylistGenreWithSongCount();
+
+    @Query("MATCH (p:CollectionPlaylist)<-[:INCLUDED_IN_PLAYLIST]-(s:CollectionSong) "
+            + "WITH p, COUNT(s) AS numSongs, AVG(s.track_popularity) AS avgPopularity "
+            + "RETURN p AS playlist, numSongs, avgPopularity "
+            + "ORDER BY numSongs DESC")
+    List<PlaylistCountAveragePopularityDTO> getPlaylistCountAndAveragePopularity();
 }

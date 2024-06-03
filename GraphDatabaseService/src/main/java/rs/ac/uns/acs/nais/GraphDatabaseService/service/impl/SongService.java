@@ -8,6 +8,9 @@ import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongSearchCriteriaDTO;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongPopularityProjection;
 import rs.ac.uns.acs.nais.GraphDatabaseService.service.ISongService;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.MostPopularSongInPlaylistDTO;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongTempoProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.HighEnergyMusicProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.LongestSongInEveryAlbumProjection;
 
 import java.util.List;
 import java.util.Map;
@@ -133,7 +136,19 @@ public class SongService implements ISongService {
         return songRepository.updatePopularityBasedOnEnergy();
     }
 
+    public List<SongTempoProjection> updateTempoBasedOnPopularity() {
+        return songRepository.updateTempoBasedOnPopularity();
+    }
+
     public List<MostPopularSongInPlaylistDTO> getMostPopularSongsFromEachPlaylist() {
         return songRepository.getMostPopularSongsFromEachPlaylist();
+    }
+
+    public List<HighEnergyMusicProjection> getHighEnergyMusicBasedOnGenre(String playlist_genre) {
+        return songRepository.getHighEnergyMusicBasedOnGenre(playlist_genre);
+    }
+
+    public List<LongestSongInEveryAlbumProjection> getLongestSongInEveryAlbum() {
+        return songRepository.getLongestSongInEveryAlbum();
     }
 }

@@ -8,14 +8,29 @@ http://localhost:9000/graph-database-service/playlists/Vibra%20Tropical/songs/3e
 http://localhost:9000/graph-database-service/playlists/playlistGenres
 
 // Izvođači sa najboljom srednjom popularnošću
-    MATCH (a:CollectionArtist)<-[:PERFORMED_BY]-(s:CollectionSong)
-    WITH a, AVG(s.track_popularity) AS avgPopularity
-    RETURN a AS artist
-    ORDER BY avgPopularity DESC
+http://localhost:9000/graph-database-service/artists/mostPopularAverage
 
 // Najpopularnija pesma u svakoj plejlisti
-    MATCH (p:CollectionPlaylist)<-[:INCLUDED_IN_PLAYLIST]-(s:CollectionSong)
-    WITH p, s
-    ORDER BY s.track_popularity DESC
-    WITH p, COLLECT(s)[0] AS popularSong, s
+http://localhost:9000/graph-database-service/songs/mostPopularSongsInPlaylist
+
+// Izmena tempa pesme na osnovu njenog popularity-a
+http://localhost:9000/graph-database-service/songs/updateTempo
+
+// Pronalaženje pesama sa visokom energetskom vrednošću u određenom žanru
+http://localhost:9000/graph-database-service/songs/highestEnergy/rock
+
+// Brojanje pesama u plejlisti i izračunavanje prosečne popularnosti plejliste
+http://localhost:9000/graph-database-service/playlists/songCountAndPopularity
+
+// Pronalaženje izvođače sa najvećom prosečnom popularnošću
+    MATCH (a:CollectionArtist)<-[:PERFORMED_BY]-(s:CollectionSong)
+    WITH a, AVG(s.track_popularity) AS avgPopularity
+    RETURN a, avgPopularity
+    ORDER BY avgPopularity DESC
+
+// Pronalaženje najduže pesme iz albuma
+    MATCH (al:CollectionAlbum)<-[:INCLUDED_IN]-(s:CollectionSong)
+    WITH al, s
+    ORDER BY s.duration_ms DESC
+    WITH al, COLLECT(s)[0] AS longestSong, s
     RETURN s
