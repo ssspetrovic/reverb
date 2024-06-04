@@ -13,6 +13,9 @@ import rs.ac.uns.acs.nais.GraphDatabaseService.dto.MostPopularSongInPlaylistDTO;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongTempoProjection;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.HighEnergyMusicProjection;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.LongestSongInEveryAlbumProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.report.ReportGenerator;
+import org.springframework.http.MediaType;
+import org.springframework.http.HttpHeaders;
 
 import java.util.List;
 import java.util.Map;
@@ -123,5 +126,19 @@ public class SongController {
     @GetMapping("/longestSongPerAlbum")
     public ResponseEntity<List<LongestSongInEveryAlbumProjection>> getLongestSongInEveryAlbum() {
         return ResponseEntity.ok(songService.getLongestSongInEveryAlbum());
+    }
+
+    @GetMapping(value = "/export-pdf", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> exportPdf() {
+        ReportGenerator reportGenerator = new ReportGenerator(songService);
+        byte[] pdfContents = reportGenerator.generateReport();
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "report.pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdfContents);
     }
 }
