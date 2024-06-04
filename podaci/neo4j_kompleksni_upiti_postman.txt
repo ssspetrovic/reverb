@@ -1,0 +1,36 @@
+// Promena popularnosti pesme na osnovu njene energičnosti
+http://localhost:9000/graph-database-service/songs/updatePopularity (GET)
+
+// Dodavanje nove pesme u plejlistu
+http://localhost:9000/graph-database-service/playlists/Vibra%20Tropical/songs/3esLMWVvotR95tEwAKkU6j/genre/latino (PUT)
+
+// Broj pesama po žanrovima u kolekciji
+http://localhost:9000/graph-database-service/playlists/playlistGenres
+
+// Izvođači sa najboljom srednjom popularnošću
+http://localhost:9000/graph-database-service/artists/mostPopularAverage
+
+// Najpopularnija pesma u svakoj plejlisti
+http://localhost:9000/graph-database-service/songs/mostPopularSongsInPlaylist
+
+// Izmena tempa pesme na osnovu njenog popularity-a
+http://localhost:9000/graph-database-service/songs/updateTempo
+
+// Pronalaženje pesama sa visokom energetskom vrednošću u određenom žanru
+http://localhost:9000/graph-database-service/songs/highestEnergy/rock
+
+// Brojanje pesama u plejlisti i izračunavanje prosečne popularnosti plejliste
+http://localhost:9000/graph-database-service/playlists/songCountAndPopularity
+
+// Pronalaženje izvođače sa najvećom prosečnom popularnošću
+    MATCH (a:CollectionArtist)<-[:PERFORMED_BY]-(s:CollectionSong)
+    WITH a, AVG(s.track_popularity) AS avgPopularity
+    RETURN a, avgPopularity
+    ORDER BY avgPopularity DESC
+
+// Pronalaženje najduže pesme iz albuma
+    MATCH (al:CollectionAlbum)<-[:INCLUDED_IN]-(s:CollectionSong)
+    WITH al, s
+    ORDER BY s.duration_ms DESC
+    WITH al, COLLECT(s)[0] AS longestSong, s
+    RETURN s

@@ -7,8 +7,18 @@ import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.acs.nais.GraphDatabaseService.service.ISongService;
 import rs.ac.uns.acs.nais.GraphDatabaseService.model.Song;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongSearchCriteriaDTO;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongPopularityProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PlaylistGenreCountDTO;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.MostPopularSongInPlaylistDTO;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongTempoProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.HighEnergyMusicProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.LongestSongInEveryAlbumProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.report.ReportGenerator;
+import org.springframework.http.MediaType;
+import org.springframework.http.HttpHeaders;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/songs")
@@ -91,5 +101,44 @@ public class SongController {
     @GetMapping("/playlistSubgenre/{playlistSubgenre}")
     public ResponseEntity<List<Song>> searchSongsByPlaylistSubgenre(@PathVariable String playlistSubgenre) {
         return ResponseEntity.ok(songService.searchSongsByPlaylistSubgenre(playlistSubgenre));
+    }
+
+    @GetMapping("/updatePopularity")
+    public ResponseEntity<List<SongPopularityProjection>> updatePopularity() {
+        return ResponseEntity.ok(songService.updatePopularityBasedOnEnergy());
+    }
+
+    @GetMapping("/updateTempo")
+    public ResponseEntity<List<SongTempoProjection>> updateTempoBasedOnPopularity() {
+        return ResponseEntity.ok(songService.updateTempoBasedOnPopularity());
+    }
+
+    @GetMapping("/mostPopularSongsInPlaylist")
+    public ResponseEntity<List<MostPopularSongInPlaylistDTO>> getMostPopularSongsFromEachPlaylist() {
+        return ResponseEntity.ok(songService.getMostPopularSongsFromEachPlaylist());
+    }
+
+    @GetMapping("/highestEnergy/{playlist_genre}")
+    public ResponseEntity<List<HighEnergyMusicProjection>> getHighEnergyMusicBasedOnGenre(@PathVariable String playlist_genre) {
+        return ResponseEntity.ok(songService.getHighEnergyMusicBasedOnGenre(playlist_genre));
+    }
+
+    @GetMapping("/longestSongPerAlbum")
+    public ResponseEntity<List<LongestSongInEveryAlbumProjection>> getLongestSongInEveryAlbum() {
+        return ResponseEntity.ok(songService.getLongestSongInEveryAlbum());
+    }
+
+    @GetMapping(value = "/export-pdf", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> exportPdf() {
+        ReportGenerator reportGenerator = new ReportGenerator(songService);
+        byte[] pdfContents = reportGenerator.generateReport();
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "report.pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdfContents);
     }
 }

@@ -5,9 +5,15 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.acs.nais.GraphDatabaseService.model.Song;
 import rs.ac.uns.acs.nais.GraphDatabaseService.repository.SongRepository;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongSearchCriteriaDTO;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongPopularityProjection;
 import rs.ac.uns.acs.nais.GraphDatabaseService.service.ISongService;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.MostPopularSongInPlaylistDTO;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongTempoProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.HighEnergyMusicProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.LongestSongInEveryAlbumProjection;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class SongService implements ISongService {
@@ -110,23 +116,39 @@ public class SongService implements ISongService {
         }
     }
 
-    // Pretraga pesama po popularnosti
     public List<Song> searchSongsByPopularity(Integer popularity) {
         return songRepository.searchSongsByPopularity(popularity);
     }
 
-    // Pretraga pesama po žanru plejliste
     public List<Song> searchSongsByPlaylistGenre(String playlistGenre) {
         return songRepository.searchSongsByPlaylistGenre(playlistGenre);
     }
 
-    // Pretraga pesama po energiji
     public List<Song> searchSongsByEnergy(String energy) {
         return songRepository.searchSongsByEnergy(energy);
     }
 
-    // Pretraga pesama po subžanru plejliste
     public List<Song> searchSongsByPlaylistSubgenre(String playlistSubgenre) {
         return songRepository.searchSongsByPlaylistSubgenre(playlistSubgenre);
+    }
+
+    public List<SongPopularityProjection> updatePopularityBasedOnEnergy() {
+        return songRepository.updatePopularityBasedOnEnergy();
+    }
+
+    public List<SongTempoProjection> updateTempoBasedOnPopularity() {
+        return songRepository.updateTempoBasedOnPopularity();
+    }
+
+    public List<MostPopularSongInPlaylistDTO> getMostPopularSongsFromEachPlaylist() {
+        return songRepository.getMostPopularSongsFromEachPlaylist();
+    }
+
+    public List<HighEnergyMusicProjection> getHighEnergyMusicBasedOnGenre(String playlist_genre) {
+        return songRepository.getHighEnergyMusicBasedOnGenre(playlist_genre);
+    }
+
+    public List<LongestSongInEveryAlbumProjection> getLongestSongInEveryAlbum() {
+        return songRepository.getLongestSongInEveryAlbum();
     }
 }

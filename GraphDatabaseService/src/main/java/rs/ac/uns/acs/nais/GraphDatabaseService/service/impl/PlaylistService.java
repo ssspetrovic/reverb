@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.acs.nais.GraphDatabaseService.model.Playlist;
 import rs.ac.uns.acs.nais.GraphDatabaseService.repository.PlaylistRepository;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PlaylistGenreCountDTO;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PlaylistCountAveragePopularityDTO;
 
 import java.util.List;
 
@@ -52,4 +54,20 @@ public class PlaylistService implements IPlaylistService {
     public List<Playlist> getPlaylistsBySubgenre(String subgenre) {
         return playlistRepository.getPlaylistsBySubgenre(subgenre);
     }
+
+    @Override
+    public Playlist updatePlaylistGenreBySong(String playlistName, String trackId, String newGenre) {
+        return playlistRepository.updatePlaylistGenreBySong(playlistName, trackId, newGenre);
+    }
+
+    @Override
+    public List<PlaylistGenreCountDTO> getPlaylistGenreWithSongCount() {
+        return playlistRepository.getPlaylistGenreWithSongCount();
+    }
+
+    @Override
+    public List<PlaylistCountAveragePopularityDTO> getPlaylistCountAndAveragePopularity() {
+        return playlistRepository.getPlaylistCountAndAveragePopularity();
+    }
+
 }

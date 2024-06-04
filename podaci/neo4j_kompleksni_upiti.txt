@@ -11,7 +11,7 @@
     RETURN p.name, s.track_name
 
 // Broj pesama po žanrovima u kolekciji
-    MATCH (s:Song)
+    MATCH (s:CollectionSong)
     WITH s.playlist_genre AS genre, COUNT(s) AS numSongs
     RETURN genre, numSongs
     ORDER BY numSongs DESC
@@ -31,16 +31,17 @@
 
 
 
-// Izmena trajanja pesme na osnovu njenog pop-a
-    MATCH (s:Song)
+// Izmena tempa pesme na osnovu njenog popularity-a
+    MATCH (s:CollectionSong)
     WHERE s.track_popularity > 80
     SET s.tempo = s.tempo + 3
     RETURN s.track_name, s.tempo
 
 // Pronalaženje pesama sa visokom energetskom vrednošću u određenom žanru
-    MATCH (s:Song)
+    MATCH (s:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(p:CollectionPlaylist)
     WHERE s.playlist_genre = 'rock' AND toFloat(s.energy) > 0.75
     RETURN s.track_name, s.energy
+
 
 // Brojanje pesama u plejlisti i izračunavanje prosečne popularnosti plejliste
     MATCH (p:CollectionPlaylist)<-[:INCLUDED_IN_PLAYLIST]-(s:CollectionSong)
@@ -48,12 +49,11 @@
     RETURN p.name AS playlist, numSongs, avgPopularity
     ORDER BY numSongs DESC
 
-// Pronalaženje izvođača sa najvećom prosečnom popularnošću
+// Pronalaženje izvođače sa najvećom prosečnom popularnošću
     MATCH (a:CollectionArtist)<-[:PERFORMED_BY]-(s:CollectionSong)
     WITH a, AVG(s.track_popularity) AS avgPopularity
     RETURN a.name AS artist, avgPopularity
     ORDER BY avgPopularity DESC
-    LIMIT 1
 
 // Pronalaženje najduže pesme iz albuma
     MATCH (al:CollectionAlbum)<-[:INCLUDED_IN]-(s:CollectionSong)

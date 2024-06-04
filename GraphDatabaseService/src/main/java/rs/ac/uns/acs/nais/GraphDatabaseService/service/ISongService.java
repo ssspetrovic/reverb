@@ -2,8 +2,14 @@ package rs.ac.uns.acs.nais.GraphDatabaseService.service;
 
 import rs.ac.uns.acs.nais.GraphDatabaseService.model.Song;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongSearchCriteriaDTO;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongPopularityProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.MostPopularSongInPlaylistDTO;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongTempoProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.HighEnergyMusicProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.LongestSongInEveryAlbumProjection;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ISongService {
     Song createSong(Song song);
@@ -18,4 +24,9 @@ public interface ISongService {
     List<Song> searchSongsByPlaylistGenre(String playlistGenre);
     List<Song> searchSongsByEnergy(String energy);
     List<Song> searchSongsByPlaylistSubgenre(String playlistSubgenre);
+    List<SongPopularityProjection> updatePopularityBasedOnEnergy();
+    List<SongTempoProjection> updateTempoBasedOnPopularity();
+    List<MostPopularSongInPlaylistDTO> getMostPopularSongsFromEachPlaylist();
+    List<HighEnergyMusicProjection> getHighEnergyMusicBasedOnGenre(String playlist_genre);
+    List<LongestSongInEveryAlbumProjection> getLongestSongInEveryAlbum();
 }
