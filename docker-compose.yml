@@ -161,20 +161,19 @@ services:
     depends_on:
       - "kafka"
 
-  services:
-    orchestrator-service:
-      build: './OrchestratorService'
-      container_name: orchestrator-service
-      depends_on:
-        - kafka
-        - eureka-server
-      networks:
-        - orchestrator-saga
-      environment:
-        - KAFKA_BROKER=kafka:29092
-        - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
-      ports:
-        - 8082:8082
+  orchestrator-service:
+    build: './OrchestratorService'
+    container_name: orchestrator-service
+    depends_on:
+      - kafka
+      - eureka-server
+    networks:
+      - orchestrator-saga
+    environment:
+      - KAFKA_BROKER=kafka:29092
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+    ports:
+      - 8082:8082
 
 volumes:
   data:
