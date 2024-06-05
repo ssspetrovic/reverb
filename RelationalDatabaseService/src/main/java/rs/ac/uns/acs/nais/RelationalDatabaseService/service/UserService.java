@@ -1,5 +1,6 @@
 package rs.ac.uns.acs.nais.RelationalDatabaseService.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import rs.ac.uns.acs.nais.RelationalDatabaseService.model.User;
@@ -11,11 +12,8 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
-
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    @Autowired
+    private UserRepository userRepository;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();

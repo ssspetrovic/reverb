@@ -1,13 +1,38 @@
 server:
-  port: 9080
+  port: 8081
 
 spring:
-  application:
-    name: orchestrator-service
+  kafka:
+    bootstrap-servers: ${KAFKA_BROKER:localhost:9092}
+    consumer:
+      group-id: orchestrator-group
+      auto-offset-reset: latest
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    listener:
+      missing-topics-fatal: false
+    topics:
+      start-saga: start-saga
+      finish-success: finish-success
+      finish-fail: finish-fail
+      orchestrator: orchestrator
+
+logging:
+  level:
+    org:
+      apache:
+        kafka: OFF
 
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
+      healthcheck:
+        enabled: true
   instance:
     prefer-ip-address: true
+
+
+
+

@@ -1,4 +1,4 @@
-package rs.ac.uns.acs.nais.GraphDatabaseService.service.impl;
+package rs.ac.uns.acs.nais.GraphDatabaseService.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,7 +6,6 @@ import rs.ac.uns.acs.nais.GraphDatabaseService.model.Playlist;
 import rs.ac.uns.acs.nais.GraphDatabaseService.repository.PlaylistRepository;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PlaylistGenreCountDTO;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PlaylistCountAveragePopularityDTO;
-import rs.ac.uns.acs.nais.GraphDatabaseService.service.IPlaylistService;
 
 import java.util.List;
 
