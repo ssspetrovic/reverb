@@ -1,4 +1,4 @@
-#version: '3.8'
+version: '3.8'
 
 services:
   eureka-server:
@@ -18,9 +18,9 @@ services:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
     depends_on:
       - eureka-server
-      #      - elastic-search-service
-      - graph-service
+      # - graph-service
       - relational-service
+      - elastic-search-service
     ports:
       - "9000:9000"
 
@@ -40,34 +40,34 @@ services:
     ports:
       - "9030:9030"
 
-  graph-service:
+  # graph-service:
+    # build:
+      # context: ./GraphDatabaseService
+      # dockerfile: Dockerfile
+    # image: graph-spring-example:latest
+    # depends_on:
+      # - eureka-server
+      # - neo4j
+    # environment:
+      # EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      # SPRING_NEO4J_URI: "bolt://neo4j:7687"
+      # SPRING_NEO4J_USERNAME: neo4j
+      # SPRING_NEO4J_PASSWORD: password
+    # volumes:
+      # - ./data:/data
+
+  elastic-search-service:
     build:
-      context: ./GraphDatabaseService
+      context: ./ElasticSearchDatabaseService
       dockerfile: Dockerfile
-    image: graph-spring-example:latest
+    image: elastic-spring-example:latest
+    restart: on-failure
     depends_on:
       - eureka-server
-      - neo4j
+      - elasticsearch
     environment:
+      SPRING_ELASTICSEARCH_URIS: http://elasticsearch:9200
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
-      SPRING_NEO4J_URI: "bolt://neo4j:7687"
-      SPRING_NEO4J_USERNAME: neo4j
-      SPRING_NEO4J_PASSWORD: password
-    volumes:
-      - ./data:/data
-  
-   elastic-search-service:
-     build:
-       context: ./ElasticSearchDatabaseService
-       dockerfile: Dockerfile
-     image: elastic-spring-example:latest
-     restart: on-failure
-     depends_on:
-       - eureka-server
-       - elasticsearch
-     environment:
-       SPRING_ELASTICSEARCH_URIS: http://elasticsearch:9200
-       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
 
   postgresdb:
     image: postgres:latest
@@ -93,35 +93,33 @@ services:
       - ./data:/data
       - ./csv:/var/lib/pgadmin/import
 
-  neo4j:
-    image: neo4j
-    container_name: neo4j
-    ports:
-      - "7474:7474"
-      - "7687:7687"
-    environment:
-      NEO4J_AUTH: neo4j/password
-    volumes:
-      - ./data:/data
-      - ./import:/var/lib/neo4j/import
+  # neo4j:
+    # image: neo4j
+    # container_name: neo4j
+    # ports:
+      # - "7474:7474"
+      # - "7687:7687"
+    # environment:
+      # NEO4J_AUTH: neo4j/password
+    # volumes:
+      # - ./data:/data
+      # - ./import:/var/lib/neo4j/import
 
-   elasticsearch:
-     image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
-     container_name: elasticsearch
-     restart: always
-     ports:
-       - ${ELASTICSEARCH_PORT}:${ELASTICSEARCH_PORT}
-     env_file:
-       - .env
-     environment:
-       - xpack.security.enabled=false
-       - discovery.type=single-node
-       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-     ulimits:
-       memlock:
-         soft: -1
-         hard: -1
-    
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
+    container_name: elasticsearch
+    restart: always
+    ports:
+      - "9200:9200"
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
   kafka:
     container_name: kafka
     image: obsidiandynamics/kafka
@@ -161,20 +159,19 @@ services:
     depends_on:
       - "kafka"
 
-  services:
-    orchestrator-service:
-      build: './OrchestratorService'
-      container_name: orchestrator-service
-      depends_on:
-        - kafka
-        - eureka-server
-      networks:
-        - orchestrator-saga
-      environment:
-        - KAFKA_BROKER=kafka:29092
-        - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
-      ports:
-        - 8082:8082
+  orchestrator-service:
+    build: './OrchestratorService'
+    container_name: orchestrator-service
+    depends_on:
+      - kafka
+      - eureka-server
+    networks:
+      - orchestrator-saga
+    environment:
+      - KAFKA_BROKER=kafka:29092
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+    ports:
+      - 8082:8082
 
 volumes:
   data:

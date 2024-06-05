@@ -1,3 +1,5 @@
+import org.springframework.kafka.annotation.KafkaListener;
+
 @KafkaListener(topics = "relational-service-topic", groupId = "relational-service-group")
 public void handleRelationalService(String message) {
     // Deserialize the message
