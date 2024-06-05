@@ -55,15 +55,15 @@ services:
     volumes:
       - ./data:/data
 
-  orchestrator-service:
-    build: './OrchestratorService'
-    container_name: orchestrator-service
-    depends_on:
-      - kafka
-    environment:
-      - KAFKA_BROKER=kafka:29092
-    ports:
-      - "8083:8083"
+#  orchestrator-service:
+#    build: './OrchestratorService'
+#    container_name: orchestrator-service
+#    depends_on:
+#      - kafka
+#    environment:
+#      - KAFKA_BROKER=kafka:29092
+#    ports:
+#      - "8083:8083"
 
   kafka:
     container_name: kafka
@@ -93,7 +93,7 @@ services:
       POSTGRES_PASSWORD: "nais"
     volumes:
       - data:/var/lib/postgres
-      - ./csv/random_user_data.csv:/tmp/random_user_data.csv
+      - ./csv/users.csv:/tmp/users.csv
     ports:
       - "5432:5432"
 
