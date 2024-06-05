@@ -25,7 +25,7 @@ public class UserService implements IUserService {
         if (user == null || user.getUserId() == null) {
             throw new IllegalArgumentException("Invalid user data");
         }
-        return userRepository.createUser(user.getUserId(), user.getFavoriteSongs());
+        return userRepository.createUser(user.getUserId());
     }
 
     @Override

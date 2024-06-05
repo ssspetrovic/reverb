@@ -24,36 +24,41 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
-        return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
+        User createdUser = userService.createUser(user);
+        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable Long id) {
-        Optional<User> user = userService.getUserById(id);
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> getUserByUserId(@PathVariable Long userId) {
+        Optional<User> user = userService.getUserById(userId);
         return user.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+        List<User> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+    @PutMapping("/{userId}")
+    public ResponseEntity<User> updateUser(@PathVariable Long userId, @RequestBody User user) {
+        if (!userId.equals(user.getUserId())) {
+            return ResponseEntity.badRequest().build();
+        }
         User updatedUser = userService.updateUser(user);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
+        userService.deleteUser(userId);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{id}/favorite-songs")
-    public ResponseEntity<List<Song>> getAllFavoriteSongs(@PathVariable Long id) {
-        List<Song> favoriteSongs = userService.getAllFavoriteSongs(id);
+    @GetMapping("/{userId}/favorite-songs")
+    public ResponseEntity<List<Song>> getAllFavoriteSongs(@PathVariable Long userId) {
+        List<Song> favoriteSongs = userService.getAllFavoriteSongs(userId);
         return ResponseEntity.ok(favoriteSongs);
     }
 }

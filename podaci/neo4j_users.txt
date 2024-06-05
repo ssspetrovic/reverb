@@ -1,21 +1,14 @@
-// Load users from CSV
+MATCH (n)
+DETACH DELETE n;
+
 LOAD CSV WITH HEADERS FROM 'file:///users.csv' AS row
-CREATE (:User {
-    user_id: toInteger(row.id),
-    username: row.username,
-    first_name: row.first_name,
-    last_name: row.last_name,
-    email: row.email
+WITH row
+MERGE (c:Collection {name: 'users'})
+CREATE (u:CollectionUser {
+    userId: toInteger(row.Id),
+    username: row.Username,
+    favoriteSongs: []
 })
 
-// Create a collection node for users
-CREATE (:Collection {name: 'users'});
-
-// Create a CollectionUser node for each user
-MATCH (user:User)
-CREATE (:CollectionUser {
-    user_id: user.user_id
-})
-
-// Index user_id in CollectionUser
-CREATE INDEX FOR (u:CollectionUser) ON (u.user_id);
+MATCH (u:CollectionUser)
+RETURN u.userId ORDER BY u.userId;
