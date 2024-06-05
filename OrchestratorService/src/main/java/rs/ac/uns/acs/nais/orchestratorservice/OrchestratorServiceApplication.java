@@ -1,13 +1,13 @@
-package rs.ac.uns.acs.nais.orchestratorservce;
+package rs.ac.uns.acs.nais.orchestratorservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class OrchestratorServceApplication {
+public class OrchestratorServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(OrchestratorServceApplication.class, args);
+        SpringApplication.run(OrchestratorServiceApplication.class, args);
     }
 
 }

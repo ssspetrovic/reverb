@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>rs.ac.uns.acs.nais</groupId>
-    <artifactId>OrchestratorServce</artifactId>
+    <artifactId>OrchestratorService</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>OrchestratorServce</name>
-    <description>OrchestratorServce</description>
+    <name>OrchestratorService</name>
+    <description>OrchestratorService</description>
     <properties>
         <java.version>17</java.version>
         <spring-cloud.version>2022.0.0</spring-cloud.version>

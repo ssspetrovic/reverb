@@ -1,10 +1,10 @@
-package rs.ac.uns.acs.nais.orchestratorservce;
+package rs.ac.uns.acs.nais.orchestratorservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class OrchestratorServceApplicationTests {
+class OrchestratorServiceApplicationTests {
 
     @Test
     void contextLoads() {
