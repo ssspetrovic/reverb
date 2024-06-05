@@ -18,7 +18,3 @@ eureka:
         enabled: true
   instance:
     prefer-ip-address: true
-
-
-
-
