@@ -180,8 +180,8 @@ public class SongService implements ISongService {
         return songRepository.getAllIncludedInPlaylistRelationships();
     }
 
-    public void updatePerformedByRelationship(String trackId, String artistName) {
-        songRepository.updatePerformedByRelationship(trackId, artistName);
+    public void updatePerformedByRelationship(String trackId, String name) {
+        songRepository.updatePerformedByRelationship(trackId, name);
     }
 
     public void updateIncludedInRelationship(String trackId, String albumName) {

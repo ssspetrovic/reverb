@@ -39,7 +39,7 @@ public interface ISongService {
     List<PerformedByProjection> getAllPerformedByRelationships();
     List<IncludedInProjection> getAllIncludedInRelationships();
     List<IncludedInPlaylistProjection> getAllIncludedInPlaylistRelationships();
-    void updatePerformedByRelationship(String trackId, String artistName);
+    void updatePerformedByRelationship(String trackId, String name);
     void updateIncludedInRelationship(String trackId, String albumName);
     void updateIncludedInPlaylistRelationship(String trackId, String playlistId);
     void deletePerformedByRelationship(String trackId);

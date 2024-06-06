@@ -210,9 +210,9 @@ public interface SongRepository extends Neo4jRepository<Song, Long> {
     @Query("MATCH (s:CollectionSong {track_id: $trackId})-[r:PERFORMED_BY]->(a:CollectionArtist) "
                 + "DELETE r "
                 + "WITH s, a "
-                + "MATCH (newArtist:CollectionArtist {name: $artistName}) "
+                + "MATCH (newArtist:CollectionArtist {name: $name}) "
                 + "CREATE (s)-[:PERFORMED_BY]->(newArtist)")
-    void updatePerformedByRelationship(@Param("trackId") String trackId, @Param("artistName") String artistName);
+    void updatePerformedByRelationship(@Param("trackId") String trackId, @Param("name") String name);
 
     @Query("MATCH (s:CollectionSong {track_id: $trackId})-[r:INCLUDED_IN]->(al:CollectionAlbum) "
                 + "DELETE r "

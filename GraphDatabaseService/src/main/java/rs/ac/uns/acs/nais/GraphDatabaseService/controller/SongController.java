@@ -153,20 +153,20 @@ public class SongController {
                 .body(pdfContents);
     }
 
-    @PostMapping("/performed-by/{trackId}")
-    public ResponseEntity<Void> createPerformedByRelationship(@PathVariable String trackId, @RequestBody String name) {
+    @PostMapping("{trackId}/performed-by/{name}")
+    public ResponseEntity<Void> createPerformedByRelationship(@PathVariable String trackId, @PathVariable String name) {
         songService.createPerformedByRelationship(trackId, name);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/included-in/{trackId}")
-    public ResponseEntity<Void> createIncludedInRelationship(@PathVariable String trackId, @RequestBody String albumName) {
+    @PostMapping("{trackId}/included-in/{albumName}")
+    public ResponseEntity<Void> createIncludedInRelationship(@PathVariable String trackId, @PathVariable String albumName) {
         songService.createIncludedInRelationship(trackId, albumName);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/included-in-playlist/{trackId}")
-    public ResponseEntity<Void> createIncludedInPlaylistRelationship(@PathVariable String trackId, @RequestBody String playlistId) {
+    @PostMapping("{trackId}/included-in-playlist/{playlistId}")
+    public ResponseEntity<Void> createIncludedInPlaylistRelationship(@PathVariable String trackId, @PathVariable String playlistId) {
         songService.createIncludedInPlaylistRelationship(trackId, playlistId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -186,20 +186,20 @@ public class SongController {
         return ResponseEntity.ok(songService.getAllIncludedInPlaylistRelationships());
     }
 
-    @PutMapping("/performed-by/{trackId}")
-    public ResponseEntity<Void> updatePerformedByRelationship(@PathVariable String trackId, @RequestBody String artistName) {
-        songService.updatePerformedByRelationship(trackId, artistName);
+    @PutMapping("{trackId}/performed-by/{name}")
+    public ResponseEntity<Void> updatePerformedByRelationship(@PathVariable String trackId, @PathVariable String name) {
+        songService.updatePerformedByRelationship(trackId, name);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/included-in/{trackId}")
-    public ResponseEntity<Void> updateIncludedInRelationship(@PathVariable String trackId, @RequestBody String albumName) {
+    @PutMapping("{trackId}/included-in/{albumName}")
+    public ResponseEntity<Void> updateIncludedInRelationship(@PathVariable String trackId, @PathVariable String albumName) {
         songService.updateIncludedInRelationship(trackId, albumName);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/included-in-playlist/{trackId}")
-    public ResponseEntity<Void> updateIncludedInPlaylistRelationship(@PathVariable String trackId, @RequestBody String playlistId) {
+    @PutMapping("{trackId}/included-in-playlist/{playlistId}")
+    public ResponseEntity<Void> updateIncludedInPlaylistRelationship(@PathVariable String trackId, @PathVariable String playlistId) {
         songService.updateIncludedInPlaylistRelationship(trackId, playlistId);
         return ResponseEntity.ok().build();
     }
