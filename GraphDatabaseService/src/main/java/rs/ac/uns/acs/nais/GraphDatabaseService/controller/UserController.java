@@ -57,8 +57,8 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/favorite-songs")
-    public ResponseEntity<List<Song>> getAllFavoriteSongs(@PathVariable Long userId) {
-        List<Song> favoriteSongs = userService.getAllFavoriteSongs(userId);
+    public ResponseEntity<List<String>> getAllFavoriteSongs(@PathVariable Long userId) {
+        List<String> favoriteSongs = userService.getAllFavoriteSongs(userId);
         return ResponseEntity.ok(favoriteSongs);
     }
 }

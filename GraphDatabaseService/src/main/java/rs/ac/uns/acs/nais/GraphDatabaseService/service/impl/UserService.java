@@ -52,7 +52,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<Song> getAllFavoriteSongs(Long userId) {
+    public List<String> getAllFavoriteSongs(Long userId) {
         Optional<User> user = getUserById(userId);
         return user.map(User::getFavoriteSongs).orElse(null);
     }

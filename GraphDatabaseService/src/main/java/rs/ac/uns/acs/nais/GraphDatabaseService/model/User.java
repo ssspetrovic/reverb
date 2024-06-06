@@ -17,7 +17,7 @@ public class User {
     @RelationshipId
     private Long userId;
     private String username;
-    private List<Song> favoriteSongs = new ArrayList<>();
+    private List<String> favoriteSongs = new ArrayList<>();
 
     public User() {
     }
@@ -30,7 +30,7 @@ public class User {
         return map;
     }
 
-    public List<Song> getFavoriteSongs() {
+    public List<String> getFavoriteSongs() {
         return new ArrayList<>(favoriteSongs);
     }
 }

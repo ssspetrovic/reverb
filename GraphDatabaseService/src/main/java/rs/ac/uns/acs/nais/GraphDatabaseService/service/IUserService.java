@@ -13,5 +13,5 @@ public interface IUserService {
     List<User> getAllUsers();
     User updateUser(User user);
     void deleteUser(Long userId);
-    List<Song> getAllFavoriteSongs(Long userId);
+    List<String> getAllFavoriteSongs(Long userId);
 }
