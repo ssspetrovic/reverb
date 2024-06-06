@@ -23,6 +23,6 @@
 -- VALUES ('Carolyn', 'Mendoza', 'smithbrianna@example.net', '6082582962', '15192 Lewis Land', 'Laurafurt', 'FM', '55021', 'Kiribati', '2003-03-20');
 
 COPY users (first_name, last_name, email, phone_number, address, city, state, zip_code, country, date_of_birth)
-    FROM '/tmp/random_user_data.csv'
+    FROM '/tmp/users.csv'
     DELIMITER ','
     CSV HEADER;
