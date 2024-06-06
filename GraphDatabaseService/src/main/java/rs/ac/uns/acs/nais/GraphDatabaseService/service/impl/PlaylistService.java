@@ -6,6 +6,7 @@ import rs.ac.uns.acs.nais.GraphDatabaseService.model.Playlist;
 import rs.ac.uns.acs.nais.GraphDatabaseService.repository.PlaylistRepository;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PlaylistGenreCountDTO;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PlaylistCountAveragePopularityDTO;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.Top3SubgenresPerGenreDTO;
 
 import java.util.List;
 
@@ -70,4 +71,13 @@ public class PlaylistService implements IPlaylistService {
         return playlistRepository.getPlaylistCountAndAveragePopularity();
     }
 
+    @Override
+    public List<PlaylistGenreCountDTO> getTop10Genres() {
+        return playlistRepository.getTop10Genres();
+    }
+
+    @Override
+    public List<Top3SubgenresPerGenreDTO> getTop3SubgenresPerGenre() {
+        return playlistRepository.getTop3SubgenresPerGenre();
+    }
 }

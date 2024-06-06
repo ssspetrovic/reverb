@@ -1,0 +1,59 @@
+//FUNKCIJA ZA REKOMENDACIJU
+
+// TOP 50 NAJPOPULARNIJIH pesama
+
+MATCH (s:CollectionSong)
+WHERE s.track_popularity IS NOT NULL
+RETURN DISTINCT s.track_name, s.track_popularity
+ORDER BY s.track_popularity DESC
+LIMIT 50;
+
+
+// TOP 10 NAJPOPULARNIJIH ZANROVA
+
+MATCH (p:CollectionPlaylist)
+WHERE p.genre IS NOT NULL
+RETURN p.genre, COUNT(*) AS songCount
+ORDER BY songCount DESC
+LIMIT 10;
+
+// TOP 3 NAJPOPULARNIJIH SUBZANROVA ZA SVAKI ZANR
+
+MATCH (p:CollectionPlaylist)
+WHERE p.genre IS NOT NULL AND p.subgenre IS NOT NULL
+WITH p.genre AS genre, p.subgenre AS subgenre, COUNT(*) AS songCount
+ORDER BY genre, songCount DESC
+WITH genre, COLLECT({subgenre: subgenre, songCount: songCount}) AS subgenres
+RETURN genre, subgenres[..3] AS topSubgenres;
+
+// Definisanje ulaznih parametara korisnika
+WITH {genre: 'rock', subgenre: 'classic rock', artist: "Guns N' Roses"} AS params
+
+// Pronalaženje pesama koje u potpunosti odgovaraju ulaznim parametrima  
+MATCH (song:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(playlist:CollectionPlaylist)
+WHERE playlist.genre = params.genre AND
+      playlist.subgenre = params.subgenre AND
+      song.track_artist = params.artist
+WITH COLLECT(song) AS songs, params
+
+// Ako nema dovoljno pesama sa prethodnim kriterijumima, odbacujemo track popularity
+WITH songs, params
+WHERE SIZE(songs) < 20
+MATCH (s:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(playlist:CollectionPlaylist)  
+WHERE playlist.genre = params.genre AND
+      playlist.subgenre = params.subgenre
+WITH songs, COLLECT(s) AS additionalSongs, params
+WITH songs, songs + additionalSongs AS allSongs, params
+ORDER BY ABS(REDUCE(avgPopularity = 0, song IN allSongs | avgPopularity + song.track_popularity) / SIZE(allSongs) - params.track_popularity) ASC
+WITH allSongs, songs, params
+WITH allSongs[..20 - SIZE(songs)] AS limitedSongs, params
+
+// Ako i dalje nema dovoljno pesama sa prethodnim kriterijumima, odbacujemo track artista
+UNWIND limitedSongs AS song
+
+// Prosleđivanje params promenljive dalje
+WITH params
+MATCH (s:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(playlist:CollectionPlaylist)
+WHERE playlist.genre = params.genre
+WITH COLLECT(s) AS finalSongs
+RETURN finalSongs[..20]

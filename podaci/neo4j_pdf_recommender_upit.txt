@@ -1,0 +1,4 @@
+http://localhost:9000/graph-database-service/songs/recommender?genre=rock&subgenre=classic%20rock&artist=Guns%20N'%20Roses
+
+
+docker cp reverb-graph-service-1:/report.pdf C:\Users\dzoni\Downloads

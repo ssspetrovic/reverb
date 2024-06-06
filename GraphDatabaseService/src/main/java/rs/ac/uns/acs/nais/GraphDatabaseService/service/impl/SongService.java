@@ -11,6 +11,10 @@ import rs.ac.uns.acs.nais.GraphDatabaseService.dto.MostPopularSongInPlaylistDTO;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongTempoProjection;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.HighEnergyMusicProjection;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.LongestSongInEveryAlbumProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PerformedByProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.IncludedInProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.IncludedInPlaylistProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.Top50SongsProjection;
 
 import java.util.List;
 import java.util.Map;
@@ -151,4 +155,61 @@ public class SongService implements ISongService {
     public List<LongestSongInEveryAlbumProjection> getLongestSongInEveryAlbum() {
         return songRepository.getLongestSongInEveryAlbum();
     }
+
+    public void createPerformedByRelationship(String trackId, String name) {
+        songRepository.createPerformedByRelationship(trackId, name);
+    }
+
+    public void createIncludedInRelationship(String trackId, String albumName) {
+        songRepository.createIncludedInRelationship(trackId, albumName);
+    }
+
+    public void createIncludedInPlaylistRelationship(String trackId, String playlistId) {
+        songRepository.createIncludedInPlaylistRelationship(trackId, playlistId);
+    }
+
+    public List<PerformedByProjection> getAllPerformedByRelationships() {
+        return songRepository.getAllPerformedByRelationships();
+    }
+
+    public List<IncludedInProjection> getAllIncludedInRelationships() {
+        return songRepository.getAllIncludedInRelationships();
+    }
+
+    public List<IncludedInPlaylistProjection> getAllIncludedInPlaylistRelationships() {
+        return songRepository.getAllIncludedInPlaylistRelationships();
+    }
+
+    public void updatePerformedByRelationship(String trackId, String artistName) {
+        songRepository.updatePerformedByRelationship(trackId, artistName);
+    }
+
+    public void updateIncludedInRelationship(String trackId, String albumName) {
+        songRepository.updateIncludedInRelationship(trackId, albumName);
+    }
+
+    public void updateIncludedInPlaylistRelationship(String trackId, String playlistId) {
+        songRepository.updateIncludedInPlaylistRelationship(trackId, playlistId);
+    }
+
+    public void deletePerformedByRelationship(String trackId) {
+        songRepository.deletePerformedByRelationship(trackId);
+    }
+
+    public void deleteIncludedInRelationship(String trackId) {
+        songRepository.deleteIncludedInRelationship(trackId);
+    }
+
+    public void deleteIncludedInPlaylistRelationship(String trackId) {
+        songRepository.deleteIncludedInPlaylistRelationship(trackId);
+    }
+
+    public List<Song> recommendSongs(String genre, String subgenre, String artist) {
+        return songRepository.recommendSongs(genre, subgenre, artist);
+    }
+
+    public List<Top50SongsProjection> getTop50Songs() {
+        return songRepository.getTop50Songs();
+    }
+
 }

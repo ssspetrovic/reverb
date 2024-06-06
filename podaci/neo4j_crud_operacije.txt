@@ -96,3 +96,74 @@ SET p.name = 'Novi naziv plejliste', p.genre = 'Novi zanr', p.subgenre = 'Novi p
 MATCH (p:CollectionPlaylist {name: 'Novi naziv plejliste'})
 DETACH DELETE p
 
+
+
+// GRANE
+
+//CREATE
+
+// Kreiranje relacije između pesme i izvođača
+MATCH (s:CollectionSong {track_id: '1dcaJ3vOelzh4xYAWiEFbQ'}), (a:CollectionArtist {name: 'Fedde Le Grand'})
+CREATE (s)-[:PERFORMED_BY]->(a)
+
+// Kreiranje relacije između pesme i albuma
+MATCH (s:CollectionSong {track_id: '1dcaJ3vOelzh4xYAWiEFbQ'}), (al:CollectionAlbum {name: 'Runaway'})
+CREATE (s)-[:INCLUDED_IN]->(al)
+
+// Kreiranje relacije između pesme i plejliste
+MATCH (s:CollectionSong {track_id: '1dcaJ3vOelzh4xYAWiEFbQ'}), (p:CollectionPlaylist {playlist_id: '2oalsaFUockoPf1DU3wrL8'})
+CREATE (s)-[:INCLUDED_IN_PLAYLIST]->(p)
+
+
+// READ
+
+// Čitanje relacija između pesme i izvođača
+MATCH (s:CollectionSong)-[:PERFORMED_BY]->(a:CollectionArtist)
+RETURN s.track_id, s.track_name, a.name
+
+// Čitanje relacija između pesme i albuma
+MATCH (s:CollectionSong)-[:INCLUDED_IN]->(al:CollectionAlbum)
+RETURN s.track_id, s.track_name, al.name
+
+// Čitanje relacija između pesme i plejliste
+MATCH (s:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(p:CollectionPlaylist)
+RETURN s.track_id, s.track_name, p.name
+
+
+// UPDATE
+
+// Ažuriranje relacije između pesme i izvođača
+MATCH (s:CollectionSong {track_id: '1dcaJ3vOelzh4xYAWiEFbQ'})-[r:PERFORMED_BY]->(a:CollectionArtist)
+DELETE r
+WITH s, a
+MATCH (newArtist:CollectionArtist {name: 'Mike Cervello'})
+CREATE (s)-[:PERFORMED_BY]->(newArtist)
+
+// Ažuriranje relacije između pesme i albuma
+MATCH (s:CollectionSong {track_id: '1dcaJ3vOelzh4xYAWiEFbQ'})-[r:INCLUDED_IN]->(al:CollectionAlbum)
+DELETE r
+WITH s, al
+MATCH (newAlbum:CollectionAlbum {name: 'We Are One (feat. Pearl Andersson) (TYMEN Remix)'})
+CREATE (s)-[:INCLUDED_IN]->(newAlbum)
+
+// Ažuriranje relacije između pesme i plejliste
+MATCH (s:CollectionSong {track_id: '1dcaJ3vOelzh4xYAWiEFbQ'})-[r:INCLUDED_IN_PLAYLIST]->(p:CollectionPlaylist)
+DELETE r
+WITH s, p
+MATCH (newPlaylist:CollectionPlaylist {playlist_id: '4R4c3WdN1Any2Q1NSuec3r'})
+CREATE (s)-[:INCLUDED_IN_PLAYLIST]->(newPlaylist)
+
+
+// DELETE
+
+// Brisanje relacije između pesme i izvođača
+MATCH (s:CollectionSong {track_id: '1dcaJ3vOelzh4xYAWiEFbQ'})-[r:PERFORMED_BY]->(a:CollectionArtist)
+DELETE r
+
+// Brisanje relacije između pesme i albuma
+MATCH (s:CollectionSong {track_id: '1dcaJ3vOelzh4xYAWiEFbQ'})-[r:INCLUDED_IN]->(al:CollectionAlbum)
+DELETE r
+
+// Brisanje relacije između pesme i plejliste
+MATCH (s:CollectionSong {track_id: '1dcaJ3vOelzh4xYAWiEFbQ'})-[r:INCLUDED_IN_PLAYLIST]->(p:CollectionPlaylist)
+DELETE r

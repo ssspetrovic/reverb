@@ -7,6 +7,10 @@ import rs.ac.uns.acs.nais.GraphDatabaseService.dto.MostPopularSongInPlaylistDTO;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongTempoProjection;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.HighEnergyMusicProjection;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.LongestSongInEveryAlbumProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PerformedByProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.IncludedInProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.IncludedInPlaylistProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.Top50SongsProjection;
 
 import java.util.List;
 import java.util.Map;
@@ -29,4 +33,18 @@ public interface ISongService {
     List<MostPopularSongInPlaylistDTO> getMostPopularSongsFromEachPlaylist();
     List<HighEnergyMusicProjection> getHighEnergyMusicBasedOnGenre(String playlist_genre);
     List<LongestSongInEveryAlbumProjection> getLongestSongInEveryAlbum();
+    void createPerformedByRelationship(String trackId, String name);
+    void createIncludedInRelationship(String trackId, String albumName);
+    void createIncludedInPlaylistRelationship(String trackId, String playlistId);
+    List<PerformedByProjection> getAllPerformedByRelationships();
+    List<IncludedInProjection> getAllIncludedInRelationships();
+    List<IncludedInPlaylistProjection> getAllIncludedInPlaylistRelationships();
+    void updatePerformedByRelationship(String trackId, String artistName);
+    void updateIncludedInRelationship(String trackId, String albumName);
+    void updateIncludedInPlaylistRelationship(String trackId, String playlistId);
+    void deletePerformedByRelationship(String trackId);
+    void deleteIncludedInRelationship(String trackId);
+    void deleteIncludedInPlaylistRelationship(String trackId);
+    List<Song> recommendSongs(String genre, String subgenre, String artist);
+    List<Top50SongsProjection> getTop50Songs();
 }
