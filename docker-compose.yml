@@ -76,7 +76,7 @@ services:
       POSTGRES_PASSWORD: "nais"
     volumes:
       - data:/var/lib/postgres
-      - ./csv/random_user_data.csv:/tmp/random_user_data.csv
+      - ./csv/users.csv:/tmp/users.csv
     ports:
       - "5432:5432"
 
