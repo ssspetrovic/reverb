@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import rs.ac.uns.acs.nais.GraphDatabaseService.model.Playlist;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PlaylistGenreCountDTO;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PlaylistCountAveragePopularityDTO;
-import rs.ac.uns.acs.nais.GraphDatabaseService.dto.Top3SubgenresPerGenreDTO;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.Top4SubgenresPerGenreDTO;
 
 import java.util.List;
 
@@ -54,18 +54,19 @@ public interface PlaylistRepository extends Neo4jRepository<Playlist, Long> {
             + "ORDER BY numSongs DESC")
     List<PlaylistCountAveragePopularityDTO> getPlaylistCountAndAveragePopularity();
 
-    @Query("MATCH (p:CollectionPlaylist) "
-                + "WHERE p.genre IS NOT NULL "
-                + "RETURN p, COUNT(*) AS songCount "
-                + "ORDER BY songCount DESC "
-                + "LIMIT 10;")
+    @Query("MATCH (p:CollectionPlaylist) " 
+            + "WHERE p.genre IS NOT NULL " 
+            + "WITH p.genre AS genre, COUNT(*) AS songCount, COLLECT(p) AS playlists " 
+            + "ORDER BY songCount DESC " 
+            + "RETURN DISTINCT playlists[0] AS playlist, songCount " 
+            + "LIMIT 10")
     List<PlaylistGenreCountDTO> getTop10Genres();
 
     @Query("MATCH (p:CollectionPlaylist) "
-                + "WHERE p.genre IS NOT NULL AND p.subgenre IS NOT NULL "
-                + "WITH p.genre AS genre, p.subgenre AS subgenre, COUNT(*) AS songCount "
-                + "ORDER BY genre, songCount DESC "
-                + "WITH genre, COLLECT({subgenre: subgenre}) AS subgenres "
-                + "RETURN p, subgenres[..3] AS topSubgenres;")
-    List<Top3SubgenresPerGenreDTO> getTop3SubgenresPerGenre();
+            + "WHERE p.genre IS NOT NULL AND p.subgenre IS NOT NULL "
+            + "WITH p.genre AS genre, p.subgenre AS subgenre, COUNT(*) AS songCount, COLLECT(p) AS playlists "
+            + "ORDER BY genre, songCount DESC "
+            + "WITH genre, COLLECT({subgenre: subgenre})[..3] AS topSubgenres, playlists "
+            + "RETURN playlists[0] AS firstPlaylist")
+    List<Top4SubgenresPerGenreDTO> getTop4SubgenresPerGenre();
 }

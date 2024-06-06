@@ -18,7 +18,6 @@ import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PerformedByProjection;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.IncludedInProjection;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.IncludedInPlaylistProjection;
 import rs.ac.uns.acs.nais.GraphDatabaseService.report.ReportGenerator;
-import rs.ac.uns.acs.nais.GraphDatabaseService.dto.Top50SongsProjection;
 import org.springframework.http.MediaType;
 import org.springframework.http.HttpHeaders;
 
@@ -228,7 +227,7 @@ public class SongController {
     }
 
     @GetMapping("/top50")
-    public ResponseEntity<List<Top50SongsProjection>> getTop50Songs() {
+    public ResponseEntity<List<String>> getTop50Songs() {
         return ResponseEntity.ok(songService.getTop50Songs());
     }
 

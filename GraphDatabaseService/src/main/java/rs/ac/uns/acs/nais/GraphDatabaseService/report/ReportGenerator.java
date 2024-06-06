@@ -4,6 +4,8 @@ import rs.ac.uns.acs.nais.GraphDatabaseService.model.Song;
 import rs.ac.uns.acs.nais.GraphDatabaseService.service.ISongService;
 import rs.ac.uns.acs.nais.GraphDatabaseService.service.IPlaylistService;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.Top50SongsProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PlaylistGenreCountDTO;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.Top4SubgenresPerGenreDTO;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -81,28 +83,71 @@ public class ReportGenerator {
             top50Title.setAlignment(Element.ALIGN_CENTER);
             document.add(top50Title);
 
-            PdfPTable top50Table = new PdfPTable(3);
+            PdfPTable top50Table = new PdfPTable(1);
             top50Table.setWidthPercentage(100);
             
             PdfPCell top50HeaderCell;
             top50HeaderCell = new PdfPCell(new Phrase("Track Name", headerFont));
             top50HeaderCell.setHorizontalAlignment(Element.ALIGN_CENTER);
             top50Table.addCell(top50HeaderCell);
-            top50HeaderCell = new PdfPCell(new Phrase("Artist", headerFont));
-            top50HeaderCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            top50Table.addCell(top50HeaderCell);
-            top50HeaderCell = new PdfPCell(new Phrase("Popularity", headerFont));
-            top50HeaderCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            top50Table.addCell(top50HeaderCell);
             
-            List<Top50SongsProjection> top50Songs = songService.getTop50Songs();
-            for (Top50SongsProjection top50Song : top50Songs) {
-                top50Table.addCell(top50Song.getTrackName());
-                top50Table.addCell(top50Song.getTrackArtist());
-                top50Table.addCell(String.valueOf(top50Song.getTrackPopularity()));
+            List<String> top50Songs = songService.getTop50Songs();
+            for (String top50Song : top50Songs) {
+                top50Table.addCell(top50Song);
             }
             
             document.add(top50Table);
+
+            // Dodavanje tabele za top 10 zanrova
+            document.add(new Paragraph(" "));
+            Paragraph top10GenresTitle = new Paragraph("Top 10 Genres", titleFont);
+            top10GenresTitle.setAlignment(Element.ALIGN_CENTER);
+            document.add(top10GenresTitle);
+
+            PdfPTable top10GenresTable = new PdfPTable(2);
+            top10GenresTable.setWidthPercentage(100);
+            
+            PdfPCell top10GenresHeaderCell;
+            top10GenresHeaderCell = new PdfPCell(new Phrase("Genre", headerFont));
+            top10GenresHeaderCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            top10GenresTable.addCell(top10GenresHeaderCell);
+            top10GenresHeaderCell = new PdfPCell(new Phrase("Song Count", headerFont));
+            top10GenresHeaderCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            top10GenresTable.addCell(top10GenresHeaderCell);
+            
+            List<PlaylistGenreCountDTO> top10Genres = playlistService.getTop10Genres();
+            for (PlaylistGenreCountDTO genreCount : top10Genres) {
+                top10GenresTable.addCell(genreCount.getGenre());
+                top10GenresTable.addCell(String.valueOf(genreCount.getSongCount()));
+            }
+            
+            document.add(top10GenresTable);
+            
+            // Dodavanje tabele za top 4 subžanrova po žanru
+            document.add(new Paragraph(" "));
+            Paragraph top4SubgenresTitle = new Paragraph("Top 4 Subgenres per Genre", titleFont);
+            top4SubgenresTitle.setAlignment(Element.ALIGN_CENTER);
+            document.add(top4SubgenresTitle);
+
+            PdfPTable top4SubgenresTable = new PdfPTable(2);
+            top4SubgenresTable.setWidthPercentage(100);
+            
+            PdfPCell top4SubgenresHeaderCell;
+            top4SubgenresHeaderCell = new PdfPCell(new Phrase("Genre", headerFont));
+            top4SubgenresHeaderCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            top4SubgenresTable.addCell(top4SubgenresHeaderCell);
+            top4SubgenresHeaderCell = new PdfPCell(new Phrase("Subgenre", headerFont));
+            top4SubgenresHeaderCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            top4SubgenresTable.addCell(top4SubgenresHeaderCell);
+            
+            List<Top4SubgenresPerGenreDTO> top4Subgenres = playlistService.getTop4SubgenresPerGenre();
+            for (Top4SubgenresPerGenreDTO top4subgenre : top4Subgenres) {
+                top4SubgenresTable.addCell(top4subgenre.getGenre());
+                top4SubgenresTable.addCell(top4subgenre.getSubgenre());
+            }
+            
+            document.add(top4SubgenresTable);
+            
             System.out.println("Report generated successfully!");
         } catch (DocumentException e) {
             System.out.println("Error: Document exception: " + e.getMessage());

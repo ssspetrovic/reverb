@@ -3,7 +3,7 @@ package rs.ac.uns.acs.nais.GraphDatabaseService.service;
 import rs.ac.uns.acs.nais.GraphDatabaseService.model.Playlist;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PlaylistGenreCountDTO;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PlaylistCountAveragePopularityDTO;
-import rs.ac.uns.acs.nais.GraphDatabaseService.dto.Top3SubgenresPerGenreDTO;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.Top4SubgenresPerGenreDTO;
 
 import java.util.List;
 
@@ -19,5 +19,5 @@ public interface IPlaylistService {
     List<PlaylistGenreCountDTO> getPlaylistGenreWithSongCount();
     List<PlaylistCountAveragePopularityDTO> getPlaylistCountAndAveragePopularity();
     List<PlaylistGenreCountDTO> getTop10Genres();
-    List<Top3SubgenresPerGenreDTO> getTop3SubgenresPerGenre();
+    List<Top4SubgenresPerGenreDTO> getTop4SubgenresPerGenre();
 }

@@ -10,7 +10,6 @@ import rs.ac.uns.acs.nais.GraphDatabaseService.dto.LongestSongInEveryAlbumProjec
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PerformedByProjection;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.IncludedInProjection;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.IncludedInPlaylistProjection;
-import rs.ac.uns.acs.nais.GraphDatabaseService.dto.Top50SongsProjection;
 
 import java.util.List;
 import java.util.Map;
@@ -46,5 +45,5 @@ public interface ISongService {
     void deleteIncludedInRelationship(String trackId);
     void deleteIncludedInPlaylistRelationship(String trackId);
     List<Song> recommendSongs(String genre, String subgenre, String artist);
-    List<Top50SongsProjection> getTop50Songs();
+    List<String> getTop50Songs();
 }

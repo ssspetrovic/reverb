@@ -14,7 +14,6 @@ import rs.ac.uns.acs.nais.GraphDatabaseService.dto.LongestSongInEveryAlbumProjec
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PerformedByProjection;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.IncludedInProjection;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.IncludedInPlaylistProjection;
-import rs.ac.uns.acs.nais.GraphDatabaseService.dto.Top50SongsProjection;
 
 import java.util.List;
 import java.util.Map;
@@ -208,7 +207,7 @@ public class SongService implements ISongService {
         return songRepository.recommendSongs(genre, subgenre, artist);
     }
 
-    public List<Top50SongsProjection> getTop50Songs() {
+    public List<String> getTop50Songs() {
         return songRepository.getTop50Songs();
     }
 

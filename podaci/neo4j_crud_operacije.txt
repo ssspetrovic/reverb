@@ -167,3 +167,9 @@ DELETE r
 // Brisanje relacije između pesme i plejliste
 MATCH (s:CollectionSong {track_id: '1dcaJ3vOelzh4xYAWiEFbQ'})-[r:INCLUDED_IN_PLAYLIST]->(p:CollectionPlaylist)
 DELETE r
+
+
+//TEST 
+
+MATCH (s:CollectionSong {track_id: '1dcaJ3vOelzh4xYAWiEFbQ'})-[:PERFORMED_BY]->(a:CollectionArtist)
+RETURN a.name AS artistName

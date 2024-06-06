@@ -14,7 +14,6 @@ import rs.ac.uns.acs.nais.GraphDatabaseService.dto.LongestSongInEveryAlbumProjec
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PerformedByProjection;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.IncludedInProjection;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.IncludedInPlaylistProjection;
-import rs.ac.uns.acs.nais.GraphDatabaseService.dto.Top50SongsProjection;
 
 import java.util.List;
 import java.util.Map;
@@ -242,33 +241,33 @@ public interface SongRepository extends Neo4jRepository<Song, Long> {
 
     @Query("WITH {genre: $genre, subgenre: $subgenre, artist: $artist} AS params " +
            "MATCH (song:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(playlist:CollectionPlaylist) " +
-           "WHERE playlist.genre = params.genre AND " +
-           "      playlist.subgenre = params.subgenre AND " +
-           "      song.track_artist = params.artist " +
-           "WITH COLLECT(song) AS songs, params " +
-           "WITH songs, params " +
-           "WHERE SIZE(songs) < 20 " +
-           "MATCH (s:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(playlist:CollectionPlaylist) " +
-           "WHERE playlist.genre = params.genre AND " +
-           "      playlist.subgenre = params.subgenre " +
-           "WITH songs, COLLECT(s) AS additionalSongs, params " +
-           "WITH songs, songs + additionalSongs AS allSongs, params " +
-           "ORDER BY ABS(REDUCE(avgPopularity = 0, song IN allSongs | avgPopularity + song.track_popularity) / SIZE(allSongs) - params.track_popularity) ASC " +
-           "WITH allSongs, songs, params " +
-           "WITH allSongs[..20 - SIZE(songs)] AS limitedSongs, params " +
-           "UNWIND limitedSongs AS song " +
-           "WITH params " +
-           "MATCH (s:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(playlist:CollectionPlaylist) " +
-           "WHERE playlist.genre = params.genre " +
-           "WITH COLLECT(s) AS finalSongs " +
-           "RETURN finalSongs[..20]")
+           "WHERE " +
+           "(CASE WHEN params.genre IS NULL OR params.genre = '' THEN TRUE ELSE playlist.genre = params.genre END) AND " +
+           "(CASE WHEN params.subgenre IS NULL OR params.subgenre = '' THEN TRUE ELSE playlist.subgenre = params.subgenre END) AND " +
+           "(CASE WHEN params.artist IS NULL OR params.artist = '' THEN TRUE ELSE song.track_artist = params.artist END) " +
+           "WITH COLLECT(song) AS exactMatches, params " +
+           "WITH exactMatches, params " +
+           "MATCH (song:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(playlist:CollectionPlaylist) " +
+           "WHERE " +
+           "(CASE WHEN params.genre IS NULL OR params.genre = '' THEN TRUE ELSE playlist.genre = params.genre END) AND " +
+           "(CASE WHEN params.subgenre IS NULL OR params.subgenre = '' THEN TRUE ELSE playlist.subgenre = params.subgenre END) " +
+           "WITH exactMatches, COLLECT(song) AS genreAndSubgenreMatches, params " +
+           "WITH exactMatches + genreAndSubgenreMatches AS combinedMatches, params " +
+           "MATCH (song:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(playlist:CollectionPlaylist) " +
+           "WHERE " +
+           "(CASE WHEN params.genre IS NULL OR params.genre = '' THEN TRUE ELSE playlist.genre = params.genre END) " +
+           "WITH combinedMatches, COLLECT(song) AS allGenreMatches " +
+           "UNWIND combinedMatches + allGenreMatches AS song " +
+           "RETURN COLLECT(song)[..20] AS finalSongs;")
     List<Song> recommendSongs(@Param("genre") String genre, @Param("subgenre") String subgenre, @Param("artist") String artist);
 
-    @Query("MATCH (s:CollectionSong) " 
+    @Query("MATCH (s:CollectionSong) "
                 + "WHERE s.track_popularity IS NOT NULL "
-                + "RETURN DISTINCT s "
+                + "WITH s.track_name AS trackName, s "
                 + "ORDER BY s.track_popularity DESC "
+                + "WITH DISTINCT trackName, s "
+                + "RETURN DISTINCT trackName "
                 + "LIMIT 50;")
-    List<Top50SongsProjection> getTop50Songs();
+    List<String> getTop50Songs();
 
 }

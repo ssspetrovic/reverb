@@ -4,8 +4,10 @@
 
 MATCH (s:CollectionSong)
 WHERE s.track_popularity IS NOT NULL
-RETURN DISTINCT s.track_name, s.track_popularity
+WITH s.track_name AS trackName, s
 ORDER BY s.track_popularity DESC
+WITH DISTINCT trackName, s
+RETURN DISTINCT trackName
 LIMIT 50;
 
 
@@ -26,34 +28,85 @@ ORDER BY genre, songCount DESC
 WITH genre, COLLECT({subgenre: subgenre, songCount: songCount}) AS subgenres
 RETURN genre, subgenres[..3] AS topSubgenres;
 
+// RECOMMENDER
+
 // Definisanje ulaznih parametara korisnika
 WITH {genre: 'rock', subgenre: 'classic rock', artist: "Guns N' Roses"} AS params
 
-// Pronalaženje pesama koje u potpunosti odgovaraju ulaznim parametrima  
+// Pronalaženje pesama koje u potpunosti odgovaraju ulaznim parametrima
 MATCH (song:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(playlist:CollectionPlaylist)
-WHERE playlist.genre = params.genre AND
-      playlist.subgenre = params.subgenre AND
-      song.track_artist = params.artist
-WITH COLLECT(song) AS songs, params
+WHERE 
+    (CASE WHEN params.genre IS NULL OR params.genre = '' THEN TRUE ELSE playlist.genre = params.genre END) AND
+    (CASE WHEN params.subgenre IS NULL OR params.subgenre = '' THEN TRUE ELSE playlist.subgenre = params.subgenre END) AND
+    (CASE WHEN params.artist IS NULL OR params.artist = '' THEN TRUE ELSE song.track_artist = params.artist END)
+WITH COLLECT(song) AS exactMatches, params
 
-// Ako nema dovoljno pesama sa prethodnim kriterijumima, odbacujemo track popularity
-WITH songs, params
-WHERE SIZE(songs) < 20
-MATCH (s:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(playlist:CollectionPlaylist)  
-WHERE playlist.genre = params.genre AND
-      playlist.subgenre = params.subgenre
-WITH songs, COLLECT(s) AS additionalSongs, params
-WITH songs, songs + additionalSongs AS allSongs, params
-ORDER BY ABS(REDUCE(avgPopularity = 0, song IN allSongs | avgPopularity + song.track_popularity) / SIZE(allSongs) - params.track_popularity) ASC
-WITH allSongs, songs, params
-WITH allSongs[..20 - SIZE(songs)] AS limitedSongs, params
+// Ako nema dovoljno pesama sa prethodnim kriterijumima, odbacujemo track artista
+WITH exactMatches, params
+MATCH (song:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(playlist:CollectionPlaylist)
+WHERE 
+    (CASE WHEN params.genre IS NULL OR params.genre = '' THEN TRUE ELSE playlist.genre = params.genre END) AND
+    (CASE WHEN params.subgenre IS NULL OR params.subgenre = '' THEN TRUE ELSE playlist.subgenre = params.subgenre END)
+WITH exactMatches, COLLECT(song) AS genreAndSubgenreMatches, params
 
-// Ako i dalje nema dovoljno pesama sa prethodnim kriterijumima, odbacujemo track artista
-UNWIND limitedSongs AS song
+// Ako i dalje nema dovoljno pesama sa prethodnim kriterijumima, odbacujemo subgenre, ali ostajemo u okviru žanra
+WITH exactMatches + genreAndSubgenreMatches AS combinedMatches, params
+MATCH (song:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(playlist:CollectionPlaylist)
+WHERE 
+    (CASE WHEN params.genre IS NULL OR params.genre = '' THEN TRUE ELSE playlist.genre = params.genre END)
+WITH combinedMatches, COLLECT(song) AS allGenreMatches
 
-// Prosleđivanje params promenljive dalje
-WITH params
-MATCH (s:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(playlist:CollectionPlaylist)
-WHERE playlist.genre = params.genre
-WITH COLLECT(s) AS finalSongs
-RETURN finalSongs[..20]
+// Ograničavanje na top 20 pesama po popularnosti, ako je potrebno
+UNWIND combinedMatches + allGenreMatches AS song
+RETURN COLLECT(song)[..20] AS finalSongs;
+
+
+
+
+
+
+
+
+
+// OVO NE UCITAVA, PRESPOR QUERY SA ZASTITOM AKO LOSE SE UNESE PODATAK
+
+// Definisanje ulaznih parametara korisnika
+WITH {genre: 'rock', subgenre: 'classic rock', artist: "Guns N' Roses"} AS params
+
+// Provera postojanja parametara u bazi
+OPTIONAL MATCH (genreCheck:CollectionPlaylist {genre: params.genre})
+OPTIONAL MATCH (subgenreCheck:CollectionPlaylist {subgenre: params.subgenre})
+OPTIONAL MATCH (artistCheck:CollectionSong {track_artist: params.artist})
+
+// Ako parametar ne postoji, postavljamo ga na null
+WITH 
+    CASE WHEN genreCheck IS NULL THEN NULL ELSE params.genre END AS validGenre,
+    CASE WHEN subgenreCheck IS NULL THEN NULL ELSE params.subgenre END AS validSubgenre,
+    CASE WHEN artistCheck IS NULL THEN NULL ELSE params.artist END AS validArtist
+
+// Pronalaženje pesama koje u potpunosti odgovaraju validnim parametrima
+MATCH (song:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(playlist:CollectionPlaylist)
+WHERE 
+    (CASE WHEN validGenre IS NULL THEN TRUE ELSE playlist.genre = validGenre END) AND
+    (CASE WHEN validSubgenre IS NULL THEN TRUE ELSE playlist.subgenre = validSubgenre END) AND
+    (CASE WHEN validArtist IS NULL THEN TRUE ELSE song.track_artist = validArtist END)
+WITH COLLECT(song) AS exactMatches, validGenre, validSubgenre, validArtist
+
+// Ako nema dovoljno pesama sa prethodnim kriterijumima, odbacujemo track artista
+WITH exactMatches, validGenre, validSubgenre
+MATCH (song:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(playlist:CollectionPlaylist)
+WHERE 
+    (CASE WHEN validGenre IS NULL THEN TRUE ELSE playlist.genre = validGenre END) AND
+    (CASE WHEN validSubgenre IS NULL THEN TRUE ELSE playlist.subgenre = validSubgenre END)
+WITH exactMatches, COLLECT(song) AS genreAndSubgenreMatches, validGenre
+
+// Ako i dalje nema dovoljno pesama sa prethodnim kriterijumima, odbacujemo subgenre, ali ostajemo u okviru žanra
+WITH exactMatches + genreAndSubgenreMatches AS combinedMatches, validGenre
+MATCH (song:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(playlist:CollectionPlaylist)
+WHERE 
+    (CASE WHEN validGenre IS NULL THEN TRUE ELSE playlist.genre = validGenre END)
+WITH combinedMatches, COLLECT(song) AS allGenreMatches
+
+// Ograničavanje na top 20 pesama po popularnosti, ako je potrebno
+UNWIND combinedMatches + allGenreMatches AS song
+RETURN COLLECT(song)[..20] AS finalSongs;
