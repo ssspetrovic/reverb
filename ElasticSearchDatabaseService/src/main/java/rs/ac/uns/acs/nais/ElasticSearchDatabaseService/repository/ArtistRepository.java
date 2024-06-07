@@ -58,26 +58,14 @@ import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Artist;
 
 @Repository
 public interface ArtistRepository extends ElasticsearchRepository<Artist, String> {
-    List<Artist> findByArtistNameOrArtistDescription(String name, String description);
 
-    List<Artist> findByArtistNameContainingOrArtistDescriptionContaining(String name, String description);
+    List<Artist> findByArtistName(String artistName);
 
-    @Query("{\"bool\": {\"should\": [{\"match\": {\"artistName\": \"?0\"}}, {\"match\": {\"artistDescription\": \"?0\"}}]}}")
+    List<Artist> findByArtistNameContaining(String name);
+
+    @Query("{\"bool\": {\"should\": [{\"match\": {\"artistName\": \"?0\"}}]}}")
     List<Artist> findByCustomQuery(String query);
 
-    @Query("{\"match_phrase\":{\"artistDescription\":\"?0\"}}")
-    List<Artist> searchByDescriptionPhrase(String phrase);
-
-    @Query("{\"multi_match\":{\"query\":\"?0\",\"fields\":[\"artistName^3\",\"artistDescription\"],\"fuzziness\":\"AUTO\"}}")
-    List<Artist> searchByNameOrDescriptionFuzzy(String searchTerm);
-
-    @Query("{\"bool\":{\"must\":[{\"match\":{\"artistName\":\"?0\"}}],\"must_not\":[{\"match\":{\"artistDescription\":\"?1\"}}],\"should\":[{\"match\":{\"attribute\":\"?2\"}}]}}")
-    List<Artist> findByNameAndDescriptionNotAndOptional(String name, String mustNotTerms, String shouldTerms);
-
-    @Query("{\"nested\":{\"path\":\"attributes\",\"query\":{\"bool\":{\"must\":[{\"match\":{\"attributes.name\":\"?0\"}},{\"match\":{\"attributes.value\":\"?1\"}}]}}},\"aggs\":{\"attribute_stats\":{\"terms\":{\"field\":\"attributes.value.keyword\"}}}}")
-    List<Artist> findByNestedAttributeAndAggregate(String attributeName, String attributeValue);
-
-    @Query("{\"function_score\":{\"query\":{\"multi_match\":{\"query\":\"?0\",\"fields\":[\"artistName^3\",\"artistDescription\"]}},\"functions\":[{\"filter\":{\"match\":{\"artistDescription\":\"?1\"}},\"weight\":2}],\"score_mode\":\"sum\",\"boost_mode\":\"multiply\"}}")
-    List<Artist> findByFunctionScore(String searchTerm, String boostTerms);
-
+    @Query("{\"multi_match\":{\"query\":\"?0\",\"fields\":[\"artistName^3\"],\"fuzziness\":\"AUTO\"}}")
+    List<Artist> searchByNameFuzzy(String searchTerm);
 }

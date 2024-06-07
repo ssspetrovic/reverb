@@ -11,15 +11,11 @@ import java.util.List;
 @Getter
 @Document(indexName = "albums")
 public class Album {
-    @Setter
-    @Getter
     @Id
-    private String albumId;
-    @Setter
-    @Getter
-    private String albumName;
-    private String albumReleaseDate;
-    private String artistId;
+    private String id;
+
+    private String name;
+    private String releaseDate;
 
     @Field(type = FieldType.Nested, includeInParent = true)
     private Artist artist;
