@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.acs.nais.GraphDatabaseService.model.Song;
 import rs.ac.uns.acs.nais.GraphDatabaseService.model.User;
 import rs.ac.uns.acs.nais.GraphDatabaseService.service.IUserService;
 
@@ -60,5 +59,11 @@ public class UserController {
     public ResponseEntity<List<String>> getAllFavoriteSongs(@PathVariable Long userId) {
         List<String> favoriteSongs = userService.getAllFavoriteSongs(userId);
         return ResponseEntity.ok(favoriteSongs);
+    }
+
+    @GetMapping("/{userId}/has-favorite-song/{trackId}")
+    public ResponseEntity<Boolean> hasFavoriteSong(@PathVariable Long userId, @PathVariable String trackId) {
+        boolean hasSong = userService.hasFavoriteSong(userId, trackId);
+        return ResponseEntity.ok(hasSong);
     }
 }

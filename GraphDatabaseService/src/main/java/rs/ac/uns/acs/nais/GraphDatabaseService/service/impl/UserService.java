@@ -56,4 +56,11 @@ public class UserService implements IUserService {
         Optional<User> user = getUserById(userId);
         return user.map(User::getFavoriteSongs).orElse(null);
     }
+
+    @Override
+    public boolean hasFavoriteSong(Long userId, String trackId) {
+        return userRepository.findById(userId)
+                .map(user -> user.getFavoriteSongs().contains(trackId))
+                .orElse(false);
+    }
 }
