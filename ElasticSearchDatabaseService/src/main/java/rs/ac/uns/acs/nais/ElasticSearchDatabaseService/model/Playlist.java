@@ -25,36 +25,28 @@ public class Playlist {
 
     }
 
-    public String getPlaylistId() {
-        return playlistId;
+    public String getPlaylist_subgenre() {
+        return playlist_subgenre;
     }
 
-    public void setPlaylistId(String playlistId) {
-        this.playlistId = playlistId;
+    public void setPlaylist_subgenre(String playlist_subgenre) {
+        this.playlist_subgenre = playlist_subgenre;
     }
 
-    public String getPlaylistName() {
-        return playlistName;
+    public String getPlaylist_genre() {
+        return playlist_genre;
     }
 
-    public void setPlaylistName(String playlistName) {
-        this.playlistName = playlistName;
+    public void setPlaylist_genre(String playlist_genre) {
+        this.playlist_genre = playlist_genre;
     }
 
-    public String getPlaylistGenre() {
-        return playlistGenre;
+    public String getPlaylist_name() {
+        return playlist_name;
     }
 
-    public void setPlaylistGenre(String playlistGenre) {
-        this.playlistGenre = playlistGenre;
-    }
-
-    public String getPlaylistSubgenre() {
-        return playlistSubgenre;
-    }
-
-    public void setPlaylistSubgenre(String playlistSubgenre) {
-        this.playlistSubgenre = playlistSubgenre;
+    public void setPlaylist_name(String playlist_name) {
+        this.playlist_name = playlist_name;
     }
 
     public List<Track> getTracks() {
@@ -63,5 +55,13 @@ public class Playlist {
 
     public void setTracks(List<Track> tracks) {
         this.tracks = tracks;
+    }
+
+    public String getId() {
+        return Id;
+    }
+
+    public void setId(String id) {
+        Id = id;
     }
 }

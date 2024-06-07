@@ -1,5 +1,6 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service;
 
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Playlist;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Track;
 
 import java.util.Optional;
