@@ -21,7 +21,7 @@ public interface UserRepository extends Neo4jRepository<User, Long> {
     @Query("MATCH (u:CollectionUser) RETURN u")
     List<User> getAllUsers();
 
-    @Query("MATCH (u:CollectionUser {userId: $userId}) SET u.favoriteSongs = $favoriteSongs RETURN u.track_id")
+    @Query("MATCH (u:CollectionUser {userId: $userId}) SET u.favoriteSongs = $favoriteSongs RETURN u")
     User updateUser(Long userId, List<String> favoriteSongs);
 
     @Query("MATCH (u:CollectionUser {userId: $userId}) DETACH DELETE u")

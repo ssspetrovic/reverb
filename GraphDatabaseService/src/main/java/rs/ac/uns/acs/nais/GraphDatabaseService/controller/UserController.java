@@ -66,4 +66,18 @@ public class UserController {
         boolean hasSong = userService.hasFavoriteSong(userId, trackId);
         return ResponseEntity.ok(hasSong);
     }
+
+
+    @PostMapping("/{userId}/favorite-songs")
+    public ResponseEntity<User> addFavoriteSong(@PathVariable Long userId, @RequestBody String trackId) {
+        Optional<User> userOptional = userService.getUserById(userId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.getFavoriteSongs().add(trackId);
+            userService.updateUser(user);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

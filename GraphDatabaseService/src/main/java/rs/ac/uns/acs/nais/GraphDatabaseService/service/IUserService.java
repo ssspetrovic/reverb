@@ -14,5 +14,4 @@ public interface IUserService {
     User updateUser(User user);
     void deleteUser(Long userId);
     List<String> getAllFavoriteSongs(Long userId);
-    boolean hasFavoriteSong(Long userId, String trackId);  // New method
 }

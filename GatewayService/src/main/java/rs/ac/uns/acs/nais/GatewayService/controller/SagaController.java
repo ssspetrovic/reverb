@@ -1,11 +1,9 @@
 package rs.ac.uns.acs.nais.GatewayService.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -25,12 +23,12 @@ public class SagaController {
         WebClient webClient = webClientBuilder.build();
 
         Mono<Boolean> emailConfirmed = webClient.get()
-                .uri("http://relational-database-service/users/{id}/email-confirmed", userId)
+                .uri("http://localhost:9000/relational-database-service/users/{id}/email-confirmed", userId)
                 .retrieve()
                 .bodyToMono(Boolean.class);
 
         Mono<Boolean> hasFavoriteSong = webClient.get()
-                .uri("http://graph-database-service/users/{userId}/has-favorite-song/{trackId}", userId, trackId)
+                .uri("http://localhost:9000/graph-database-service/users/{userId}/has-favorite-song/{trackId}", userId, trackId)
                 .retrieve()
                 .bodyToMono(Boolean.class);
 
@@ -40,11 +38,25 @@ public class SagaController {
                     boolean hasTrack = result.getT2();
 
                     if (isEmailConfirmed && !hasTrack) {
-                        return Mono.just(ResponseEntity.ok("Transaction can be completed"));
+                        // Perform transaction (add song to favorite songs)
+                        return addSongToFavorite(userId, trackId);
                     } else {
-                        return Mono.just(ResponseEntity.badRequest().body("Transaction cannot be completed"));
+                        // Transaction cannot be completed
+                        return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body("Transaction cannot be completed"));
                     }
                 })
-                .onErrorResume(e -> Mono.just(ResponseEntity.status(500).body("Error occurred: " + e.getMessage())));
+                .onErrorResume(e -> Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Error occurred: " + e.getMessage())));
+    }
+
+    private Mono<ResponseEntity<String>> addSongToFavorite(Long userId, String trackId) {
+        WebClient webClient = webClientBuilder.build();
+        return webClient.post()
+                .uri("http://localhost:9000/graph-database-service/users/{userId}/favorite-songs", userId)
+                .bodyValue("{\"trackId\": \"" + trackId + "\"}")
+                .retrieve()
+                .toEntity(String.class)
+                .map(response -> ResponseEntity.ok("Transaction completed successfully: " + response.getBody()));
     }
 }
