@@ -20,25 +20,36 @@ public class DataLoadingController {
         this.dataLoadingService = dataLoadingService;
     }
 
-    @PostMapping("/loadArtists")
-    public String loadArtists() {
+    @PostMapping("/loadTracks")
+    public String loadTracks() {
         try {
-            dataLoadingService.loadArtists();
-            return "Artists loaded successfully";
+            dataLoadingService.loadData();
+            return "Tracks loaded successfully";
         } catch (IOException e) {
             e.printStackTrace();
-            return "Failed to load artists: " + e.getMessage();
+            return "Failed to load tracks: " + e.getMessage();
         }
     }
 
-    @PostMapping("/loadAlbums")
-    public String loadAlbums() {
-        try {
-            dataLoadingService.loadAlbums();
-            return "Albums loaded successfully";
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "Failed to load albums: " + e.getMessage();
-        }
-    }
+//    @PostMapping("/loadArtists")
+//    public String loadArtists() {
+//        try {
+//            dataLoadingService.loadArtists();
+//            return "Artists loaded successfully";
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return "Failed to load artists: " + e.getMessage();
+//        }
+//    }
+//
+//    @PostMapping("/loadAlbums")
+//    public String loadAlbums() {
+//        try {
+//            dataLoadingService.loadAlbums();
+//            return "Albums loaded successfully";
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return "Failed to load albums: " + e.getMessage();
+//        }
+//    }
 }
