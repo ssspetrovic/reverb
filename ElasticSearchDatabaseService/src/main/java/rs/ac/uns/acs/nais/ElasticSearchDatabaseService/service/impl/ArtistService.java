@@ -37,37 +37,20 @@ public class ArtistService implements IArtistService {
         artistRepository.deleteById(id);
     }
 
-    // Custom query methods
-    public List<Artist> findByArtistNameOrArtistDescription(String name, String description) {
-        return artistRepository.findByArtistNameOrArtistDescription(name, description);
+    public List<Artist> findByArtistName(String artistName){
+        return artistRepository.findByArtistName(artistName);
     }
 
-    public List<Artist> findByArtistNameContainingOrArtistDescriptionContaining(String name, String description) {
-        return artistRepository.findByArtistNameContainingOrArtistDescriptionContaining(name, description);
+    public List<Artist> findByArtistNameContaining(String name){
+        return artistRepository.findByArtistNameContaining(name);
     }
 
-    public List<Artist> findByCustomQuery(String query) {
+    public List<Artist> findByCustomQuery(String query){
         return artistRepository.findByCustomQuery(query);
     }
 
-    public List<Artist> searchByDescriptionPhrase(String phrase) {
-        return artistRepository.searchByDescriptionPhrase(phrase);
-    }
-
-    public List<Artist> searchByNameOrDescriptionFuzzy(String searchTerm) {
-        return artistRepository.searchByNameOrDescriptionFuzzy(searchTerm);
-    }
-
-    public List<Artist> findByNameAndDescriptionNotAndOptional(String name, String mustNotTerms, String shouldTerms) {
-        return artistRepository.findByNameAndDescriptionNotAndOptional(name, mustNotTerms, shouldTerms);
-    }
-
-    public List<Artist> findByNestedAttributeAndAggregate(String attributeName, String attributeValue) {
-        return artistRepository.findByNestedAttributeAndAggregate(attributeName, attributeValue);
-    }
-
-    public List<Artist> findByFunctionScore(String searchTerm, String boostTerms) {
-        return artistRepository.findByFunctionScore(searchTerm, boostTerms);
+    public List<Artist> searchByNameFuzzy(String searchTerm){
+        return artistRepository.searchByNameFuzzy(searchTerm);
     }
 /* 
     public byte[] export(List<Product> products) throws IOException {

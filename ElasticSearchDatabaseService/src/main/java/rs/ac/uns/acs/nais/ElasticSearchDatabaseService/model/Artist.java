@@ -12,8 +12,9 @@ import java.util.List;
 @Document(indexName = "artists")
 public class Artist {
     @Id
-    private String artistId;
-    private String artistName;
+    private String id;
+
+    private String name;
 
     @Field(type = FieldType.Nested, includeInParent = true)
     private List<Album> albums;

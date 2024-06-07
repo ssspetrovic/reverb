@@ -40,45 +40,9 @@ public class ArtistController {
         artistService.deleteArtistById(id);
     }
 
-    // Custom query methods
-    @GetMapping("/search")
-    public List<Artist> findByArtistNameOrArtistDescription(@RequestParam String name, @RequestParam String description) {
-        return artistService.findByArtistNameOrArtistDescription(name, description);
-    }
-
-    @GetMapping("/search/contains")
-    public List<Artist> findByArtistNameContainingOrArtistDescriptionContaining(@RequestParam String name, @RequestParam String description) {
-        return artistService.findByArtistNameContainingOrArtistDescriptionContaining(name, description);
-    }
-
     @GetMapping("/search/custom")
     public List<Artist> findByCustomQuery(@RequestParam String query) {
         return artistService.findByCustomQuery(query);
-    }
-
-    @GetMapping("/search/phrase")
-    public List<Artist> searchByDescriptionPhrase(@RequestParam String phrase) {
-        return artistService.searchByDescriptionPhrase(phrase);
-    }
-
-    @GetMapping("/search/fuzzy")
-    public List<Artist> searchByNameOrDescriptionFuzzy(@RequestParam String searchTerm) {
-        return artistService.searchByNameOrDescriptionFuzzy(searchTerm);
-    }
-
-    @GetMapping("/search/complex")
-    public List<Artist> findByNameAndDescriptionNotAndOptional(@RequestParam String name, @RequestParam String mustNotTerms, @RequestParam String shouldTerms) {
-        return artistService.findByNameAndDescriptionNotAndOptional(name, mustNotTerms, shouldTerms);
-    }
-
-    @GetMapping("/search/nested")
-    public List<Artist> findByNestedAttributeAndAggregate(@RequestParam String attributeName, @RequestParam String attributeValue) {
-        return artistService.findByNestedAttributeAndAggregate(attributeName, attributeValue);
-    }
-
-    @GetMapping("/search/function-score")
-    public List<Artist> findByFunctionScore(@RequestParam String searchTerm, @RequestParam String boostTerms) {
-        return artistService.findByFunctionScore(searchTerm, boostTerms);
     }
 /* 
     @GetMapping(value = "/export-pdf", produces = MediaType.APPLICATION_PDF_VALUE)

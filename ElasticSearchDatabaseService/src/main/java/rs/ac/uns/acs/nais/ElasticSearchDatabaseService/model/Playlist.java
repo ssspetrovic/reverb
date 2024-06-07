@@ -12,10 +12,11 @@ import java.util.List;
 @Document(indexName = "playlists")
 public class Playlist {
     @Id
-    private String playlistId;
-    private String playlistName;
-    private String playlistGenre;
-    private String playlistSubgenre;
+    private String Id;
+
+    private String playlist_name;
+    private String playlist_genre;
+    private String playlist_subgenre;
 
     @Field(type = FieldType.Nested, includeInParent = true)
     private List<Track> tracks;
