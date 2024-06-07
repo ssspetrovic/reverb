@@ -2,7 +2,6 @@ package rs.ac.uns.acs.nais.GraphDatabaseService.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rs.ac.uns.acs.nais.GraphDatabaseService.model.Song;
 import rs.ac.uns.acs.nais.GraphDatabaseService.model.User;
 import rs.ac.uns.acs.nais.GraphDatabaseService.repository.UserRepository;
 import rs.ac.uns.acs.nais.GraphDatabaseService.service.IUserService;
@@ -55,5 +54,10 @@ public class UserService implements IUserService {
     public List<String> getAllFavoriteSongs(Long userId) {
         Optional<User> user = getUserById(userId);
         return user.map(User::getFavoriteSongs).orElse(null);
+    }
+
+    @Override
+    public boolean hasFavoriteSong(Long userId, String trackId) {
+        return userRepository.hasFavoriteSong(userId, trackId);
     }
 }

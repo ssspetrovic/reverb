@@ -29,4 +29,7 @@ public interface UserRepository extends Neo4jRepository<User, Long> {
 
     @Query("MATCH (u:CollectionUser {userId: $userId})-[:FAVORITES]->(s:CollectionSong) RETURN s")
     List<Song> getAllFavoriteSongs(Long userId);
+
+    @Query("MATCH (u:CollectionUser {userId: $userId}) WHERE ANY(song IN u.favoriteSongs WHERE song = $trackId) RETURN COUNT(u) > 0")
+    boolean hasFavoriteSong(Long userId, String trackId);
 }

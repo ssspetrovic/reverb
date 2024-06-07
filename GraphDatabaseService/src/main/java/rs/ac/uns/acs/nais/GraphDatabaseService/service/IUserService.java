@@ -1,5 +1,6 @@
 package rs.ac.uns.acs.nais.GraphDatabaseService.service;
 
+import reactor.core.publisher.Mono;
 import rs.ac.uns.acs.nais.GraphDatabaseService.model.Song;
 import rs.ac.uns.acs.nais.GraphDatabaseService.model.User;
 
@@ -14,4 +15,5 @@ public interface IUserService {
     User updateUser(User user);
     void deleteUser(Long userId);
     List<String> getAllFavoriteSongs(Long userId);
+    boolean hasFavoriteSong(Long userId, String trackId);
 }
