@@ -15,7 +15,6 @@ public class DataLoadingController {
 
     private final DataLoadingService dataLoadingService;
 
-    @Autowired
     public DataLoadingController(DataLoadingService dataLoadingService) {
         this.dataLoadingService = dataLoadingService;
     }

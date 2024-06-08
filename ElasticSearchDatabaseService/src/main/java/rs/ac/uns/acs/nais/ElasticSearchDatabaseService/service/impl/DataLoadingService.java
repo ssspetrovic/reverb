@@ -48,12 +48,12 @@ public class DataLoadingService {
             album.setId(UUID.randomUUID().toString());
             album.setName(csvRecord.get("track_album_name"));
             album.setReleaseDate(csvRecord.get("track_album_release_date"));
-            track.setAlbum(album);
+            track.setAlbumId(album.getId());
 
             // Create and set Artist object
             Artist artist = new Artist();
             artist.setName(csvRecord.get("track_artist"));
-            track.setArtist(artist);
+            track.setArtistId(artist.getId());
 
             // Save the track
             trackRepository.save(track);

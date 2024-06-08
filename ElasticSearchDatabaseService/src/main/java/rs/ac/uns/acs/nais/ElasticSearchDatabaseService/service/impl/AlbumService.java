@@ -17,6 +17,7 @@ public class AlbumService implements IAlbumService {
 
     private final AlbumRepository albumRepository;
 
+    @Autowired
     public AlbumService(AlbumRepository albumRepository) {
         this.albumRepository = albumRepository;
     }

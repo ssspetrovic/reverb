@@ -19,11 +19,11 @@ public class Album {
     private String name;
     private String releaseDate;
 
-    @Field(type = FieldType.Nested, includeInParent = true)
-    private Artist artist;
+    @Field(type = FieldType.Keyword)
+    private String artistId;
 
-    @Field(type = FieldType.Nested, includeInParent = true)
-    private List<Track> tracks;
+    @Field(type = FieldType.Keyword)
+    private List<String> trackIds;
 
     public Album() {
     }

@@ -19,11 +19,11 @@ public class Artist {
     @Field(type = FieldType.Text, name = "name")
     private String name;
 
-    @Field(type = FieldType.Nested, includeInParent = true)
-    private List<Album> albums;
+    @Field(type = FieldType.Keyword)
+    private List<String> albumIds;  // List of Album IDs
 
-    @Field(type = FieldType.Nested, includeInParent = true)
-    private List<Track> tracks;
+    @Field(type = FieldType.Keyword)
+    private List<String> trackIds;
 
 
     public Artist() {

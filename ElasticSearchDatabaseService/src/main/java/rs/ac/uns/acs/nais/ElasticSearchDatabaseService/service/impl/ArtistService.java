@@ -1,5 +1,6 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Artist;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository.ArtistRepository;
@@ -17,6 +18,7 @@ public class ArtistService implements IArtistService {
     public ArtistService(ArtistRepository artistRepository) {
         this.artistRepository = artistRepository;
     }
+
 
     public Artist saveArtist(Artist artist) {
         return artistRepository.save(artist);

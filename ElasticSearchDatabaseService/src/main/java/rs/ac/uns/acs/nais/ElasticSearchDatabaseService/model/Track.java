@@ -30,11 +30,11 @@ public class Track {
     private Double tempo;
     private Integer duration_ms;
 
-    @Field(type = FieldType.Nested, includeInParent = true)
-    private Album album;
+    @Field(type = FieldType.Keyword)
+    private String albumId;
 
-    @Field(type = FieldType.Nested, includeInParent = true)
-    private Artist artist;
+    @Field(type = FieldType.Keyword)
+    private String artistId;
 
     public Track(){
 

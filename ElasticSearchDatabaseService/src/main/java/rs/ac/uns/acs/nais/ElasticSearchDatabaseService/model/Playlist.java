@@ -20,6 +20,6 @@ public class Playlist {
     @Field(type = FieldType.Keyword, name = "subgenre")
     private String subgenre;
 
-    @Field(type = FieldType.Nested, includeInParent = true)
-    private List<Track> tracks;
+    @Field(type = FieldType.Keyword)
+    private List<String> trackIds;
 }

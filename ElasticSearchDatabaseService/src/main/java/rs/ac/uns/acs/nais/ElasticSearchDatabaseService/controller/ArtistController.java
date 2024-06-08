@@ -1,5 +1,6 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Artist;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl.ArtistService;
