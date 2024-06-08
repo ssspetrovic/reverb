@@ -36,6 +36,9 @@ public class Track {
     @Field(type = FieldType.Keyword)
     private String artistId;
 
+    @Field(type = FieldType.Keyword)
+    private String playlistId;
+
     public Track(){
 
     }

@@ -16,4 +16,5 @@ public interface IAlbumService {
 //    List<Album> findByCustomQuery(String query);
 //
 //    List<Album> searchByNameOrArtistFuzzy(String searchTerm);
+    void deleteAllAlbums();
 }

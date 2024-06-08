@@ -41,4 +41,6 @@ public class AlbumController {
 //    public List<Album> searchByNameOrArtistFuzzy(@RequestParam String searchTerm) {
 //        return albumService.searchByNameOrArtistFuzzy(searchTerm);
 //    }
+    @DeleteMapping
+    public void deleteAllAlbums(){albumService.deleteAllAlbums();}
 }

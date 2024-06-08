@@ -9,4 +9,5 @@ public interface IPlaylistService {
     Optional<Playlist> findPlaylistById(String id);
     Iterable<Playlist> findAllPlaylists();
     void deletePlaylistById(String id);
+    void deleteAllPlaylists();
 }

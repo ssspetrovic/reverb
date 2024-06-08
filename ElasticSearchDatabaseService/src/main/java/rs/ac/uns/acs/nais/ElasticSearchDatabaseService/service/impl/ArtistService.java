@@ -39,6 +39,8 @@ public class ArtistService implements IArtistService {
         artistRepository.deleteById(id);
     }
 
+    public void deleteAllArtists() {artistRepository.deleteAll();}
+
 }
 //    public List<Artist> findByArtistName(String artistName){
 //        return artistRepository.findByArtistName(artistName);

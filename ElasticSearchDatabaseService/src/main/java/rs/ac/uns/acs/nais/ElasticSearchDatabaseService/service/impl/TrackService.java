@@ -33,4 +33,7 @@ public class TrackService implements ITrackService {
     public void deleteTrackById(String id) {
         trackRepository.deleteById(id);
     }
+
+    @Override
+    public void deleteAllTracks() {trackRepository.deleteAll();}
 }

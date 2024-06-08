@@ -18,6 +18,8 @@ public interface IArtistService {
     // Delete an artist by ID
     void deleteArtistById(String id);
 
+    void deleteAllArtists();
+
 //    List<Artist> findByArtistName(String artistName);
 //
 //    List<Artist> findByArtistNameContaining(String name);

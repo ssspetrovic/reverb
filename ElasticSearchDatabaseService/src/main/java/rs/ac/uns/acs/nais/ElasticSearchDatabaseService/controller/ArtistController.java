@@ -41,6 +41,9 @@ public class ArtistController {
         artistService.deleteArtistById(id);
     }
 
+    @DeleteMapping
+    public void deleteAllArtists(){artistService.deleteAllArtists();}
+
 //    @GetMapping("/search/custom")
 //    public List<Artist> findByCustomQuery(@RequestParam String query) {
 //        return artistService.findByCustomQuery(query);

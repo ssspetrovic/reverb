@@ -35,4 +35,7 @@ public class TrackController {
         trackService.deleteTrackById(id);
     }
 
+    @DeleteMapping
+    public void deleteAllTracks(){trackService.deleteAllTracks();}
+
 }

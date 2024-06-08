@@ -33,5 +33,6 @@ public class PlaylistController {
         playlistService.deletePlaylistById(id);
     }
 
-
+    @DeleteMapping
+    public void deleteAllPlaylists() {playlistService.deleteAllPlaylists();}
 }

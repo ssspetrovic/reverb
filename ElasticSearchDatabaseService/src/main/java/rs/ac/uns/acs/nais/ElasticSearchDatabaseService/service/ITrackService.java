@@ -10,4 +10,5 @@ public interface ITrackService {
     Optional<Track> findTrackById(String id);
     Iterable<Track> findAllTracks();
     void deleteTrackById(String id);
+    void deleteAllTracks();
 }

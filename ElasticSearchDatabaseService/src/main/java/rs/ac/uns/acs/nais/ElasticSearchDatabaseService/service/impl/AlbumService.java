@@ -46,5 +46,6 @@ public class AlbumService implements IAlbumService {
 //    public List<Album> searchByNameOrArtistFuzzy(String searchTerm) {
 //        return albumRepository.searchByNameOrArtistFuzzy(searchTerm);
 //    }
-
+    @Override
+    public void deleteAllAlbums(){albumRepository.deleteAll();}
 }

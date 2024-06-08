@@ -33,4 +33,7 @@ public class PlaylistService implements IPlaylistService {
     public void deletePlaylistById(String id) {
         playlistRepository.deleteById(id);
     }
+
+    @Override
+    public void deleteAllPlaylists(){playlistRepository.deleteAll();}
 }
