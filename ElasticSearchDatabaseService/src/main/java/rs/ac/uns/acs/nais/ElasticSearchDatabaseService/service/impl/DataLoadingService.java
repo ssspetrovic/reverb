@@ -3,45 +3,25 @@ package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Album;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Artist;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Track;
-import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository.AlbumRepository;
-import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository.ArtistRepository;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository.TrackRepository;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Service
 public class DataLoadingService {
 
-//    @Autowired
-//    private ArtistRepository artistRepository;
-
     @Autowired
     private TrackRepository trackRepository;
 
     private static final String CSV_FILE_PATH = "D:/FAKS/4. godina/Letnji_Semestar/NAIS/Projekat/reverb/podaci/spotify_songs.csv";
-
-//    public void loadArtists() throws IOException {
-//        Reader reader = new FileReader(CSV_FILE_PATH);
-//        CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withHeader());
-//        for (CSVRecord csvRecord : csvParser) {
-//            Artist artist = new Artist();
-//            artist.setId(UUID.randomUUID().toString());
-//            artist.setName(csvRecord.get("artist_name"));
-//            artistRepository.save(artist);
-//        }
-//        csvParser.close();
-//    }
 
     public void loadData() throws IOException {
         Reader reader = new FileReader(CSV_FILE_PATH);

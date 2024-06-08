@@ -1,5 +1,6 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service;
 
+import org.springframework.stereotype.Service;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Artist;
 
 import java.util.List;

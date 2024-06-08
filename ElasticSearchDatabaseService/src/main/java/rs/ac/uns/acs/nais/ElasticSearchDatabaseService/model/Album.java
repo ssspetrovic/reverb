@@ -1,4 +1,5 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Setter
 @Getter
+@Data
 @Document(indexName = "albums")
 public class Album {
     @Id
