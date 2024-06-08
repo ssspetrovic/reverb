@@ -30,26 +30,4 @@ public class DataLoadingController {
             return "Failed to load tracks: " + e.getMessage();
         }
     }
-
-//    @PostMapping("/loadArtists")
-//    public String loadArtists() {
-//        try {
-//            dataLoadingService.loadArtists();
-//            return "Artists loaded successfully";
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return "Failed to load artists: " + e.getMessage();
-//        }
-//    }
-//
-//    @PostMapping("/loadAlbums")
-//    public String loadAlbums() {
-//        try {
-//            dataLoadingService.loadAlbums();
-//            return "Albums loaded successfully";
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return "Failed to load albums: " + e.getMessage();
-//        }
-//    }
 }
