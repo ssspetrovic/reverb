@@ -22,29 +22,29 @@ public class AlbumService implements IAlbumService {
         this.albumRepository = albumRepository;
     }
 
-    @Override
-    public List<Album> findByName(String name) {
-        return albumRepository.findByName(name);
-    }
-
-    @Override
-    public List<Album> findByNameContaining(String name) {
-        return albumRepository.findByNameContaining(name);
-    }
-
-    @Override
-    public List<Album> findByArtistName(String artistName) {
-        return albumRepository.findByArtistName(artistName);
-    }
-
-    @Override
-    public List<Album> findByCustomQuery(String query) {
-        return albumRepository.findByCustomQuery(query);
-    }
-
-    @Override
-    public List<Album> searchByNameOrArtistFuzzy(String searchTerm) {
-        return albumRepository.searchByNameOrArtistFuzzy(searchTerm);
-    }
+//    @Override
+//    public List<Album> findByName(String name) {
+//        return albumRepository.findByName(name);
+//    }
+//
+//    @Override
+//    public List<Album> findByNameContaining(String name) {
+//        return albumRepository.findByNameContaining(name);
+//    }
+//
+//    @Override
+//    public List<Album> findByArtistName(String artistName) {
+//        return albumRepository.findByArtistName(artistName);
+//    }
+//
+//    @Override
+//    public List<Album> findByCustomQuery(String query) {
+//        return albumRepository.findByCustomQuery(query);
+//    }
+//
+//    @Override
+//    public List<Album> searchByNameOrArtistFuzzy(String searchTerm) {
+//        return albumRepository.searchByNameOrArtistFuzzy(searchTerm);
+//    }
 
 }

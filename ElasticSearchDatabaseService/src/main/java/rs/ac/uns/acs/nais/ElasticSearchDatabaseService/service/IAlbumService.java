@@ -7,13 +7,13 @@ import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Album;
 import java.util.List;
 
 public interface IAlbumService {
-    List<Album> findByName(String name);
-
-    List<Album> findByNameContaining(String name);
-
-    List<Album> findByArtistName(String artistName);
-
-    List<Album> findByCustomQuery(String query);
-
-    List<Album> searchByNameOrArtistFuzzy(String searchTerm);
+//    List<Album> findByName(String name);
+//
+//    List<Album> findByNameContaining(String name);
+//
+//    List<Album> findByArtistName(String artistName);
+//
+//    List<Album> findByCustomQuery(String query);
+//
+//    List<Album> searchByNameOrArtistFuzzy(String searchTerm);
 }

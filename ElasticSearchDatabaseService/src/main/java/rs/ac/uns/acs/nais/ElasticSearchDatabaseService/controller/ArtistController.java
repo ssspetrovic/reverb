@@ -41,28 +41,8 @@ public class ArtistController {
         artistService.deleteArtistById(id);
     }
 
-    @GetMapping("/search/custom")
-    public List<Artist> findByCustomQuery(@RequestParam String query) {
-        return artistService.findByCustomQuery(query);
-    }
-/* 
-    @GetMapping(value = "/export-pdf", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<byte[]> exportPdf() {
-        List<Product> products = productService.findByCustomQuery("brown shorts"); 
-        try {
-            byte[] pdfContents = productService.export(products);
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_PDF);
-            headers.setContentDispositionFormData("attachment", "products.pdf");
-
-            return ResponseEntity.ok()
-                                 .headers(headers)
-                                 .body(pdfContents);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-*/
+//    @GetMapping("/search/custom")
+//    public List<Artist> findByCustomQuery(@RequestParam String query) {
+//        return artistService.findByCustomQuery(query);
+//    }
 }

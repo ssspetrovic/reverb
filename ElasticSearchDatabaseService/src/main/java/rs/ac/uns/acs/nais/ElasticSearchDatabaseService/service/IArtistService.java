@@ -18,11 +18,11 @@ public interface IArtistService {
     // Delete an artist by ID
     void deleteArtistById(String id);
 
-    List<Artist> findByArtistName(String artistName);
-
-    List<Artist> findByArtistNameContaining(String name);
-
-    List<Artist> findByCustomQuery(String query);
-
-    List<Artist> searchByNameFuzzy(String searchTerm);
+//    List<Artist> findByArtistName(String artistName);
+//
+//    List<Artist> findByArtistNameContaining(String name);
+//
+//    List<Artist> findByCustomQuery(String query);
+//
+//    List<Artist> searchByNameFuzzy(String searchTerm);
 }
