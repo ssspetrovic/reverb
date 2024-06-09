@@ -22,9 +22,6 @@ public class Album {
     @Field(type = FieldType.Keyword)
     private String artistId;
 
-    @Field(type = FieldType.Keyword)
-    private List<String> trackIds;
-
     public Album() {
     }
 

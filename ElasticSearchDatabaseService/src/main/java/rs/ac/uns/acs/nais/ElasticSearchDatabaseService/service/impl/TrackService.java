@@ -1,6 +1,8 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Track;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository.TrackRepository;
@@ -27,6 +29,10 @@ public class TrackService implements ITrackService {
     @Override
     public Iterable<Track> findAllTracks() {
         return trackRepository.findAll();
+    }
+
+    public Page<Track> findAllTracksPage(int page, int size) {
+        return trackRepository.findAll(PageRequest.of(page,size));
     }
 
     @Override

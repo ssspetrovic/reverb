@@ -1,11 +1,14 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository;
 
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.elasticsearch.annotations.Query;
 import java.util.List;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Artist;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Track;
 
 @Repository
 public interface ArtistRepository extends ElasticsearchRepository<Artist, String> {
@@ -19,4 +22,6 @@ public interface ArtistRepository extends ElasticsearchRepository<Artist, String
 //
 //    @Query("{\"multi_match\":{\"query\":\"?0\",\"fields\":[\"artistName^3\"],\"fuzziness\":\"AUTO\"}}")
 //    List<Artist> searchByNameFuzzy(String searchTerm);
+    Page<Artist> findAll(Pageable pageable);
+
 }

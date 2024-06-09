@@ -1,6 +1,9 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl;
 
+import org.elasticsearch.search.aggregations.metrics.InternalHDRPercentiles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Album;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Artist;
@@ -48,4 +51,9 @@ public class AlbumService implements IAlbumService {
 //    }
     @Override
     public void deleteAllAlbums(){albumRepository.deleteAll();}
+
+    @Override
+    public Iterable<Album> getAllAlbums(){return albumRepository.findAll();}
+
+    public Page<Album> findAllAlbumsPage(int page, int size){return albumRepository.findAll(PageRequest.of(page, size));}
 }

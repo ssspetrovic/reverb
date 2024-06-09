@@ -1,7 +1,10 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Artist;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Playlist;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository.PlaylistRepository;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.IPlaylistService;
@@ -36,4 +39,7 @@ public class PlaylistService implements IPlaylistService {
 
     @Override
     public void deleteAllPlaylists(){playlistRepository.deleteAll();}
+
+    public Page<Playlist> findAllPlaylistsPage(int page, int size){return playlistRepository.findAll(PageRequest.of(page, size));}
+
 }

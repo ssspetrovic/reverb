@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl.DataLoadingService;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 
 @RestController
@@ -25,6 +26,13 @@ public class DataLoadingController {
             dataLoadingService.loadData();
             return "Tracks loaded successfully";
         } catch (IOException e) {
+            e.printStackTrace();
+            return "Failed to load tracks: " + e.getMessage();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Restore interrupted status
+            e.printStackTrace();
+            return "Failed to load tracks: " + e.getMessage();
+        } catch (ExecutionException e) {
             e.printStackTrace();
             return "Failed to load tracks: " + e.getMessage();
         }

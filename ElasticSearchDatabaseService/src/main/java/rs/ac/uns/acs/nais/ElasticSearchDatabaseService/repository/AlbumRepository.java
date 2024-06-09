@@ -1,9 +1,12 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Repository;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Album;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Track;
 
 import java.util.List;
 
@@ -20,4 +23,6 @@ public interface AlbumRepository extends ElasticsearchRepository<Album, String> 
 //
 //    @Query("{\"multi_match\":{\"query\":\"?0\",\"fields\":[\"name^3\",\"artist.artistName\"],\"fuzziness\":\"AUTO\"}}")
 //    List<Album> searchByNameOrArtistFuzzy(String searchTerm);
+    Page<Album> findAll(Pageable pageable);
+
 }

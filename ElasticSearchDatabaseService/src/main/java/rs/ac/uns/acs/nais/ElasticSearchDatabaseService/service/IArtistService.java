@@ -1,6 +1,8 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Album;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Artist;
 
 import java.util.List;
@@ -19,6 +21,9 @@ public interface IArtistService {
     void deleteArtistById(String id);
 
     void deleteAllArtists();
+
+    Page<Artist> findAllArtistsPage(int page, int size);
+
 
 //    List<Artist> findByArtistName(String artistName);
 //

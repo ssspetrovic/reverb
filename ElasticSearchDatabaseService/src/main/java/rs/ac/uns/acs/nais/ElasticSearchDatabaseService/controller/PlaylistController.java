@@ -1,8 +1,10 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Playlist;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Track;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.IPlaylistService;
 
 import java.util.Optional;
@@ -35,4 +37,9 @@ public class PlaylistController {
 
     @DeleteMapping
     public void deleteAllPlaylists() {playlistService.deleteAllPlaylists();}
+
+    @GetMapping("/page")
+    public Page<Playlist> findAllPlaylistsPage(@RequestParam(defaultValue="0") int page, @RequestParam(defaultValue = "1000") int size){
+        return playlistService.findAllPlaylistsPage(page, size);
+    }
 }

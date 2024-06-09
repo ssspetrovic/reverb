@@ -1,7 +1,10 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Album;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Artist;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository.ArtistRepository;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.IArtistService;
@@ -40,6 +43,9 @@ public class ArtistService implements IArtistService {
     }
 
     public void deleteAllArtists() {artistRepository.deleteAll();}
+
+    public Page<Artist> findAllArtistsPage(int page, int size){return artistRepository.findAll(PageRequest.of(page, size));}
+
 
 }
 //    public List<Artist> findByArtistName(String artistName){

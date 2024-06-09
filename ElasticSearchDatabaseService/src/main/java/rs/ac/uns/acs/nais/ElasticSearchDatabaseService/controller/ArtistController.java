@@ -1,7 +1,9 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Album;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Artist;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl.ArtistService;
 
@@ -43,6 +45,11 @@ public class ArtistController {
 
     @DeleteMapping
     public void deleteAllArtists(){artistService.deleteAllArtists();}
+
+    @GetMapping("/page")
+    public Page<Artist> findAllArtistsPage(@RequestParam(defaultValue="0") int page, @RequestParam(defaultValue = "1000") int size){
+        return artistService.findAllArtistsPage(page, size);
+    }
 
 //    @GetMapping("/search/custom")
 //    public List<Artist> findByCustomQuery(@RequestParam String query) {

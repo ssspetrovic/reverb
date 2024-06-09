@@ -2,6 +2,8 @@ package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Track;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.ITrackService;
@@ -25,10 +27,13 @@ public class TrackController {
         return trackService.findTrackById(id);
     }
 
-    @GetMapping
-    public Iterable<Track> findAllTracks(){
-        return trackService.findAllTracks();
+    @GetMapping("/page")
+    public Page<Track> findAllTracksPage(@RequestParam(defaultValue="0") int page, @RequestParam(defaultValue = "1000") int size){
+        return trackService.findAllTracksPage(page, size);
     }
+
+    @GetMapping
+    public Iterable<Track> findAllTracks(){return trackService.findAllTracks();}
 
     @DeleteMapping("/{id}")
     public void deleteTrackById(@PathVariable String id){
