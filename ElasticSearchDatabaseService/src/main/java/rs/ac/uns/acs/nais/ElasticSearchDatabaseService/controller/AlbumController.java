@@ -53,4 +53,6 @@ public class AlbumController {
     public Page<Album> findAllTracksPage(@RequestParam(defaultValue="0") int page, @RequestParam(defaultValue = "1000") int size){
         return albumService.findAllAlbumsPage(page, size);
     }
+    @GetMapping("/count")
+    public long countAllAlbums(){return albumService.countAllAlbums();}
 }

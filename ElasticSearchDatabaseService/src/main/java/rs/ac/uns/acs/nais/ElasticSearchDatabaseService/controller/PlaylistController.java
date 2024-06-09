@@ -42,4 +42,6 @@ public class PlaylistController {
     public Page<Playlist> findAllPlaylistsPage(@RequestParam(defaultValue="0") int page, @RequestParam(defaultValue = "1000") int size){
         return playlistService.findAllPlaylistsPage(page, size);
     }
+    @GetMapping("/count")
+    public long countAllPlaylists(){return playlistService.countAllPlaylists();}
 }

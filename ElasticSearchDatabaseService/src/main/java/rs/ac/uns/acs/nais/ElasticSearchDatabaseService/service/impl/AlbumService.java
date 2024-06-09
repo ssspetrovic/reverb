@@ -56,4 +56,6 @@ public class AlbumService implements IAlbumService {
     public Iterable<Album> getAllAlbums(){return albumRepository.findAll();}
 
     public Page<Album> findAllAlbumsPage(int page, int size){return albumRepository.findAll(PageRequest.of(page, size));}
+
+    public long countAllAlbums(){return albumRepository.count();}
 }

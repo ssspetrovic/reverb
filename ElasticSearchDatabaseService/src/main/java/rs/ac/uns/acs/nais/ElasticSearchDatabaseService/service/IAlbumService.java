@@ -21,4 +21,5 @@ public interface IAlbumService {
     void deleteAllAlbums();
     Iterable<Album> getAllAlbums();
     Page<Album> findAllAlbumsPage(int page, int size);
+    long countAllAlbums();
 }

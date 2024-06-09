@@ -42,4 +42,6 @@ public class PlaylistService implements IPlaylistService {
 
     public Page<Playlist> findAllPlaylistsPage(int page, int size){return playlistRepository.findAll(PageRequest.of(page, size));}
 
+    public long countAllPlaylists(){return playlistRepository.count();}
+
 }

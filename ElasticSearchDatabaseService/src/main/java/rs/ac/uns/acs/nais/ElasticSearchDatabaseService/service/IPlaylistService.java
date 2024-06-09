@@ -13,5 +13,6 @@ public interface IPlaylistService {
     void deletePlaylistById(String id);
     void deleteAllPlaylists();
     Page<Playlist> findAllPlaylistsPage(int page, int size);
+    long countAllPlaylists();
 
 }

@@ -42,4 +42,6 @@ public class TrackService implements ITrackService {
 
     @Override
     public void deleteAllTracks() {trackRepository.deleteAll();}
+
+    public long countAllTracks(){return trackRepository.count();}
 }

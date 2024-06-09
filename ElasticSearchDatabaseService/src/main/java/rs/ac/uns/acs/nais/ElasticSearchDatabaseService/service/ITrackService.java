@@ -13,4 +13,5 @@ public interface ITrackService {
     Page<Track> findAllTracksPage(int page, int size);
     void deleteTrackById(String id);
     void deleteAllTracks();
+    long countAllTracks();
 }

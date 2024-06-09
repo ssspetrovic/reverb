@@ -42,5 +42,7 @@ public class TrackController {
 
     @DeleteMapping
     public void deleteAllTracks(){trackService.deleteAllTracks();}
+    @GetMapping("/count")
+    public long countAllTracks(){return trackService.countAllTracks();}
 
 }

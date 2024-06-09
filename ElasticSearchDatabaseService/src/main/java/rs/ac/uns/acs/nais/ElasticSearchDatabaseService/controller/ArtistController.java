@@ -51,6 +51,9 @@ public class ArtistController {
         return artistService.findAllArtistsPage(page, size);
     }
 
+    @GetMapping("/count")
+    public long countAllArtists(){return artistService.countAllArtists();}
+
 //    @GetMapping("/search/custom")
 //    public List<Artist> findByCustomQuery(@RequestParam String query) {
 //        return artistService.findByCustomQuery(query);

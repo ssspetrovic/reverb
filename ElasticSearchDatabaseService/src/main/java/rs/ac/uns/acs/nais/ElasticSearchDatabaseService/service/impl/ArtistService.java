@@ -46,7 +46,7 @@ public class ArtistService implements IArtistService {
 
     public Page<Artist> findAllArtistsPage(int page, int size){return artistRepository.findAll(PageRequest.of(page, size));}
 
-
+    public long countAllArtists(){return artistRepository.count();}
 }
 //    public List<Artist> findByArtistName(String artistName){
 //        return artistRepository.findByArtistName(artistName);
