@@ -1,16 +1,22 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.controller;
 
+import com.lowagie.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Album;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Playlist;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Track;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.IPlaylistService;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,5 +62,31 @@ public class PlaylistController {
         Pageable pageable = PageRequest.of(0, 500, sort);
         Page<Playlist> playlistsPage = playlistService.findPlaylistsByName(name, pageable);
         return playlistsPage.getContent();
+    }
+
+    @GetMapping("/searchByGenre")
+    public List<Playlist> findPlaylistByGenre(@RequestParam String genre){
+        return playlistService.findPlaylistByGenre(genre);
+    }
+
+    @GetMapping(value = "/export-pdf", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> exportPdf(@RequestParam String genre) {
+
+        List<Playlist> playlists = playlistService.findPlaylistByGenre(genre);
+
+        try {
+            byte[] pdfContents = playlistService.export(playlists);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", "playlists_report.pdf");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(pdfContents);
+        } catch (IOException | DocumentException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 }

@@ -71,7 +71,6 @@ public class AlbumService implements IAlbumService {
         String directoryPath = "pdf";
         String filename = directoryPath + "/" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy-HH-mm-ss")) + ".pdf";
 
-        // Ensure the directory exists
         File directory = new File(directoryPath);
         if (!directory.exists()) {
             directory.mkdirs();
