@@ -21,4 +21,5 @@ public interface IAlbumService {
     void deleteAllAlbums();
     Iterable<Album> getAllAlbums();
     Page<Album> findAllAlbumsPage(int page, int size);
+    List<Album> searchAlbumsByNameAndReleaseDate(String keyword, String startDate, String endDate);
 }

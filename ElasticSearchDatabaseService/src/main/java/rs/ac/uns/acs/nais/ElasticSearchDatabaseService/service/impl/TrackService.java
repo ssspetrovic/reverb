@@ -3,12 +3,9 @@ package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl;
 import co.elastic.clients.elasticsearch._types.SortOrder;
 import co.elastic.clients.elasticsearch._types.aggregations.Aggregation;
 import co.elastic.clients.json.JsonData;
-import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.elasticsearch.client.elc.ElasticsearchAggregation;
-import org.springframework.data.elasticsearch.client.elc.ElasticsearchAggregations;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
@@ -70,18 +67,25 @@ public class TrackService implements ITrackService {
         return trackRepository.findTracksByTempoAndDuration(minTempo, maxDuration, pageable);
     }
 
-    public List<Track> findTracksByArtistIdAndEnergyRangeWithAvgTempoAggregation(String artistId) {
+    public List<Track> findTracksByArtistIdAndEnergyRangeWithAvgTempoAggregation(String artistId, double minEnergy, double maxEnergy) {
         // Building the query with aggregation
         NativeQuery query = NativeQuery.builder()
                 .withQuery(q -> q
                         .bool(b -> b
-                                .must(
-                                        m -> m.term(t -> t.field("artistId").value(artistId))
+                                .must(m -> m
+                                        .term(t -> t.field("artistId").value(artistId))
+                                )
+                                .must(m -> m
+                                        .range(r -> r.field("energy").gte(JsonData.of(minEnergy)).lte(JsonData.of(maxEnergy)))
                                 )
                         )
                 )
                 .withAggregation("avg_tempo", Aggregation.of(a -> a
                         .avg(avg -> avg.field("tempo"))
+                ))
+                .withSort(s -> s.field(f -> f
+                        .field("danceability")
+                        .order(SortOrder.Desc)
                 ))
                 .build();
 

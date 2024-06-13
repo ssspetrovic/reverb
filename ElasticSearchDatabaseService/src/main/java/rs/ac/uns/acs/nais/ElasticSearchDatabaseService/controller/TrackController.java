@@ -48,8 +48,10 @@ public class TrackController {
 
     @GetMapping("/byArtistAndEnergy")
     public List<Track> getTracksByArtistIdAndEnergyRangeWithAvgTempo(
-            @RequestParam String artistId) {
-        return trackService.findTracksByArtistIdAndEnergyRangeWithAvgTempoAggregation(artistId);
+            @RequestParam String artistId,
+            @RequestParam double minEnergy,
+            @RequestParam double maxEnergy) {
+        return trackService.findTracksByArtistIdAndEnergyRangeWithAvgTempoAggregation(artistId, minEnergy, maxEnergy);
     }
 
 

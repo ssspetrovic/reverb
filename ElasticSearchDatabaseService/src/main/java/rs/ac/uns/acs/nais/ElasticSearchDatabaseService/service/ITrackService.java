@@ -15,6 +15,6 @@ public interface ITrackService {
     void deleteTrackById(String id);
     void deleteAllTracks();
     List<Track> searchTracksByTempoAndDuration(double minTempo, int maxDuration, int page, int size);
-    List<Track> findTracksByArtistIdAndEnergyRangeWithAvgTempoAggregation(String artistId);
+    List<Track> findTracksByArtistIdAndEnergyRangeWithAvgTempoAggregation(String artistId, double minEnergy, double maxEnergy);
     List<Track> findTracksInPlaylistWithAvgPopularityAggregation(String playlistId, Pageable pageable);
 }
