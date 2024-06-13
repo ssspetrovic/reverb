@@ -8,6 +8,7 @@ import rs.ac.uns.acs.nais.GraphDatabaseService.model.Playlist;
 import rs.ac.uns.acs.nais.GraphDatabaseService.service.IPlaylistService;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PlaylistGenreCountDTO;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PlaylistCountAveragePopularityDTO;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.Top4SubgenresPerGenreDTO;
 
 import java.util.List;
 
@@ -77,5 +78,15 @@ public class PlaylistController {
     @GetMapping("/songCountAndPopularity")
     public List<PlaylistCountAveragePopularityDTO> getPlaylistCountAndAveragePopularity() {
         return playlistService.getPlaylistCountAndAveragePopularity();
+    }
+
+    @GetMapping("/top10genres")
+    public ResponseEntity<List<PlaylistGenreCountDTO>> getTop10Genres() {
+        return ResponseEntity.ok(playlistService.getTop10Genres());
+    }
+
+    @GetMapping("/top3subgenres")
+    public ResponseEntity<List<Top4SubgenresPerGenreDTO>> getTop4SubgenresPerGenre() {
+        return ResponseEntity.ok(playlistService.getTop4SubgenresPerGenre());
     }
 }

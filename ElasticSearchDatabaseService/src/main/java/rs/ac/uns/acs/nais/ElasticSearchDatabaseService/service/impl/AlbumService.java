@@ -23,38 +23,12 @@ import java.util.Optional;
 public class AlbumService implements IAlbumService {
 
     private final AlbumRepository albumRepository;
-    private SimpleDateFormat sourceDateFormat = new SimpleDateFormat("MM/dd/yyyy");
-    private SimpleDateFormat targetDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @Autowired
     public AlbumService(AlbumRepository albumRepository) {
         this.albumRepository = albumRepository;
     }
 
-//    @Override
-//    public List<Album> findByName(String name) {
-//        return albumRepository.findByName(name);
-//    }
-//
-//    @Override
-//    public List<Album> findByNameContaining(String name) {
-//        return albumRepository.findByNameContaining(name);
-//    }
-//
-//    @Override
-//    public List<Album> findByArtistName(String artistName) {
-//        return albumRepository.findByArtistName(artistName);
-//    }
-//
-//    @Override
-//    public List<Album> findByCustomQuery(String query) {
-//        return albumRepository.findByCustomQuery(query);
-//    }
-//
-//    @Override
-//    public List<Album> searchByNameOrArtistFuzzy(String searchTerm) {
-//        return albumRepository.searchByNameOrArtistFuzzy(searchTerm);
-//    }
     @Override
     public void deleteAllAlbums(){albumRepository.deleteAll();}
 

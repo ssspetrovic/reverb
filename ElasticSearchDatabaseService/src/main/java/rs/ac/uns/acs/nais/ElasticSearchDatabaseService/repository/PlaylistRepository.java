@@ -6,12 +6,16 @@ import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Repository;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Playlist;
-import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Track;
+import java.util.List;
 
 import java.util.List;
 
 @Repository
 public interface PlaylistRepository extends ElasticsearchRepository<Playlist, String> {
+
+    @Query("{\"bool\": {\"must\": [{\"match\": {\"playlist_name\": \"?0\"}}], \"filter\": [{\"range\": {\"num_tracks\": {\"gte\": ?1}}}]}, \"sort\": [{\"creation_date\": {\"order\": \"desc\"}}]}")
+    List<Playlist> findPlaylistsByNameWithFiltersAndSorting(String text, int minTracks, Pageable pageable);
+
     Page<Playlist> findAll(Pageable pageable);
 
     //Ispisi playliste koje sadrze zadat tekst u imenu i sortiraj ih po zanru

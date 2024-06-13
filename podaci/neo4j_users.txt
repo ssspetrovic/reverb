@@ -1,0 +1,14 @@
+MATCH (n)
+DETACH DELETE n;
+
+LOAD CSV WITH HEADERS FROM 'file:///users.csv' AS row
+WITH row
+MERGE (c:Collection {name: 'users'})
+CREATE (u:CollectionUser {
+    userId: toInteger(row.Id),
+    username: row.Username,
+    favoriteSongs: []
+})
+
+MATCH (u:CollectionUser)
+RETURN u.userId ORDER BY u.userId;

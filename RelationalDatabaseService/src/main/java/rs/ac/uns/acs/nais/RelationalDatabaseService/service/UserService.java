@@ -2,7 +2,6 @@ package rs.ac.uns.acs.nais.RelationalDatabaseService.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import rs.ac.uns.acs.nais.RelationalDatabaseService.model.User;
 import rs.ac.uns.acs.nais.RelationalDatabaseService.repository.UserRepository;
 
@@ -35,4 +34,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    public Optional<Boolean> isEmailConfirmed(Long id) {
+        return userRepository.findById(id).map(User::getConfirmedEmail);
+    }
 }

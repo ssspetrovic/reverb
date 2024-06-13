@@ -22,3 +22,18 @@ eureka:
         enabled: true
   instance:
     prefer-ip-address: true
+
+logging:
+  level:
+    # Enable detailed logging for the core Elasticsearch operations
+    org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate: DEBUG
+    org.elasticsearch.client: DEBUG
+
+    # Enable detailed logging for repository interactions
+    org.springframework.data.elasticsearch.repository: DEBUG
+
+    # Enable detailed logging for the rest client used by Spring Data Elasticsearch
+    org.elasticsearch.client.RestClient: DEBUG
+
+    # Enable detailed logging for HTTP requests and responses
+    org.elasticsearch.client.RestClient#org.apache.http.impl.nio.client.InternalHttpAsyncClient: DEBUG

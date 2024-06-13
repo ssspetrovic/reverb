@@ -45,4 +45,10 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/{id}/email-confirmed")
+    public ResponseEntity<Boolean> isEmailConfirmed(@PathVariable Long id) {
+        Optional<Boolean> isConfirmed = userService.isEmailConfirmed(id);
+        return isConfirmed.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
 }
