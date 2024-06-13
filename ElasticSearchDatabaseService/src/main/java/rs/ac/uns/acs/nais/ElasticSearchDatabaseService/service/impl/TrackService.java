@@ -1,18 +1,18 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl;
 
 import co.elastic.clients.elasticsearch._types.SortOrder;
-import co.elastic.clients.elasticsearch._types.aggregations.Aggregate;
 import co.elastic.clients.elasticsearch._types.aggregations.Aggregation;
-import co.elastic.clients.elasticsearch._types.aggregations.AvgAggregate;
 import co.elastic.clients.json.JsonData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.elasticsearch.client.elc.ElasticsearchAggregations;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.core.*;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dtos.TrackDTO;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Track;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository.TrackRepository;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.ITrackService;
@@ -25,14 +25,17 @@ import java.util.stream.Collectors;
 @Service
 public class TrackService implements ITrackService {
 
+    private final TrackRepository trackRepository;
+
     @Autowired
-    private TrackRepository trackRepository;
+    private KafkaTemplate<String, Object> kafkaTemplate;
 
     private final ElasticsearchOperations elasticsearchOperations;
 
     @Autowired
-    public TrackService(ElasticsearchOperations elasticsearchOperations) {
+    public TrackService(ElasticsearchOperations elasticsearchOperations, TrackRepository trackRepository) {
         this.elasticsearchOperations = elasticsearchOperations;
+        this.trackRepository = trackRepository;
     }
 
     @Override
@@ -52,6 +55,38 @@ public class TrackService implements ITrackService {
 
     public Page<Track> findAllTracksPage(int page, int size) {
         return trackRepository.findAll(PageRequest.of(page,size));
+    }
+
+    @KafkaListener(topics = "elastic-search-service-topic", groupId = "elastic-group")
+    public void handleTrackMessage(TrackDTO trackDTO) {
+        // Convert DTO to Elasticsearch document and save
+        try {
+            Track track = new Track();
+            // Map fields from trackDTO to track entity
+            track.setId(trackDTO.getId());
+            track.setName(trackDTO.getName());
+            track.setPopularity(trackDTO.getPopularity());
+            track.setDanceability(trackDTO.getDanceability());
+            track.setEnergy(trackDTO.getEnergy());
+            track.setKey(trackDTO.getKey());
+            track.setLoudness(trackDTO.getLoudness());
+            track.setMode(trackDTO.getMode());
+            track.setSpeechiness(trackDTO.getSpeechiness());
+            track.setAcousticness(trackDTO.getAcousticness());
+            track.setInstrumentalness(trackDTO.getInstrumentalness());
+            track.setLiveness(trackDTO.getLiveness());
+            track.setValence(trackDTO.getValence());
+            track.setTempo(trackDTO.getTempo());
+            track.setDuration_ms(trackDTO.getDuration_ms());
+            track.setAlbumId(trackDTO.getAlbumId());
+            track.setArtistId(trackDTO.getArtistId());
+            track.setPlaylistId(trackDTO.getPlaylistId());
+
+            trackRepository.save(track);
+            kafkaTemplate.send("track-saga-success", "Track ID: " + trackDTO.getId() + " processed successfully.");
+        } catch (Exception e) {
+            kafkaTemplate.send("track-saga-fail", "Track ID: " + trackDTO.getId() + " failed to process.");
+        }
     }
 
     @Override
