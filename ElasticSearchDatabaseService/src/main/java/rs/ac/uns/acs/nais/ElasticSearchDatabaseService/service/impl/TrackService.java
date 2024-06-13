@@ -1,22 +1,22 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl;
 
 import co.elastic.clients.elasticsearch._types.SortOrder;
+import co.elastic.clients.elasticsearch._types.aggregations.Aggregate;
 import co.elastic.clients.elasticsearch._types.aggregations.Aggregation;
+import co.elastic.clients.elasticsearch._types.aggregations.AvgAggregate;
 import co.elastic.clients.json.JsonData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchAggregations;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.SearchHit;
-import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.*;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Track;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository.TrackRepository;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.ITrackService;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -92,6 +92,20 @@ public class TrackService implements ITrackService {
         // Execute the query
         SearchHits<Track> searchHits = elasticsearchOperations.search(query, Track.class);
 
+//        Double avgTempoValue = null;
+//        if (searchHits.hasAggregations()) {
+//            ElasticsearchAggregations aggregations = (ElasticsearchAggregations) searchHits.getAggregations();;
+//
+//            Aggregate avgTempoAggregate = aggregations.get("avg_tempo");
+//            if (avgTempoAggregate != null && avgTempoAggregate.isAvg()) {
+//                AvgAggregate avgAgg = avgTempoAggregate.avg();
+//                if (avgAgg != null) {
+//                    avgTempoValue = avgAgg.value();
+//                }
+//            }
+//        }
+
+        //System.out.println(avgTempoValue);
         // Construct and return the custom response
         return searchHits.stream()
                 .map(SearchHit::getContent)
