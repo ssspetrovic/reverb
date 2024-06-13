@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.acs.nais.GraphDatabaseService.service.ISongService;
+import rs.ac.uns.acs.nais.GraphDatabaseService.service.IPlaylistService;
 import rs.ac.uns.acs.nais.GraphDatabaseService.model.Song;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongSearchCriteriaDTO;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongPopularityProjection;
@@ -13,6 +14,9 @@ import rs.ac.uns.acs.nais.GraphDatabaseService.dto.MostPopularSongInPlaylistDTO;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongTempoProjection;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.HighEnergyMusicProjection;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.LongestSongInEveryAlbumProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PerformedByProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.IncludedInProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.IncludedInPlaylistProjection;
 import rs.ac.uns.acs.nais.GraphDatabaseService.report.ReportGenerator;
 import org.springframework.http.MediaType;
 import org.springframework.http.HttpHeaders;
@@ -25,10 +29,12 @@ import java.util.Map;
 public class SongController {
 
     private final ISongService songService;
+    private final IPlaylistService playlistService;
 
     @Autowired
-    public SongController(ISongService songService) {
+    public SongController(ISongService songService, IPlaylistService playlistService) {
         this.songService = songService;
+        this.playlistService = playlistService;
     }
 
     @PostMapping
@@ -129,9 +135,13 @@ public class SongController {
     }
 
     @GetMapping(value = "/export-pdf", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<byte[]> exportPdf() {
-        ReportGenerator reportGenerator = new ReportGenerator(songService);
-        byte[] pdfContents = reportGenerator.generateReport();
+    public ResponseEntity<byte[]> exportPdf(
+            @RequestParam(value = "genre") String genre,
+            @RequestParam(value = "subgenre") String subgenre,
+            @RequestParam(value = "artist") String artist) {
+
+        ReportGenerator reportGenerator = new ReportGenerator(songService, playlistService);
+        byte[] pdfContents = reportGenerator.generateReport(genre, subgenre, artist);
         
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
@@ -141,4 +151,84 @@ public class SongController {
                 .headers(headers)
                 .body(pdfContents);
     }
+
+    @PostMapping("{trackId}/performed-by/{name}")
+    public ResponseEntity<Void> createPerformedByRelationship(@PathVariable String trackId, @PathVariable String name) {
+        songService.createPerformedByRelationship(trackId, name);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("{trackId}/included-in/{albumName}")
+    public ResponseEntity<Void> createIncludedInRelationship(@PathVariable String trackId, @PathVariable String albumName) {
+        songService.createIncludedInRelationship(trackId, albumName);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("{trackId}/included-in-playlist/{playlistId}")
+    public ResponseEntity<Void> createIncludedInPlaylistRelationship(@PathVariable String trackId, @PathVariable String playlistId) {
+        songService.createIncludedInPlaylistRelationship(trackId, playlistId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/performed-by")
+    public ResponseEntity<List<PerformedByProjection>> getAllPerformedByRelationships() {
+        return ResponseEntity.ok(songService.getAllPerformedByRelationships());
+    }
+
+    @GetMapping("/included-in")
+    public ResponseEntity<List<IncludedInProjection>> getAllIncludedInRelationships() {
+        return ResponseEntity.ok(songService.getAllIncludedInRelationships());
+    }
+
+    @GetMapping("/included-in-playlist")
+    public ResponseEntity<List<IncludedInPlaylistProjection>> getAllIncludedInPlaylistRelationships() {
+        return ResponseEntity.ok(songService.getAllIncludedInPlaylistRelationships());
+    }
+
+    @PutMapping("{trackId}/performed-by/{name}")
+    public ResponseEntity<Void> updatePerformedByRelationship(@PathVariable String trackId, @PathVariable String name) {
+        songService.updatePerformedByRelationship(trackId, name);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("{trackId}/included-in/{albumName}")
+    public ResponseEntity<Void> updateIncludedInRelationship(@PathVariable String trackId, @PathVariable String albumName) {
+        songService.updateIncludedInRelationship(trackId, albumName);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("{trackId}/included-in-playlist/{playlistId}")
+    public ResponseEntity<Void> updateIncludedInPlaylistRelationship(@PathVariable String trackId, @PathVariable String playlistId) {
+        songService.updateIncludedInPlaylistRelationship(trackId, playlistId);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/performed-by/{trackId}")
+    public ResponseEntity<Void> deletePerformedByRelationship(@PathVariable String trackId) {
+        songService.deletePerformedByRelationship(trackId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/included-in/{trackId}")
+    public ResponseEntity<Void> deleteIncludedInRelationship(@PathVariable String trackId) {
+        songService.deleteIncludedInRelationship(trackId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/included-in-playlist/{trackId}")
+    public ResponseEntity<Void> deleteIncludedInPlaylistRelationship(@PathVariable String trackId) {
+        songService.deleteIncludedInPlaylistRelationship(trackId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/recommender")
+    public ResponseEntity<List<Song>> recommendSongs(@RequestParam String genre, @RequestParam String subgenre, @RequestParam String artist) {
+        return ResponseEntity.ok(songService.recommendSongs(genre, subgenre, artist));
+    }
+
+    @GetMapping("/top50")
+    public ResponseEntity<List<String>> getTop50Songs() {
+        return ResponseEntity.ok(songService.getTop50Songs());
+    }
+
 }

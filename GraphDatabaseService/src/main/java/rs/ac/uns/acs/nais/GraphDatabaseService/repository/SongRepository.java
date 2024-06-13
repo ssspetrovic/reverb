@@ -2,6 +2,7 @@ package rs.ac.uns.acs.nais.GraphDatabaseService.repository;
 
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongSearchCriteriaDTO;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongPopularityProjection;
@@ -10,6 +11,9 @@ import rs.ac.uns.acs.nais.GraphDatabaseService.model.Song;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.SongTempoProjection;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.HighEnergyMusicProjection;
 import rs.ac.uns.acs.nais.GraphDatabaseService.dto.LongestSongInEveryAlbumProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.PerformedByProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.IncludedInProjection;
+import rs.ac.uns.acs.nais.GraphDatabaseService.dto.IncludedInPlaylistProjection;
 
 import java.util.List;
 import java.util.Map;
@@ -145,14 +149,16 @@ public interface SongRepository extends Neo4jRepository<Song, Long> {
     List<Song> searchSongsByPlaylistSubgenre(String playlistSubgenre);
 
     @Query("MATCH (s:CollectionSong) "
-            + "WHERE toFloat(s.energy) > 0.8 AND s.track_name IS NOT NULL AND s.track_popularity IS NOT NULL "
-            + "SET s.track_popularity = s.track_popularity + 10 "
-            + "RETURN s")
+            + "WHERE toFloat(s.energy) > 0.8 "
+            + "WITH s, s.track_popularity + 10 AS newPopularity "
+            + "SET s.track_popularity = newPopularity "
+            + "RETURN s.track_name, s.track_popularity")
     List<SongPopularityProjection> updatePopularityBasedOnEnergy();
 
     @Query("MATCH (s:CollectionSong) "
             + "WHERE s.track_popularity > 80 "
             + "SET s.tempo = toString(ROUND(toFloat(s.tempo) + 3, 2)) "
+            + "WITH s "
             + "RETURN s")
     List<SongTempoProjection> updateTempoBasedOnPopularity();
 
@@ -175,4 +181,93 @@ public interface SongRepository extends Neo4jRepository<Song, Long> {
             + "WITH al, COLLECT(s)[0] AS longestSong, s "
             + "RETURN s")
     List<LongestSongInEveryAlbumProjection> getLongestSongInEveryAlbum();
+
+    @Query("MATCH (s:CollectionSong {track_id: $trackId}), (a:CollectionArtist {name: $name}) "
+                + "CREATE (s)-[:PERFORMED_BY]->(a)")
+    void createPerformedByRelationship(@Param("trackId") String trackId, @Param("name") String name);
+
+    @Query("MATCH (s:CollectionSong {track_id: $trackId}), (al:CollectionAlbum {name: $albumName}) "
+                + "CREATE (s)-[:INCLUDED_IN]->(al)")
+    void createIncludedInRelationship(@Param("trackId") String trackId, @Param("albumName") String albumName);
+
+    @Query("MATCH (s:CollectionSong {track_id: $trackId}), (p:CollectionPlaylist {playlist_id: $playlistId}) "
+                + "CREATE (s)-[:INCLUDED_IN_PLAYLIST]->(p)")
+    void createIncludedInPlaylistRelationship(@Param("trackId") String trackId, @Param("playlistId") String playlistId);
+
+    @Query("MATCH (s:CollectionSong)-[:PERFORMED_BY]->(a:CollectionArtist) "
+                + "RETURN s")
+    List<PerformedByProjection> getAllPerformedByRelationships();
+
+    @Query("MATCH (s:CollectionSong)-[:INCLUDED_IN]->(al:CollectionAlbum) "
+                + "RETURN s")
+    List<IncludedInProjection> getAllIncludedInRelationships();
+
+    @Query("MATCH (s:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(p:CollectionPlaylist) "
+                + "RETURN s")
+    List<IncludedInPlaylistProjection> getAllIncludedInPlaylistRelationships();
+
+    @Query("MATCH (s:CollectionSong {track_id: $trackId})-[r:PERFORMED_BY]->(a:CollectionArtist) "
+                + "DELETE r "
+                + "WITH s, a "
+                + "MATCH (newArtist:CollectionArtist {name: $name}) "
+                + "CREATE (s)-[:PERFORMED_BY]->(newArtist)")
+    void updatePerformedByRelationship(@Param("trackId") String trackId, @Param("name") String name);
+
+    @Query("MATCH (s:CollectionSong {track_id: $trackId})-[r:INCLUDED_IN]->(al:CollectionAlbum) "
+                + "DELETE r "
+                + "WITH s, al "
+                + "MATCH (newAlbum:CollectionAlbum {name: $albumName}) "
+                + "CREATE (s)-[:INCLUDED_IN]->(newAlbum)")
+    void updateIncludedInRelationship(@Param("trackId") String trackId, @Param("albumName") String albumName);
+
+    @Query("MATCH (s:CollectionSong {track_id: $trackId})-[r:INCLUDED_IN_PLAYLIST]->(p:CollectionPlaylist) "
+                + "DELETE r " 
+                + "WITH s, p " 
+                + "MATCH (newPlaylist:CollectionPlaylist {playlist_id: $playlistId}) " 
+                + "CREATE (s)-[:INCLUDED_IN_PLAYLIST]->(newPlaylist)")
+    void updateIncludedInPlaylistRelationship(@Param("trackId") String trackId, @Param("playlistId") String playlistId);
+
+    @Query("MATCH (s:CollectionSong {track_id: $trackId})-[r:PERFORMED_BY]->(a:CollectionArtist) " 
+                + "DELETE r")
+    void deletePerformedByRelationship(@Param("trackId") String trackId);
+
+    @Query("MATCH (s:CollectionSong {track_id: $trackId})-[r:INCLUDED_IN]->(al:CollectionAlbum) "
+                + "DELETE r")
+    void deleteIncludedInRelationship(@Param("trackId") String trackId);
+
+    @Query("MATCH (s:CollectionSong {track_id: $trackId})-[r:INCLUDED_IN_PLAYLIST]->(p:CollectionPlaylist) "
+                + "DELETE r")
+    void deleteIncludedInPlaylistRelationship(@Param("trackId") String trackId);
+
+    @Query("WITH {genre: $genre, subgenre: $subgenre, artist: $artist} AS params " +
+           "MATCH (song:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(playlist:CollectionPlaylist) " +
+           "WHERE " +
+           "(CASE WHEN params.genre IS NULL OR params.genre = '' THEN TRUE ELSE playlist.genre = params.genre END) AND " +
+           "(CASE WHEN params.subgenre IS NULL OR params.subgenre = '' THEN TRUE ELSE playlist.subgenre = params.subgenre END) AND " +
+           "(CASE WHEN params.artist IS NULL OR params.artist = '' THEN TRUE ELSE song.track_artist = params.artist END) " +
+           "WITH COLLECT(song) AS exactMatches, params " +
+           "WITH exactMatches, params " +
+           "MATCH (song:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(playlist:CollectionPlaylist) " +
+           "WHERE " +
+           "(CASE WHEN params.genre IS NULL OR params.genre = '' THEN TRUE ELSE playlist.genre = params.genre END) AND " +
+           "(CASE WHEN params.subgenre IS NULL OR params.subgenre = '' THEN TRUE ELSE playlist.subgenre = params.subgenre END) " +
+           "WITH exactMatches, COLLECT(song) AS genreAndSubgenreMatches, params " +
+           "WITH exactMatches + genreAndSubgenreMatches AS combinedMatches, params " +
+           "MATCH (song:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(playlist:CollectionPlaylist) " +
+           "WHERE " +
+           "(CASE WHEN params.genre IS NULL OR params.genre = '' THEN TRUE ELSE playlist.genre = params.genre END) " +
+           "WITH combinedMatches, COLLECT(song) AS allGenreMatches " +
+           "UNWIND combinedMatches + allGenreMatches AS song " +
+           "RETURN COLLECT(song)[..20] AS finalSongs;")
+    List<Song> recommendSongs(@Param("genre") String genre, @Param("subgenre") String subgenre, @Param("artist") String artist);
+
+    @Query("MATCH (s:CollectionSong) "
+                + "WHERE s.track_popularity IS NOT NULL "
+                + "WITH s.track_name AS trackName, s "
+                + "ORDER BY s.track_popularity DESC "
+                + "WITH DISTINCT trackName, s "
+                + "RETURN DISTINCT trackName "
+                + "LIMIT 50;")
+    List<String> getTop50Songs();
+
 }

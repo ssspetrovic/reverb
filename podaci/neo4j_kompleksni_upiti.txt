@@ -1,7 +1,8 @@
 // Promena popularnosti pesme na osnovu njene energičnosti
     MATCH (s:CollectionSong)
     WHERE toFloat(s.energy) > 0.8
-    SET s.track_popularity = s.track_popularity + 10
+    WITH s, s.track_popularity + 10 AS newPopularity
+    SET s.track_popularity = newPopularity
     RETURN s.track_name, s.track_popularity
 
 // Dodavanje nove pesme u plejlistu
@@ -11,7 +12,7 @@
     RETURN p.name, s.track_name
 
 // Broj pesama po žanrovima u kolekciji
-    MATCH (s:CollectionSong)
+    MATCH (s:CollectionSong)-[:INCLUDED_IN_PLAYLIST]->(p:CollectionPlaylist)
     WITH s.playlist_genre AS genre, COUNT(s) AS numSongs
     RETURN genre, numSongs
     ORDER BY numSongs DESC
@@ -35,6 +36,7 @@
     MATCH (s:CollectionSong)
     WHERE s.track_popularity > 80
     SET s.tempo = s.tempo + 3
+    WITH s
     RETURN s.track_name, s.tempo
 
 // Pronalaženje pesama sa visokom energetskom vrednošću u određenom žanru
