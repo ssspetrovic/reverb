@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Album;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Artist;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository.AlbumRepository;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository.ArtistRepository;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.IArtistService;
 
@@ -17,9 +18,11 @@ import java.util.Optional;
 public class ArtistService implements IArtistService {
 
     private final ArtistRepository artistRepository;
+    private final AlbumRepository albumRepository;
 
-    public ArtistService(ArtistRepository artistRepository) {
+    public ArtistService(ArtistRepository artistRepository, AlbumRepository albumRepository) {
         this.artistRepository = artistRepository;
+        this.albumRepository = albumRepository;
     }
 
 
@@ -47,6 +50,8 @@ public class ArtistService implements IArtistService {
     public Page<Artist> findAllArtistsPage(int page, int size){return artistRepository.findAll(PageRequest.of(page, size));}
 
     public long countAllArtists(){return artistRepository.count();}
+
+
 }
 //    public List<Artist> findByArtistName(String artistName){
 //        return artistRepository.findByArtistName(artistName);

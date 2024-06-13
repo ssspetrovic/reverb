@@ -3,12 +3,14 @@ package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Artist;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Playlist;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository.PlaylistRepository;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.IPlaylistService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -44,4 +46,7 @@ public class PlaylistService implements IPlaylistService {
 
     public long countAllPlaylists(){return playlistRepository.count();}
 
+    public Page<Playlist> findPlaylistsByName(String keyword, Pageable page) {
+        return playlistRepository.findPlaylistsByNameContaining(keyword, page);
+    }
 }

@@ -2,11 +2,16 @@ package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Album;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Playlist;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Track;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.IPlaylistService;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -44,4 +49,12 @@ public class PlaylistController {
     }
     @GetMapping("/count")
     public long countAllPlaylists(){return playlistService.countAllPlaylists();}
+
+    @GetMapping("/search")
+    public List<Playlist> findPlaylistByName(@RequestParam String name){
+        Sort sort = Sort.by(Sort.Direction.ASC, "genre");
+        Pageable pageable = PageRequest.of(0, 500, sort);
+        Page<Playlist> playlistsPage = playlistService.findPlaylistsByName(name, pageable);
+        return playlistsPage.getContent();
+    }
 }
