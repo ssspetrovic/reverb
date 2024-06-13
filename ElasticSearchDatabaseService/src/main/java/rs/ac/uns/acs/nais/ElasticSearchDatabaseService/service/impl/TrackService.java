@@ -1,20 +1,42 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl;
 
+import co.elastic.clients.elasticsearch._types.SortOrder;
+import co.elastic.clients.elasticsearch._types.aggregations.Aggregation;
+import co.elastic.clients.json.JsonData;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchAggregation;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchAggregations;
+import org.springframework.data.elasticsearch.client.elc.NativeQuery;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Track;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository.TrackRepository;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.ITrackService;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TrackService implements ITrackService {
 
     @Autowired
     private TrackRepository trackRepository;
+
+    private final ElasticsearchOperations elasticsearchOperations;
+
+    @Autowired
+    public TrackService(ElasticsearchOperations elasticsearchOperations) {
+        this.elasticsearchOperations = elasticsearchOperations;
+    }
 
     @Override
     public Track saveTrack(Track track){
@@ -42,4 +64,60 @@ public class TrackService implements ITrackService {
 
     @Override
     public void deleteAllTracks() {trackRepository.deleteAll();}
+
+    public List<Track> searchTracksByTempoAndDuration(double minTempo, int maxDuration, int page, int size) {
+        PageRequest pageable = PageRequest.of(page, size);
+        return trackRepository.findTracksByTempoAndDuration(minTempo, maxDuration, pageable);
+    }
+
+    public List<Track> findTracksByArtistIdAndEnergyRangeWithAvgTempoAggregation(String artistId) {
+        // Building the query with aggregation
+        NativeQuery query = NativeQuery.builder()
+                .withQuery(q -> q
+                        .bool(b -> b
+                                .must(
+                                        m -> m.term(t -> t.field("artistId").value(artistId))
+                                )
+                        )
+                )
+                .withAggregation("avg_tempo", Aggregation.of(a -> a
+                        .avg(avg -> avg.field("tempo"))
+                ))
+                .build();
+
+        // Execute the query
+        SearchHits<Track> searchHits = elasticsearchOperations.search(query, Track.class);
+
+        // Construct and return the custom response
+        return searchHits.stream()
+                .map(SearchHit::getContent)
+                .collect(Collectors.toList());
+    }
+
+    public List<Track> findTracksInPlaylistWithAvgPopularityAggregation(String playlistId, Pageable pageable) {
+        // Building the query
+        NativeQuery query = NativeQuery.builder()
+                .withQuery(q -> q
+                        .bool(b -> b
+                                .must(m -> m.term(t -> t.field("playlistId").value(playlistId)))
+                        )
+                )
+                .withAggregation("avg_popularity", Aggregation.of(a -> a
+                        .avg(avg -> avg.field("popularity")) // Calculate average popularity
+                ))
+                .withSort(s -> s.field(f -> f
+                        .field("popularity")
+                        .order(SortOrder.Desc) // Sort by popularity in descending order
+                ))
+                .withPageable(pageable)
+                .build();
+
+        // Execute the query
+        SearchHits<Track> searchHits = elasticsearchOperations.search(query, Track.class);
+
+        // Construct and return the custom response
+        return searchHits.stream()
+                .map(SearchHit::getContent)
+                .collect(Collectors.toList());
+    }
 }

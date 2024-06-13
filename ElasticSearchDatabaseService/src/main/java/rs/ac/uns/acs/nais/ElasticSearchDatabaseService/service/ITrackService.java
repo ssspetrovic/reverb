@@ -1,9 +1,10 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service;
 
 import org.springframework.data.domain.Page;
-import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Playlist;
+import org.springframework.data.domain.Pageable;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Track;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ITrackService {
@@ -13,4 +14,7 @@ public interface ITrackService {
     Page<Track> findAllTracksPage(int page, int size);
     void deleteTrackById(String id);
     void deleteAllTracks();
+    List<Track> searchTracksByTempoAndDuration(double minTempo, int maxDuration, int page, int size);
+    List<Track> findTracksByArtistIdAndEnergyRangeWithAvgTempoAggregation(String artistId);
+    List<Track> findTracksInPlaylistWithAvgPopularityAggregation(String playlistId, Pageable pageable);
 }
