@@ -7,7 +7,10 @@ import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-import java.util.List;
+
+
+
+import java.util.Date;
 
 @Setter
 @Getter
@@ -17,9 +20,10 @@ public class Album {
     @Id
     private String id;
 
+    @Field(type=FieldType.Text, name="name")
     private String name;
 
-    @Field(type = FieldType.Date, format = DateFormat.date)
+    @Field(type = FieldType.Date, format=DateFormat.date, pattern="yyyy-MM-dd")
     private String releaseDate;
 
     @Field(type = FieldType.Keyword)

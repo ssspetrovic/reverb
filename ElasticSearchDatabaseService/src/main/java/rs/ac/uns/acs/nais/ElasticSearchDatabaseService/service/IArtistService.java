@@ -23,6 +23,7 @@ public interface IArtistService {
     void deleteAllArtists();
 
     Page<Artist> findAllArtistsPage(int page, int size);
+    long countAllArtists();
 
 
 //    List<Artist> findByArtistName(String artistName);

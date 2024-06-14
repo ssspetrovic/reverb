@@ -3,6 +3,8 @@ package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -15,10 +17,13 @@ import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository.AlbumRepositor
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository.ArtistRepository;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository.PlaylistRepository;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository.TrackRepository;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.utils.DateUtils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
@@ -40,6 +45,10 @@ public class DataLoadingService {
 
     private static final String CSV_FILE_PATH = "data/spotify_songs.csv";
     private static final int BATCH_SIZE = 1000;
+    private static final SimpleDateFormat CSV_DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy");
+    private static final Logger logger = LoggerFactory.getLogger(DataLoadingService.class);
+
+
 
     public void loadData() throws IOException, InterruptedException, ExecutionException {
         // Load the CSV file as a resource from the classpath
@@ -117,9 +126,14 @@ public class DataLoadingService {
             String albumId = csvRecord.get("track_album_id");
             Album album = albumMap.computeIfAbsent(albumId, id -> {
                 Album newAlbum = new Album();
-                newAlbum.setId(id);
+                newAlbum.setId(albumId);
                 newAlbum.setName(csvRecord.get("track_album_name"));
-                newAlbum.setReleaseDate(csvRecord.get("track_album_release_date"));
+                String releaseDateStr = csvRecord.get("track_album_release_date");
+                if (DateUtils.isValidDate(releaseDateStr)) {
+                    newAlbum.setReleaseDate(releaseDateStr);
+                } else {
+                    newAlbum.setReleaseDate(null); // or handle it differently if needed
+                }
                 newAlbum.setArtistId(artist.getId());
                 newAlbums.add(newAlbum);
                 return newAlbum;
@@ -129,7 +143,7 @@ public class DataLoadingService {
             String playlistId = csvRecord.get("playlist_id");
             Playlist playlist = playlistMap.computeIfAbsent(playlistId, id -> {
                 Playlist newPlaylist = new Playlist();
-                newPlaylist.setId(id);
+                newPlaylist.setId(playlistId);
                 newPlaylist.setName(csvRecord.get("playlist_name"));
                 newPlaylist.setGenre(csvRecord.get("playlist_genre"));
                 newPlaylist.setSubgenre(csvRecord.get("playlist_subgenre"));
@@ -142,18 +156,18 @@ public class DataLoadingService {
             track.setId(csvRecord.get("track_id"));
             track.setName(csvRecord.get("track_name"));
             track.setPopularity(Integer.parseInt(csvRecord.get("track_popularity")));
-            track.setDanceability(Double.parseDouble(csvRecord.get("danceability")));
-            track.setEnergy(Double.parseDouble(csvRecord.get("energy")));
-            track.setKey(Integer.parseInt(csvRecord.get("key")));
-            track.setLoudness(Double.parseDouble(csvRecord.get("loudness")));
-            track.setMode(Integer.parseInt(csvRecord.get("mode")));
-            track.setSpeechiness(Double.parseDouble(csvRecord.get("speechiness")));
-            track.setAcousticness(Double.parseDouble(csvRecord.get("acousticness")));
-            track.setInstrumentalness(Double.parseDouble(csvRecord.get("instrumentalness")));
-            track.setLiveness(Double.parseDouble(csvRecord.get("liveness")));
-            track.setValence(Double.parseDouble(csvRecord.get("valence")));
-            track.setTempo(Double.parseDouble(csvRecord.get("tempo")));
-            track.setDuration_ms(Integer.parseInt(csvRecord.get("duration_ms")));
+            track.setDanceability(parseDouble(csvRecord.get("danceability")));
+            track.setEnergy(parseDouble(csvRecord.get("energy")));
+            track.setKey(parseInt(csvRecord.get("key")));
+            track.setLoudness(parseDouble(csvRecord.get("loudness")));
+            track.setMode(parseInt(csvRecord.get("mode")));
+            track.setSpeechiness(parseDouble(csvRecord.get("speechiness")));
+            track.setAcousticness(parseDouble(csvRecord.get("acousticness")));
+            track.setInstrumentalness(parseDouble(csvRecord.get("instrumentalness")));
+            track.setLiveness(parseDouble(csvRecord.get("liveness")));
+            track.setValence(parseDouble(csvRecord.get("valence")));
+            track.setTempo(parseDouble(csvRecord.get("tempo")));
+            track.setDuration_ms(parseInt(csvRecord.get("duration_ms")));
 
             // Set relationships
             track.setAlbumId(album.getId());
@@ -167,5 +181,33 @@ public class DataLoadingService {
         albumRepository.saveAll(newAlbums);
         playlistRepository.saveAll(newPlaylists);
         trackRepository.saveAll(tracks);
+    }
+
+
+    private int parseInt(String value) {
+        try {
+            return Integer.parseInt(value.trim());
+        } catch (NumberFormatException e) {
+            logger.error("Failed to parse int: {}", value, e);
+            return 0;
+        }
+    }
+
+    private double parseDouble(String value) {
+        try {
+            if (value == null || value.trim().isEmpty()) {
+                logger.warn("Empty or null string found for double parsing, defaulting to 0.0");
+                return 0.0;
+            }
+            String cleanedValue = value.trim().replaceAll("[^0-9Ee.-]", "");
+            // Handle multiple decimal points
+            if (cleanedValue.chars().filter(ch -> ch == '.').count() > 1 && !cleanedValue.contains("E")) {
+                throw new NumberFormatException("Multiple decimal points found in: " + value);
+            }
+            return Double.parseDouble(cleanedValue);
+        } catch (NumberFormatException e) {
+            logger.error("Failed to parse double: {}", value, e);
+            return 0.0;
+        }
     }
 }

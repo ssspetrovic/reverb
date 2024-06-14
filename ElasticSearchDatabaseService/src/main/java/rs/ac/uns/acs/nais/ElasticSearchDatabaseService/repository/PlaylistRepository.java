@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Playlist;
 import java.util.List;
 
+import java.util.List;
+
 @Repository
 public interface PlaylistRepository extends ElasticsearchRepository<Playlist, String> {
 
@@ -16,4 +18,10 @@ public interface PlaylistRepository extends ElasticsearchRepository<Playlist, St
 
     Page<Playlist> findAll(Pageable pageable);
 
+    //Ispisi playliste koje sadrze zadat tekst u imenu i sortiraj ih po zanru
+    @Query("{ \"bool\": { \"must\": [ { \"match\": { \"name\": \"?0\" } } ] } }")
+    Page<Playlist> findPlaylistsByNameContaining(String keyword, Pageable page);
+
+    @Query("{ \"bool\": { \"must\": [ { \"match\": { \"genre\": \"?0\" } } ] } }")
+    List<Playlist> findPlaylistsByGenre(String keyword);
 }

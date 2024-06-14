@@ -18,4 +18,7 @@ public interface TrackRepository extends ElasticsearchRepository<Track, String> 
     @Query("{\"bool\": { \"must\": [{ \"range\": { \"tempo\": { \"gte\": ?0 } } }], \"filter\": [{ \"range\": { \"duration_ms\": { \"lte\": ?1 } } }] }}")
     List<Track> findTracksByTempoAndDuration(double minTempo, int maxDuration, Pageable pageable);
 
+    @Query("{ \"bool\": { \"must\": [ { \"match\": { \"artistId\": \"?0\" } }, { \"range\": { \"liveness\": { \"gte\": ?1 } } } ] } }")
+    Page<Track> findTracksByTempoAndArtistId(String artistId, Double minLiveness, Pageable pageable);
+
 }
