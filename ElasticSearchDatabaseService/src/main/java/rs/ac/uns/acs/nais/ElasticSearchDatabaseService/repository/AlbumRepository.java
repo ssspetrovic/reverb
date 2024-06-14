@@ -13,17 +13,7 @@ import java.util.List;
 
 @Repository
 public interface AlbumRepository extends ElasticsearchRepository<Album, String> {
-//    List<Album> findByName(String name);
-//
-//    List<Album> findByNameContaining(String name);
-//
-//    List<Album> findByArtistName(String artistName);
-//
-//    @Query("{\"bool\": {\"should\": [{\"match\": {\"name\": \"?0\"}}, {\"match\": {\"artist.artistName\": \"?0\"}}]}}")
-//    List<Album> findByCustomQuery(String query);
-//
-//    @Query("{\"multi_match\":{\"query\":\"?0\",\"fields\":[\"name^3\",\"artist.artistName\"],\"fuzziness\":\"AUTO\"}}")
-//    List<Album> searchByNameOrArtistFuzzy(String searchTerm);
+
     Page<Album> findAll(Pageable pageable);
 
     //Ispisi Albume nakon zadatog datuma i sortiraj ih od najnovijeg do najstarijeg
