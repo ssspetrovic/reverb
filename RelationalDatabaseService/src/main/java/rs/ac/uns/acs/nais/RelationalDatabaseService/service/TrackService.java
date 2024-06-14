@@ -8,6 +8,9 @@ import rs.ac.uns.acs.nais.RelationalDatabaseService.dtos.TrackDTO;
 import rs.ac.uns.acs.nais.RelationalDatabaseService.model.Track;
 import rs.ac.uns.acs.nais.RelationalDatabaseService.repository.TrackRepository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class TrackService {
 
@@ -16,6 +19,19 @@ public class TrackService {
 
     @Autowired
     private KafkaTemplate<String, Object> kafkaTemplate;
+
+
+    public Track createTrack(Track track) {
+        return trackRepository.save(track);
+    }
+
+    public List<Track> getAllTracks() {
+        return trackRepository.findAll();
+    }
+
+    public Optional<Track> getTrackById(String id) {
+        return trackRepository.findById(id);
+    }
 
     @KafkaListener(topics = "relational-service-topic", groupId = "relational-group")
     public void handleTrackMessage(TrackDTO trackDTO) {
@@ -28,7 +44,7 @@ public class TrackService {
             track.setPopularity(trackDTO.getPopularity());
             track.setDanceability(trackDTO.getDanceability());
             track.setEnergy(trackDTO.getEnergy());
-            track.setKey(trackDTO.getKey());
+            track.setKey_value(trackDTO.getKey());
             track.setLoudness(trackDTO.getLoudness());
             track.setMode(trackDTO.getMode());
             track.setSpeechiness(trackDTO.getSpeechiness());
@@ -49,7 +65,8 @@ public class TrackService {
         }
     }
 
-    public void deleteTrack(String trackId) {
+    public boolean deleteTrack(String trackId) {
         trackRepository.deleteById(trackId);
+        return false;
     }
 }

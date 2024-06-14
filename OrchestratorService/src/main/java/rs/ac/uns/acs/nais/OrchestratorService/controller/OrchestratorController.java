@@ -20,9 +20,9 @@ public class OrchestratorController {
         this.orchestratorService = orchestratorService;
     }
 
-//    @PostMapping("/start-saga")
-//    public ResponseEntity<String> startSaga(@RequestBody String jsonString) {
-//        orchestratorService.handleStartSaga(jsonString);
-//        return ResponseEntity.status(HttpStatus.CREATED).body("Saga started successfully");
-//    }
+    @PostMapping("/start-saga")
+    public ResponseEntity<String> startSaga(@RequestBody String jsonString) {
+        orchestratorService.handleStartSaga(jsonString);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Saga started successfully");
+    }
 }

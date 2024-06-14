@@ -12,7 +12,6 @@ import lombok.Setter;
 @Table(name = "tracks")
 public class Track {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     @Column(name = "name", nullable = false)
@@ -28,7 +27,7 @@ public class Track {
     private Double energy;
 
     @Column(name = "key_value")
-    private Integer key; // "key" is a reserved keyword in some databases, use "key_value" instead
+    private Integer key_value; // "key" is a reserved keyword in some databases, use "key_value" instead
 
     @Column(name = "loudness")
     private Double loudness;
@@ -72,7 +71,7 @@ public class Track {
         this.popularity = popularity;
         this.danceability = danceability;
         this.energy = energy;
-        this.key = key;
+        this.key_value = key;
         this.loudness = loudness;
         this.mode = mode;
         this.speechiness = speechiness;
