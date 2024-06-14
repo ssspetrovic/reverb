@@ -11,6 +11,13 @@ spring:
         enabled: true
   elasticsearch:
     uris: http://localhost:9200
+  kafka:
+    consumer:
+      bootstrap-servers: kafka:29092
+      group-id: elastic-group
+
+    producer:
+      bootstrap-servers: kafka:29092
 
 # application.yml
 
