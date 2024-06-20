@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dtos.TracksPopularityAggDTO;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dtos.TracksTempoAggDTO;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Album;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Track;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.ITrackService;
@@ -56,7 +58,7 @@ public class TrackController {
     public long countAllTracks(){return trackService.countAllTracks();}
 
     @GetMapping("/byArtistAndEnergy")
-    public List<Track> getTracksByArtistIdAndEnergyRangeWithAvgTempo(
+    public TracksTempoAggDTO getTracksByArtistIdAndEnergyRangeWithAvgTempo(
             @RequestParam String artistId,
             @RequestParam double minEnergy,
             @RequestParam double maxEnergy) {
@@ -74,7 +76,7 @@ public class TrackController {
     }
 
     @GetMapping("/byPlaylist/{playlistId}")
-    public List<Track> getTracksInPlaylistWithAvgPopularity(
+    public TracksPopularityAggDTO getTracksInPlaylistWithAvgPopularity(
             @PathVariable String playlistId,
             @RequestParam int page,
             @RequestParam int size) {

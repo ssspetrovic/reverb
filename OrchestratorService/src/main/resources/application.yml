@@ -7,9 +7,9 @@ spring:
     consumer:
       group-id: orchestrator-group
       auto-offset-reset: latest
+      value-deserializer: rs.ac.uns.acs.nais.OrchestratorService.serializers.TrackDTODeserializer
     producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: rs.ac.uns.acs.nais.OrchestratorService.serializers.TrackDTOSerializer
     listener:
       missing-topics-fatal: false
     topics:

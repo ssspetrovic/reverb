@@ -1,9 +1,6 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl;
 
 import co.elastic.clients.elasticsearch._types.SortOrder;
-import co.elastic.clients.elasticsearch._types.aggregations.Aggregate;
-import co.elastic.clients.elasticsearch._types.aggregations.Aggregation;
-import co.elastic.clients.elasticsearch._types.aggregations.AvgAggregate;
 import co.elastic.clients.json.JsonData;
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
@@ -13,7 +10,6 @@ import com.lowagie.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.elasticsearch.client.elc.ElasticsearchAggregations;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.core.*;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -21,6 +17,8 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dtos.TrackDTO;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dtos.TracksPopularityAggDTO;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dtos.TracksTempoAggDTO;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Track;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository.TrackRepository;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.ITrackService;
@@ -33,9 +31,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class TrackService implements ITrackService {
@@ -45,7 +41,6 @@ public class TrackService implements ITrackService {
 
     @Autowired
     private KafkaTemplate<String, Object> kafkaTemplate;
-
 
     private final ElasticsearchOperations elasticsearchOperations;
 
@@ -88,7 +83,7 @@ public class TrackService implements ITrackService {
         return trackRepository.findTracksByTempoAndDuration(minTempo, maxDuration, pageable);
     }
 
-    public List<Track> findTracksByArtistIdAndEnergyRangeWithAvgTempoAggregation(String artistId, double minEnergy, double maxEnergy) {
+    public TracksTempoAggDTO findTracksByArtistIdAndEnergyRangeWithAvgTempoAggregation(String artistId, double minEnergy, double maxEnergy) {
         // Building the query with aggregation
         NativeQuery query = NativeQuery.builder()
                 .withQuery(q -> q
@@ -101,9 +96,9 @@ public class TrackService implements ITrackService {
                                 )
                         )
                 )
-                .withAggregation("avg_tempo", Aggregation.of(a -> a
-                        .avg(avg -> avg.field("tempo"))
-                ))
+//                .withAggregation("avg_tempo", Aggregation.of(a -> a
+//                        .avg(avg -> avg.field("tempo"))
+//                ))
                 .withSort(s -> s.field(f -> f
                         .field("danceability")
                         .order(SortOrder.Desc)
@@ -113,6 +108,17 @@ public class TrackService implements ITrackService {
         // Execute the query
         SearchHits<Track> searchHits = elasticsearchOperations.search(query, Track.class);
 
+        List<Track> tracks = searchHits.stream()
+                .map(SearchHit::getContent)
+                .toList();
+
+        double avgTempo = 0;
+
+        for (Track track : tracks) {
+            avgTempo += track.getTempo();
+        }
+
+        avgTempo = avgTempo / tracks.size();
 //        Double avgTempoValue = null;
 //        if (searchHits.hasAggregations()) {
 //            ElasticsearchAggregations aggregations = (ElasticsearchAggregations) searchHits.getAggregations();;
@@ -128,12 +134,10 @@ public class TrackService implements ITrackService {
 
         //System.out.println(avgTempoValue);
         // Construct and return the custom response
-        return searchHits.stream()
-                .map(SearchHit::getContent)
-                .collect(Collectors.toList());
+        return new TracksTempoAggDTO(tracks, avgTempo);
     }
 
-    public List<Track> findTracksInPlaylistWithAvgPopularityAggregation(String playlistId, Pageable pageable) {
+    public TracksPopularityAggDTO findTracksInPlaylistWithAvgPopularityAggregation(String playlistId, Pageable pageable) {
         // Building the query
         NativeQuery query = NativeQuery.builder()
                 .withQuery(q -> q
@@ -141,9 +145,9 @@ public class TrackService implements ITrackService {
                                 .must(m -> m.term(t -> t.field("playlistId").value(playlistId)))
                         )
                 )
-                .withAggregation("avg_popularity", Aggregation.of(a -> a
-                        .avg(avg -> avg.field("popularity")) // Calculate average popularity
-                ))
+//                .withAggregation("avg_popularity", Aggregation.of(a -> a
+//                        .avg(avg -> avg.field("popularity")) // Calculate average popularity
+//                ))
                 .withSort(s -> s.field(f -> f
                         .field("popularity")
                         .order(SortOrder.Desc) // Sort by popularity in descending order
@@ -154,10 +158,20 @@ public class TrackService implements ITrackService {
         // Execute the query
         SearchHits<Track> searchHits = elasticsearchOperations.search(query, Track.class);
 
-        // Construct and return the custom response
-        return searchHits.stream()
+        List<Track> tracks = searchHits.stream()
                 .map(SearchHit::getContent)
-                .collect(Collectors.toList());
+                .toList();
+
+        double avgPopularity = 0;
+
+        for (Track track : tracks){
+            avgPopularity += track.getPopularity();
+        }
+
+        avgPopularity /= tracks.size();
+
+        // Construct and return the custom response
+        return new TracksPopularityAggDTO(tracks, avgPopularity);
     }
 
     @KafkaListener(topics = "elastic-search-service-topic", groupId = "elastic-group")
@@ -180,7 +194,7 @@ public class TrackService implements ITrackService {
             track.setLiveness(trackDTO.getLiveness());
             track.setValence(trackDTO.getValence());
             track.setTempo(trackDTO.getTempo());
-            track.setDuration_ms(trackDTO.getDuration_ms());
+            track.setDuration_ms(trackDTO.getDurationMs());
             track.setAlbumId(trackDTO.getAlbumId());
             track.setArtistId(trackDTO.getArtistId());
             track.setPlaylistId(trackDTO.getPlaylistId());

@@ -6,7 +6,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@JsonDeserialize(using = TrackDeserializer.class)
 public class TrackDTO {
     private String id;
     private String name;

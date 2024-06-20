@@ -53,7 +53,7 @@ public class TrackService {
             track.setLiveness(trackDTO.getLiveness());
             track.setValence(trackDTO.getValence());
             track.setTempo(trackDTO.getTempo());
-            track.setDuration_ms(trackDTO.getDuration_ms());
+            track.setDuration_ms(trackDTO.getDurationMs());
             track.setAlbumId(trackDTO.getAlbumId());
             track.setArtistId(trackDTO.getArtistId());
             track.setPlaylistId(trackDTO.getPlaylistId());

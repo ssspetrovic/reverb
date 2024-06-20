@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("a")
+@RequestMapping("api/tracks")
 public class TrackController {
 
     private final TrackService trackService;

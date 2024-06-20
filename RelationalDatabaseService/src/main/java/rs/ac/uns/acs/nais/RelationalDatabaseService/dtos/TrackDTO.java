@@ -18,7 +18,7 @@ public class TrackDTO {
     private Double liveness;
     private Double valence;
     private Double tempo;
-    private Integer duration_ms;
+    private Integer durationMs;
     private String albumId;
     private String artistId;
     private String playlistId;

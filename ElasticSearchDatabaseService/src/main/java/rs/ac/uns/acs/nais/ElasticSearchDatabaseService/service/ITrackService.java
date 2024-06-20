@@ -4,6 +4,8 @@ import com.lowagie.text.DocumentException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dtos.TrackDTO;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dtos.TracksPopularityAggDTO;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dtos.TracksTempoAggDTO;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Track;
 
 import java.io.IOException;
@@ -19,8 +21,8 @@ public interface ITrackService {
     void deleteTrackById(String id);
     void deleteAllTracks();
     List<Track> searchTracksByTempoAndDuration(double minTempo, int maxDuration, int page, int size);
-    List<Track> findTracksByArtistIdAndEnergyRangeWithAvgTempoAggregation(String artistId, double minEnergy, double maxEnergy);
-    List<Track> findTracksInPlaylistWithAvgPopularityAggregation(String playlistId, Pageable pageable);
+    TracksTempoAggDTO findTracksByArtistIdAndEnergyRangeWithAvgTempoAggregation(String artistId, double minEnergy, double maxEnergy);
+    TracksPopularityAggDTO findTracksInPlaylistWithAvgPopularityAggregation(String playlistId, Pageable pageable);
     void handleTrackMessage(TrackDTO trackDTO);
     long countAllTracks();
     Page<Track> findTracksByArtistAndLiveness(String artistId, Double liveness, Pageable pageable);
