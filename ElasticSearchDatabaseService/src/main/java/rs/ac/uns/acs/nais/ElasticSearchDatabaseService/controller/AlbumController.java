@@ -66,10 +66,13 @@ public class AlbumController {
     }
 
     @GetMapping(value = "/export-pdf", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<byte[]> exportPdf() {
+    public ResponseEntity<byte[]> exportPdf(@RequestParam String keyword, @RequestParam String startDate, @RequestParam String endDate) {
 
-        List<Album> albums = albumService.findAlbumsByNameInDateRange("close", "2015-01-01", "2020-12-31", PageRequest.of(0, 500)).getContent();
-
+        Sort sort = Sort.by(Sort.Direction.ASC, "artistId");
+        Pageable pageable = PageRequest.of(0, 500, sort);
+        Page<Album> albumPage = albumService.findAlbumsByNameInDateRange(keyword, startDate, endDate, pageable);
+        List<Album> albums = albumPage.getContent();
+        logger.debug("Found albums: {}", albums.size());
         try {
             byte[] pdfContents = albumService.export(albums);
 
