@@ -66,13 +66,33 @@ public class AlbumController {
     }
 
     @GetMapping(value = "/export-pdf", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<byte[]> exportPdf(@RequestParam String keyword, @RequestParam String startDate, @RequestParam String endDate) {
+    public ResponseEntity<byte[]> exportPdfByKeywordAndDate(@RequestParam String keyword, @RequestParam String startDate, @RequestParam String endDate) {
 
         Sort sort = Sort.by(Sort.Direction.ASC, "artistId");
         Pageable pageable = PageRequest.of(0, 500, sort);
         Page<Album> albumPage = albumService.findAlbumsByNameInDateRange(keyword, startDate, endDate, pageable);
         List<Album> albums = albumPage.getContent();
-        logger.debug("Found albums: {}", albums.size());
+        try {
+            byte[] pdfContents = albumService.export(albums);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", "albums_report.pdf");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(pdfContents);
+        } catch (IOException | DocumentException e) {
+            e.printStackTrace(); // Log the exception details
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping(value = "/export-pdf/all", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> exportPdf() {
+
+        Page<Album> albumPage = albumService.findAllAlbumsPage(0, 500);
+        List<Album> albums = albumPage.getContent();
         try {
             byte[] pdfContents = albumService.export(albums);
 
