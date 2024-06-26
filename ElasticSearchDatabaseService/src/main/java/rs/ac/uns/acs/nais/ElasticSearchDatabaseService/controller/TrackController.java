@@ -94,11 +94,11 @@ public class TrackController {
         return trackPage.getContent();
     }
 
-    @GetMapping(value = "/export-pdf", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<byte[]> exportPdf() {
+    @GetMapping(value = "/export-pdf/{artistId}", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> exportPdf(@PathVariable String artistId, @RequestParam Double minLiveness) {
         Sort sort = Sort.by(Sort.Direction.DESC, "popularity");
         Pageable pageable = PageRequest.of(0, 500, sort);
-        Page<Track> trackPage = trackService.findTracksByArtistAndLiveness("537f3cb2-edf2-4a9c-8d25-16c33dc3971e", 0.1, pageable);
+        Page<Track> trackPage = trackService.findTracksByArtistAndLiveness(artistId, minLiveness, pageable);
         List<Track> tracks = trackPage.getContent();
 
         try {

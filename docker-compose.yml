@@ -83,7 +83,7 @@ services:
       - PGADMIN_DEFAULT_EMAIL=admin@example.com
       - PGADMIN_DEFAULT_PASSWORD=admin
     ports:
-      - "8080:80"
+      - "8083:80"
     depends_on:
       - postgresdb
     volumes:
@@ -148,7 +148,7 @@ services:
     entrypoint: /bin/sh
     command: -c "echo \"$$CONSOLE_CONFIG_FILE\" > /tmp/config.yml; /app/console"
     ports:
-      - "8081:8080"
+      - "8084:8080"
     environment:
       CONFIG_FILEPATH: /tmp/config.yml
       CONSOLE_CONFIG_FILE: |
