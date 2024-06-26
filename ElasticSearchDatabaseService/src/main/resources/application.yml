@@ -19,9 +19,9 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: rs.ac.uns.acs.nais.ElasticSearchDatabaseService.serializers.TrackDTODeserializer
     producer:
+      bootstrap-servers: kafka:29092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: rs.ac.uns.acs.nais.ElasticSearchDatabaseService.serializers.TrackDTOSerializer
-
 # application.yml
 
 eureka:

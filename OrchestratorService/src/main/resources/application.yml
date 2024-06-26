@@ -17,7 +17,6 @@ spring:
       finish-success: finish-success
       finish-fail: finish-fail
       orchestrator: orchestrator
-
 logging:
   level:
     org:

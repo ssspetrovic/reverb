@@ -59,9 +59,19 @@ public class TrackService {
             track.setPlaylistId(trackDTO.getPlaylistId());
 
             trackRepository.save(track);
-            kafkaTemplate.send("track-saga-success", "Track ID: " + trackDTO.getId() + " processed successfully.");
+            kafkaTemplate.send("finish-success", "Track ID: " + trackDTO.getId() + " processed successfully.");
         } catch (Exception e) {
-            kafkaTemplate.send("track-saga-fail", "Track ID: " + trackDTO.getId() + " failed to process.");
+            kafkaTemplate.send("finish-fail", "Track ID: " + trackDTO.getId() + " failed to process.");
+        }
+    }
+
+    @KafkaListener(topics = "compensate-relational", groupId = "relational-group")
+    public void handleCompensateRelational(TrackDTO trackDTO) {
+        try {
+            trackRepository.deleteById(trackDTO.getId());
+            System.out.println("Compensated (deleted) relational data for Track ID: " + trackDTO.getId());
+        } catch (Exception e) {
+            System.err.println("Failed to compensate (delete) relational data: " + e.getMessage());
         }
     }
 

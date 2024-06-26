@@ -22,9 +22,9 @@ public class OrchestratorService {
 
     @KafkaListener(topics = "${spring.kafka.topics.start-saga}", groupId = "${spring.kafka.consumer.group-id}")
     public void handleStartSaga(String message) {
+        TrackDTO trackDTO;
         try {
-            // Deserialize the message
-            TrackDTO trackDTO = objectMapper.readValue(message, TrackDTO.class);
+            trackDTO = objectMapper.readValue(message, TrackDTO.class);
 
             // Notify relational service
             kafkaTemplate.send("relational-service-topic", trackDTO);
@@ -34,7 +34,6 @@ public class OrchestratorService {
 
         } catch (Exception e) {
             System.err.println("Error processing message: " + e.getMessage());
-            // Handle error (e.g., send to a failure topic or perform compensating transactions)
         }
     }
 
@@ -46,6 +45,12 @@ public class OrchestratorService {
     @KafkaListener(topics = "${spring.kafka.topics.finish-fail}", groupId = "${spring.kafka.consumer.group-id}")
     public void handleFinishFail(String message) {
         System.out.println("Transaction failed: " + message);
-        // Handle rollback or compensating transactions
+        try {
+            TrackDTO trackDTO = objectMapper.readValue(message, TrackDTO.class);
+            kafkaTemplate.send("compensate-relational", trackDTO);
+            kafkaTemplate.send("compensate-elastic", trackDTO);
+        } catch (Exception e) {
+            System.err.println("Error during compensation: " + e.getMessage());
+        }
     }
 }

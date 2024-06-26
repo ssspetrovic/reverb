@@ -200,9 +200,19 @@ public class TrackService implements ITrackService {
             track.setPlaylistId(trackDTO.getPlaylistId());
 
             trackRepository.save(track);
-            kafkaTemplate.send("track-saga-success", "Track ID: " + trackDTO.getId() + " processed successfully.");
+            kafkaTemplate.send("finish-success", "Track ID: " + trackDTO.getId() + " processed successfully.");
         } catch (Exception e) {
-            kafkaTemplate.send("track-saga-fail", "Track ID: " + trackDTO.getId() + " failed to process.");
+            kafkaTemplate.send("finish-fail", "Track ID: " + trackDTO.getId() + " failed to process.");
+        }
+    }
+
+    @KafkaListener(topics = "compensate-elastic", groupId = "elastic-group")
+    public void handleCompensateElastic(TrackDTO trackDTO) {
+        try {
+            trackRepository.deleteById(trackDTO.getId());
+            System.out.println("Compensated (deleted) elastic data for Track ID: " + trackDTO.getId());
+        } catch (Exception e) {
+            System.err.println("Failed to compensate (delete) elastic data: " + e.getMessage());
         }
     }
 
